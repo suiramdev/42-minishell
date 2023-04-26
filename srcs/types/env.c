@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:03:54 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/04/26 17:04:33 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/04/27 00:24:46 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ t_env	*remove_env(t_env *head, char *key)
 /// @brief Free the list of environment variables
 /// @param head The head of the list
 /// @return void
-void	free_env(t_env *head)
+void	free_envs(t_env *head)
 {
 	t_env	*tmp;
 

@@ -13,7 +13,7 @@
 #include "types/command.h"
 #include "libft.h"
 
-void	cmd_env(t_cmd *cmd)
+void	builtin_env(t_cmd *cmd)
 {
 	char	**formatted_env;
 	size_t	i;

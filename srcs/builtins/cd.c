@@ -6,11 +6,13 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 15:58:49 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/04/25 16:01:18 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/04/27 00:23:19 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	cmd_cd()
-{
+#include "types/command.h"
 
+void	builtin_cd(t_cmd *cmd)
+{
+	(void)cmd;
 }

@@ -6,14 +6,13 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 15:57:35 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/04/26 15:43:46 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/04/27 00:22:43 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "types/env.h"
 #include "types/command.h"
 
-void	cmd_export(t_env **env, t_cmd *cmd)
+void	builtin_export(t_cmd *cmd)
 {
-
+	(void)cmd;
 }

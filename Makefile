@@ -6,7 +6,7 @@
 #    By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/06 22:19:57 by mnouchet          #+#    #+#              #
-#    Updated: 2023/04/26 16:37:43 by mnouchet         ###   ########.fr        #
+#    Updated: 2023/04/27 00:21:37 by mnouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,9 +37,17 @@ INCS		:= includes				\
 
 SRCS_DIR	:= srcs
 SRCS		:= main.c				\
+			   builtins.c			\
+			   utils/path.c			\
 			   types/command.c		\
 			   types/env.c			\
+			   builtins/cd.c		\
 			   builtins/echo.c		\
+			   builtins/env.c		\
+			   builtins/exit.c		\
+			   builtins/export.c	\
+			   builtins/pwd.c		\
+			   builtins/unset.c
 
 SRCS		:= $(SRCS:%=$(SRCS_DIR)/%)
 
