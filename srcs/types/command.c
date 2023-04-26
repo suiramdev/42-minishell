@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:28:40 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/04/27 01:47:21 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/04/27 01:50:59 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ t_cmd	*example_cmds(t_env *env)
 
 /// @brief Execute a list of commands
 /// @param cmds The list of commands to execute
-/// @return EXIT_SUCCESS if the command was executed successfully, EXIT_FAILURE otherwise
+/// @return EXIT_SUCCESS if the command was executed successfully
+/// EXIT_FAILURE otherwise
 int	exec_cmds(t_cmd *cmds)
 {
 	while (cmds)

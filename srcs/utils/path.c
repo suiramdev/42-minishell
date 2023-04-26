@@ -42,8 +42,8 @@ char	*join_path(char *s1, char *s2)
 	return (output);
 }
 
-/// @brief Resolve a path from a file name based on the PATH environment variable
-/// or the current directory if the file name is a relative path
+/// @brief Resolve a path from a file name based on the PATH environment 
+/// variable or the current directory if the file name is a relative path
 /// @param file The file name to resolve
 /// @param envs The environment variables
 /// @return The resolved path, or NULL if an error occured

@@ -36,7 +36,6 @@ static void	put_args(t_env *env, t_cmd_arg *args)
 	}
 }
 
-
 void	builtin_echo(t_cmd *cmd)
 {
 	put_args(cmd->env, cmd->args);

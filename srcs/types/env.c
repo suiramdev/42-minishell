@@ -41,7 +41,7 @@ t_env	*add_env(t_env **head, char *key, char *value)
 {
 	t_env	*new;
 	t_env	*last;
-	
+
 	new = get_env(*head, key);
 	if (new)
 	{
@@ -70,7 +70,8 @@ t_env	*add_env(t_env **head, char *key, char *value)
 /// @brief Remove an environment variable from the list
 /// @param head The head of the list
 /// @param key The key of the environment variable to remove
-/// @return The head of the list, or NULL if the environment variable was not found
+/// @return The head of the list, or NULL if the environment
+/// variable was not found
 t_env	*remove_env(t_env *head, char *key)
 {
 	t_env	*tmp;
@@ -78,7 +79,8 @@ t_env	*remove_env(t_env *head, char *key)
 	tmp = head;
 	while (tmp)
 	{
-		if (ft_strncmp(tmp->key, key, ft_strlen(tmp->key) + ft_strlen(key)) == 0)
+		if (ft_strncmp(tmp->key, key, ft_strlen(tmp->key)
+				+ ft_strlen(key)) == 0)
 		{
 			free(tmp->key);
 			free(tmp->value);

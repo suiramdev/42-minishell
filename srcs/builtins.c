@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 00:11:36 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/04/27 00:18:22 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/04/27 01:56:19 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 int	builtins(t_cmd *cmd)
 {
 	t_builtin	builtins[4];
-	size_t	i;
+	size_t		i;
 
-	builtins[0] = (t_builtin){ .name = "echo", .func = builtin_echo };
-	builtins[1] = (t_builtin){ .name = "env", .func = builtin_env };
+	builtins[0] = (t_builtin){.name = "echo", .func = builtin_echo};
+	builtins[1] = (t_builtin){.name = "env", .func = builtin_env};
 	i = 0;
 	while (builtins[i].name)
 	{
