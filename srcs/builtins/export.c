@@ -12,6 +12,8 @@
 
 #include "types/command.h"
 
+// Issue there, is that cmd->env is a copy of the env, not the actual env
+// we should make it a pointer to env, and have also its own copy of the env maybe
 void	builtin_export(t_cmd *cmd)
 {
 	(void)cmd;
