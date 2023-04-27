@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   command.c                                          :+:      :+:    :+:   */
+/*                                                        :::      ::::::::   */ /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:28:40 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/04/27 01:50:59 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/04/27 15:31:52 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "types/command.h"
 #include "builtins.h"
+#include "utils/path.h"
 #include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
 
 /// @brief Create new commands for testing purposes
@@ -23,48 +24,81 @@
 t_cmd	*example_cmds(t_env *env)
 {
 	t_cmd		*cmd;
-	t_cmd_arg	*arg1;
-	t_cmd_arg	*arg2;
-	t_cmd_arg	*arg2_1;
-	t_cmd_arg	*arg2_2;
 
 	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
+		return (NULL);
+	cmd->name = "cd";
+	cmd->args = malloc(sizeof(char *) * 3);
+	if (!cmd->args)
+	{
+		free(cmd);
+		return (NULL);
+	}
+	cmd->args[0] = "cd";
+	cmd->args[1] = "dddd";
+	cmd->args[2] = NULL;
 	cmd->env = env;
-	cmd->name = "echo";
-	arg2_2 = malloc(sizeof(t_cmd_arg));
-	arg2_2->type = VARIABLE;
-	arg2_2->data = "USER";
-	arg2_2->next = NULL;
-	arg2_1 = malloc(sizeof(t_cmd_arg));
-	arg2_1->type = LITERAL;
-	arg2_1->data = "\nHow are you";
-	arg2_1->next = arg2_2;
-	arg2 = malloc(sizeof(t_cmd_arg));
-	arg2->type = CONCATENATION;
-	arg2->data = arg2_1;
-	arg2->next = NULL;
-	arg1 = malloc(sizeof(t_cmd_arg));
-	arg1->type = LITERAL;
-	arg1->data = "Hello !";
-	arg1->next = arg2;
-	cmd->args = arg1;
+	cmd->next = malloc(sizeof(t_cmd));
+	if (!cmd->next)
+	{
+		free(cmd->args);
+		free(cmd);
+		return (NULL);
+	}
+	cmd->next->name = "pwd";
+	cmd->next->args = malloc(sizeof(char *) * 2);
+	if (!cmd->next->args)
+	{
+		free(cmd->next);
+		free(cmd->args);
+		free(cmd);
+		return (NULL);
+	}
+	cmd->next->args[0] = "pwd";
+	cmd->next->args[1] = NULL;
+	cmd->next->env = env;
+	cmd->next->next = NULL;
 	return (cmd);
 }
 
-/// @brief Execute a list of commands
+static int	child_process(t_cmd *cmd)
+{
+	char	*path;
+
+	if (builtins(cmd) == EXIT_FAILURE)
+	{
+		path = resolve_path(cmd->name, cmd->env);
+		execve(path, cmd->args, format_env(cmd->env));
+		printf("Command not found: %s\n", cmd->name);
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
+/// @brief Execute a list of commands in parallel processes
 /// @param cmds The list of commands to execute
 /// @return EXIT_SUCCESS if the command was executed successfully
 /// EXIT_FAILURE otherwise
 int	exec_cmds(t_cmd *cmds)
 {
-	while (cmds)
+	t_cmd	*cmd;
+
+	cmd = cmds;
+	while (cmd)
 	{
-		if (builtins(cmds) == EXIT_FAILURE)
-		{
-			printf("Command not found: %s\n", cmds->name);
-			// execve in a fork, and maybe builtins should be in a fork too
-		}
-		cmds = cmds->next;
+		cmd->pid = fork();
+		if (cmd->pid == -1)
+			return (EXIT_FAILURE);
+		if (cmd->pid == 0)
+			child_process(cmd);
+		cmd = cmd->next;
+	}
+	cmd = cmds;
+	while (cmd)
+	{
+		waitpid(cmd->pid, NULL, 0);
+		cmd = cmd->next;
 	}
 	return (EXIT_SUCCESS);
 }
