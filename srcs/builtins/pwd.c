@@ -11,8 +11,22 @@
 /* ************************************************************************** */
 
 #include "types/command.h"
+#include "libft.h"
+#include <stdio.h>
 
+/// @brief Execute the pwd builtin command
+/// @param cmd The command data structure
 void	builtin_pwd(t_cmd *cmd)
 {
-	(void)cmd;
+	char	path[1024];
+
+	if (cmd->args)
+	{
+		ft_putstr_fd("pwd: too many arguments\n", STDERR_FILENO);
+		return ;
+	}
+	if (!getcwd(path, 1024))
+		perror("pwd");
+	else
+		printf("%s\n", path);
 }
