@@ -11,8 +11,11 @@
 /* ************************************************************************** */
 
 #include "types/command.h"
-#include "libft.h"
+#include <stdlib.h>
+#include <stdio.h>
 
+/// @brief Execute the env builtin command
+/// @param cmd The command data structure
 void	builtin_env(t_cmd *cmd)
 {
 	char	**formatted_env;
@@ -21,9 +24,9 @@ void	builtin_env(t_cmd *cmd)
 	formatted_env = format_env(cmd->env);
 	i = 0;
 	while (formatted_env[i])
-		ft_putendl_fd(formatted_env[i++], STDOUT_FILENO);
-	i = 0;
-	while (formatted_env[i])
+	{
+		printf("%s\n", formatted_env[i]);
 		free(formatted_env[i++]);
+	}
 	free(formatted_env);
 }
