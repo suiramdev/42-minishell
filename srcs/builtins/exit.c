@@ -11,8 +11,14 @@
 /* ************************************************************************** */
 
 #include "types/command.h"
+#include "libft.h"
 
 void	builtin_exit(t_cmd *cmd)
 {
-	(void)cmd;
+	int		exit_code;
+
+	exit_code = 0;
+	if (cmd->args && cmd->args[1])
+		exit_code = ft_atoi(cmd->args[1]);
+	exit(exit_code);
 }
