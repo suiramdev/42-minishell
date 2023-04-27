@@ -12,32 +12,23 @@
 
 #include "types/command.h"
 #include "types/env.h"
-#include "libft.h"
+#include <stdio.h>
 
-static void	put_args(t_env *env, t_cmd_arg *args)
-{
-	t_env	*var_env;
-
-	while (args)
-	{
-		if (args->type == CONCATENATION)
-			put_args(env, args->data);
-		else if (args->type == VARIABLE)
-		{
-			var_env = get_env(env, args->data);
-			if (var_env)
-				ft_putstr_fd(var_env->value, STDOUT_FILENO);
-		}
-		else
-			ft_putstr_fd(args->data, STDOUT_FILENO);
-		if (args->next)
-			ft_putchar_fd(' ', STDOUT_FILENO);
-		args = args->next;
-	}
-}
-
+/// @brief Execute the echo builtin command
+/// @param cmd The command data structure
+/// @return EXIT_SUCCESS
+/// @todo Handle the -n option
 void	builtin_echo(t_cmd *cmd)
 {
-	put_args(cmd->env, cmd->args);
-	ft_putchar_fd('\n', STDOUT_FILENO);
+	size_t	i;
+
+	i = 1;
+	while (cmd->args && cmd->args[i])
+	{
+		printf("%s", cmd->args[i]);
+		if (cmd->args[i + 1])
+			printf(" ");
+		i++;
+	}
+	printf("\n");
 }
