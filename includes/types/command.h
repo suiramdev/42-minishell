@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:44:04 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/04/26 20:08:55 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/04/27 15:18:58 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,14 @@
 # define COMMAND_H
 
 # include "types/env.h"
-
-enum e_arg_types
-{
-	LITERAL,
-	VARIABLE,
-	CONCATENATION,
-};
-
-typedef struct s_cmd_arg
-{
-	enum e_arg_types	type;
-	void				*data;
-	struct s_cmd_arg	*next;
-}	t_cmd_arg;
+# include <sys/types.h>
 
 typedef struct s_cmd
 {
 	char			*name;
-	t_cmd_arg		*args;
+	char			**args;
 	t_env			*env;
+	pid_t			pid;
 	struct s_cmd	*next;
 }	t_cmd;
 
