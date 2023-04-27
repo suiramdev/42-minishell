@@ -14,19 +14,23 @@
 #include "builtins.h"
 #include "libft.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 /// @brief Attempt to execute a builtin command
 /// @param cmd The command to execute
 /// @return EXIT_SUCCESS if the command was executed, EXIT_FAILURE otherwise
 int	builtins(t_cmd *cmd)
 {
-	t_builtin	builtins[4];
+	t_builtin	builtins[5];
 	size_t		i;
 
-	builtins[0] = (t_builtin){.name = "echo", .func = builtin_echo};
-	builtins[1] = (t_builtin){.name = "env", .func = builtin_env};
+	builtins[0] = (t_builtin){.name = "cd", .func = builtin_cd};
+	builtins[1] = (t_builtin){.name = "echo", .func = builtin_echo};
+	builtins[2] = (t_builtin){.name = "env", .func = builtin_env};
+	builtins[3] = (t_builtin){.name = "exit", .func = builtin_exit};
+	builtins[4] = (t_builtin){.name = "pwd", .func = builtin_pwd};
 	i = 0;
-	while (builtins[i].name)
+	while (i < 5)
 	{
 		if (ft_strcmp(builtins[i].name, cmd->name) == 0)
 		{
