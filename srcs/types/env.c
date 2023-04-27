@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:03:54 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/04/27 00:24:46 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/04/27 15:20:45 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 #include <stdlib.h>
 
 /// @brief Get an environment variable from the list
-/// @param head The head of the list
+/// @param envs The head of the list of environment variables
 /// @param key The key of the environment variable to get
 /// @return The environment variable, or NULL if it was not found
-t_env	*get_env(t_env *head, char *key)
+t_env	*get_env(t_env *envs, char *key)
 {
 	t_env	*tmp;
 
-	tmp = head;
+	tmp = envs;
 	while (tmp)
 	{
 		if (ft_strcmp(tmp->key, key) == 0)
@@ -33,16 +33,16 @@ t_env	*get_env(t_env *head, char *key)
 }
 
 /// @brief Add or replace an environment variable to the list
-/// @param head The head of the list, NULL accepted
+/// @param envs The head of the list of environment variables, NULL accepted
 /// @param key The key of the new environment variable
 /// @param value The value of the new environment variable
 /// @return The new environment variable
-t_env	*add_env(t_env **head, char *key, char *value)
+t_env	*add_env(t_env **envs, char *key, char *value)
 {
 	t_env	*new;
 	t_env	*last;
 
-	new = get_env(*head, key);
+	new = get_env(*envs, key);
 	if (new)
 	{
 		free(new->value);
@@ -55,12 +55,12 @@ t_env	*add_env(t_env **head, char *key, char *value)
 	new->key = key;
 	new->value = value;
 	new->next = NULL;
-	if (!*head)
+	if (!*envs)
 	{
-		*head = new;
+		*envs = new;
 		return (new);
 	}
-	last = *head;
+	last = *envs;
 	while (last->next)
 		last = last->next;
 	last->next = new;
@@ -68,15 +68,15 @@ t_env	*add_env(t_env **head, char *key, char *value)
 }
 
 /// @brief Remove an environment variable from the list
-/// @param head The head of the list
+/// @param envs The envs of the list of environment variables
 /// @param key The key of the environment variable to remove
-/// @return The head of the list, or NULL if the environment
+/// @return The envs of the list, or NULL if the environment
 /// variable was not found
-t_env	*remove_env(t_env *head, char *key)
+t_env	*remove_env(t_env *envs, char *key)
 {
 	t_env	*tmp;
 
-	tmp = head;
+	tmp = envs;
 	while (tmp)
 	{
 		if (ft_strncmp(tmp->key, key, ft_strlen(tmp->key)
@@ -85,7 +85,7 @@ t_env	*remove_env(t_env *head, char *key)
 			free(tmp->key);
 			free(tmp->value);
 			free(tmp);
-			return (head);
+			return (envs);
 		}
 		tmp = tmp->next;
 	}
@@ -93,16 +93,16 @@ t_env	*remove_env(t_env *head, char *key)
 }
 
 /// @brief Free the list of environment variables
-/// @param head The head of the list
+/// @param list The envs of the list of environment variables
 /// @return void
-void	free_envs(t_env *head)
+void	free_envs(t_env *envs)
 {
 	t_env	*tmp;
 
-	while (head)
+	while (envs)
 	{
-		tmp = head;
-		head = head->next;
+		tmp = envs;
+		envs = envs->next;
 		free(tmp->key);
 		free(tmp->value);
 		free(tmp);
@@ -111,33 +111,33 @@ void	free_envs(t_env *head)
 
 /// @brief Format the list of environment variables to an array of strings
 /// ending with NULL
-/// @param head The head of the list
+/// @param envs The envs of the list of environment variables
 /// @return The array of strings, or NULL if an error occured
-char	**format_env(t_env *head)
+char	**format_env(t_env *envs)
 {
 	size_t	i;
 	t_env	*tmp;
-	char	**env;
+	char	**output;
 
 	i = 0;
-	tmp = head;
+	tmp = envs;
 	while (tmp)
 	{
 		i++;
 		tmp = tmp->next;
 	}
-	env = malloc(sizeof(char *) * (i + 1));
-	if (!env)
+	output = malloc(sizeof(char *) * (i + 1));
+	if (!output)
 		return (NULL);
 	i = 0;
-	tmp = head;
+	tmp = envs;
 	while (tmp)
 	{
-		env[i] = ft_strjoin(tmp->key, "=");
-		env[i] = ft_strjoin(env[i], tmp->value);
+		output[i] = ft_strjoin(tmp->key, "=");
+		output[i] = ft_strjoin(output[i], tmp->value);
 		i++;
 		tmp = tmp->next;
 	}
-	env[i] = NULL;
-	return (env);
+	output[i] = NULL;
+	return (output);
 }

@@ -32,7 +32,7 @@ static t_env	*init_envs(char **envp)
 		while ((*envp)[i] != '=')
 			i++;
 		name = ft_substr(*envp, 0, i);
-		add_env(&env, name, getenv(name));
+		add_env(&env, name, ft_strdup(getenv(name)));
 		envp++;
 	}
 	return (env);
