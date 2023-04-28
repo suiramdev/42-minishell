@@ -89,11 +89,11 @@ int	exec_cmds(t_cmd *cmds)
 
 	cmd = cmds;
 	i = 0;
-	pipe(pipes[0]);
-	pipe(pipes[1]);
+	if (pipe(pipes[0]) == -1 || pipe(pipes[1]) == -1)
+		return (EXIT_FAILURE);
 	while (cmd)
 	{
-		if (pipe(pipes[i % 2]) == -1)
+		if (i > 0 && pipe(pipes[i % 2]) == -1)
 			return (EXIT_FAILURE);
 		cmd->pid = fork();
 		if (cmd->pid == -1)
