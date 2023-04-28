@@ -15,6 +15,8 @@
 #include "utils/path.h"
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <stdio.h>
 
 /// @brief Create new commands for testing purposes
