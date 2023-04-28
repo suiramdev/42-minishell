@@ -61,7 +61,6 @@ static int	child_process(size_t index, int pipes[2][2], t_cmd *cmd)
 	if (builtins(cmd) == EXIT_FAILURE)
 	{
 		path = resolve_path(cmd->name, cmd->env);
-		printf("path: %s\n", path);
 		envp = format_env(cmd->env);
 		execve(path, cmd->args, envp);
 		free(path);
