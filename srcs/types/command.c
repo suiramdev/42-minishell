@@ -11,6 +11,7 @@
 
 #include "types/command.h"
 #include "builtins.h"
+#include "libft.h"
 #include "utils/path.h"
 #include <stdlib.h>
 #include <unistd.h>
@@ -28,49 +29,47 @@ t_cmd	*example_cmds(t_env *env)
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
-	cmd->name = "cd";
-	cmd->args = malloc(sizeof(char *) * 3);
-	if (!cmd->args)
-	{
-		free(cmd);
-		return (NULL);
-	}
-	cmd->args[0] = "cd";
-	cmd->args[1] = "dddd";
-	cmd->args[2] = NULL;
+	cmd->name = "cat";
+	cmd->args = NULL;
 	cmd->env = env;
-	cmd->next = malloc(sizeof(t_cmd));
-	if (!cmd->next)
-	{
-		free(cmd->args);
-		free(cmd);
-		return (NULL);
-	}
-	cmd->next->name = "pwd";
-	cmd->next->args = malloc(sizeof(char *) * 2);
-	if (!cmd->next->args)
-	{
-		free(cmd->next);
-		free(cmd->args);
-		free(cmd);
-		return (NULL);
-	}
-	cmd->next->args[0] = "pwd";
-	cmd->next->args[1] = NULL;
-	cmd->next->env = env;
-	cmd->next->next = NULL;
+	cmd->next = NULL;
 	return (cmd);
 }
 
-static int	child_process(t_cmd *cmd)
+// Should be replaced, this is just for testing
+static void	close_pipes(int pipes[2][2])
+{
+	close(pipes[0][0]);
+	close(pipes[0][1]);
+	close(pipes[1][0]);
+	close(pipes[1][1]);
+}
+
+static int	child_process(size_t index, int pipes[2][2], t_cmd *cmd)
 {
 	char	*path;
+	char	**envp;
+	size_t	i;
 
+	if (index > 0)
+		dup2(pipes[(index - 1) % 2][0], STDIN_FILENO);
+	if (cmd->next)
+		dup2(pipes[index % 2][1], STDOUT_FILENO);
+	close_pipes(pipes);
 	if (builtins(cmd) == EXIT_FAILURE)
 	{
 		path = resolve_path(cmd->name, cmd->env);
-		execve(path, cmd->args, format_env(cmd->env));
-		printf("Command not found: %s\n", cmd->name);
+		printf("path: %s\n", path);
+		envp = format_env(cmd->env);
+		execve(path, cmd->args, envp);
+		free(path);
+		i = 0;
+		while (envp[i])
+			free(envp[i++]);
+		free(envp);
+		ft_putstr_fd("Command not found: ", STDERR_FILENO);
+		ft_putstr_fd(cmd->name, STDERR_FILENO);
+		ft_putstr_fd("\n", STDERR_FILENO); // Maybe use putsr endl
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
@@ -83,15 +82,22 @@ static int	child_process(t_cmd *cmd)
 int	exec_cmds(t_cmd *cmds)
 {
 	t_cmd	*cmd;
+	size_t	i;
+	int		pipes[2][2];
 
 	cmd = cmds;
+	i = 0;
 	while (cmd)
 	{
+		if (pipe(pipes[i % 2]) == -1)
+			return (EXIT_FAILURE);
 		cmd->pid = fork();
 		if (cmd->pid == -1)
 			return (EXIT_FAILURE);
 		if (cmd->pid == 0)
-			child_process(cmd);
+			child_process(i, pipes, cmd);
+		close_pipes(pipes);
+		i++;
 		cmd = cmd->next;
 	}
 	cmd = cmds;
