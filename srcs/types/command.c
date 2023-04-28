@@ -89,6 +89,8 @@ int	exec_cmds(t_cmd *cmds)
 
 	cmd = cmds;
 	i = 0;
+	pipe(pipes[0]);
+	pipe(pipes[1]);
 	while (cmd)
 	{
 		if (pipe(pipes[i % 2]) == -1)
