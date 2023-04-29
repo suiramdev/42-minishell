@@ -1,13 +1,15 @@
+#include "../../includes/minishell.h"
 
-int ft_parsing()
+int main(int ac, char **av, char **envp)
 {
-    
+    t_data lst;
 
-}
+    (void)av;
+    (void)ac;
+    (void)envp;
 
-int main(int ac, char **av)
-{
-    if (ac == 1)
-        return (ft_parsing());
+    if (!ft_loop(&lst))
+        return (0);
+
     return (0);
 }

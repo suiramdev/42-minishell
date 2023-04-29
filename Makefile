@@ -1,4 +1,9 @@
-SRCS				=			xyz.c
+SRCS				=			srcs/main/main.c  \
+								srcs/parsing/createlinkedlist.c \
+								srcs/parsing/parsing.c \
+								srcs/utils/linked_list_utils.c \
+								srcs/utils/parsing_utils.c \
+								srcs/utils/signals.c
 
 NAME				=			minishell
 
@@ -12,7 +17,7 @@ all					:			$(NAME)
 
 $(NAME)				:			$(OBJS)
 								make -C libft/ && mv libft/libft.a .
-								$(CC) -g -o $(NAME) $(OBJS) libft.a
+								$(CC) -g -o $(NAME) $(OBJS) -lreadline libft.a
 								@echo "===== minishell has been created ====="
 
 clean				:
@@ -28,3 +33,4 @@ re					:			fclean all
 
 .PHONY				:			all bonus clean fclean re
 								@echo "===== minishell created, deleted and re-created done ====="
+
