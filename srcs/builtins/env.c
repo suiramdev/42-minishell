@@ -1,30 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/01 16:36:16 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/01 16:50:27 by mnouchet         ###   ########.fr       */
+/*   Created: 2023/04/25 16:01:31 by mnouchet          #+#    #+#             */
+/*   Updated: 2023/04/26 17:48:51 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <signal.h>
-#include <stdio.h>
+#include "types/command.h"
 #include <stdlib.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+#include <stdio.h>
 
-/// @brief Handle the SIGINT signal
-/// @param signal The signal to handle
-/// @return void
-void	signal_handler(int signal) 
+/// @brief Execute the env builtin command
+/// @param cmd The command data structure
+void	builtin_env(t_cmd *cmd)
 {
-    if (signal == SIGINT) {
-        printf("\n");
-        rl_on_new_line();
-        rl_replace_line("", 0);
-        rl_redisplay();
-    }
+	char	**formatted_env;
+	size_t	i;
+
+	formatted_env = format_env(cmd->env);
+	i = 0;
+	while (formatted_env[i])
+	{
+		printf("%s\n", formatted_env[i]);
+		free(formatted_env[i++]);
+	}
+	free(formatted_env);
 }

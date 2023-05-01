@@ -1,36 +1,115 @@
-SRCS				=			srcs/main/main.c  \
-								srcs/parsing/createlinkedlist.c \
-								srcs/parsing/parsing.c \
-								srcs/utils/linked_list_utils.c \
-								srcs/utils/parsing_utils.c \
-								srcs/utils/signals.c
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/01/06 22:19:57 by mnouchet          #+#    #+#              #
+#    Updated: 2023/05/01 16:57:01 by mnouchet         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-NAME				=			minishell
+NAME		:= minishell
+## ########################################################################## ## #   INGREDIENTS																  ##
+## ########################################################################## ##
+# LIBS			libraries to be used
+# LIBS_TARGET	libraries to be built
+# INCS			header file locations
+#
+# SRCS_DIR		source directory
+# SRCS			source files
+#
+# BUILD_DIR		build directory
+# OBJS			object files
+#
+# CC			compiler
+# CFLAGS		compiler flags
+# CPPFLAGS		preprocessor flags
+# LDFLAGS		linker flags
+# LDLIBS		libraries name
 
-CC					=			cc
+LIBS		:= ft					\
+			   readline
+LIBS_TARGET	:= libs/libft/libft.a
 
-CFLAGS				=			-Wall -Wextra -Werror
+INCS		:= includes				\
+			   libs/libft
 
-OBJS				=			$(SRCS:.c=.o)
+SRCS_DIR	:= srcs
+SRCS		:= main.c				\
+			   builtins.c			\
+			   utils/parsing.c		\
+			   utils/path.c			\
+			   utils/signals.c		\
+			   types/command.c		\
+			   types/env.c			\
+			   types/tokens.c		\
+			   builtins/cd.c		\
+			   builtins/echo.c		\
+			   builtins/env.c		\
+			   builtins/exit.c		\
+			   builtins/export.c	\
+			   builtins/pwd.c		\
+			   builtins/unset.c
 
-all					:			$(NAME)
+SRCS		:= $(SRCS:%=$(SRCS_DIR)/%)
 
-$(NAME)				:			$(OBJS)
-								make -C libft/ && mv libft/libft.a .
-								$(CC) -g -o $(NAME) $(OBJS) -lreadline libft.a
-								@echo "===== minishell has been created ====="
+BUILD_DIR	:= .build
+OBJS		:= $(SRCS:$(SRCS_DIR)/%.c=$(BUILD_DIR)/%.o)
 
-clean				:
-								make clean -C libft/
-								rm -rf $(OBJS)
-								@echo "===== temporary files has been deleted ====="
+CC			:= cc
+CFLAGS		:= -g3 -Wall -Wextra -Werror	
+CPPFLAGS    := $(INCS:%=-I%)
+LDFLAGS     := $(addprefix -L,$(dir $(LIBS_TARGET)))
+LDLIBS      := $(addprefix -l,$(LIBS))
 
-fclean				: 			clean
-								rm -rf $(NAME) libft.a
-								@echo "===== minishell has been deleted ====="
+## ########################################################################## ##
+#   UTENSILS																  ##
+## ########################################################################## ##
+# RM			force remove
+# MAKEFLAGS		make flags
+# DIR_UP		duplicate directory tree
 
-re					:			fclean all
+RM          := rm -f
+MAKEFLAGS   += --silent --no-print-directory
+DIR_DUP     = mkdir -p $(@D)
 
-.PHONY				:			all bonus clean fclean re
-								@echo "===== minishell created, deleted and re-created done ====="
+## ########################################################################## ##
+#   RECIPES																	  ##
+## ########################################################################## ##
+# all			default goal
+# $(NAME)		link .o -> archive
+# %.o			compilation .c -> .o
+# clean			remove .o
+# fclean		remove .o + binary
+# re			remake default goal
 
+all: $(NAME)
+
+$(LIBS_TARGET):
+	echo "→ Compiling $(@F)"
+	$(MAKE) -C $(@D)
+
+$(BUILD_DIR)/%.o: $(SRCS_DIR)/%.c
+	echo "→ Compiling $<"
+	$(DIR_DUP)
+	$(CC) $(CFLAGS) -c $< -o $@ $(CPPFLAGS)
+
+$(NAME): $(LIBS_TARGET) $(OBJS)
+	$(CC) $(OBJS) -o $(NAME) $(LDLIBS) $(LDFLAGS)
+	echo "\033[0;32m✓ $@ READY\033[0m"
+
+bonus: all
+
+clean:
+	echo "→ Removing objects"
+	$(RM) $(OBJS)
+
+fclean: clean
+	echo "→ Removing binaries"
+	$(RM) $(NAME)
+
+re: fclean all
+
+.PHONY: re

@@ -1,0 +1,10 @@
+# Build
+.build
+minishell
+
+# IDEs
+.vscode
+
+# Compiled Object files
+**/*.o
+**/*.gch

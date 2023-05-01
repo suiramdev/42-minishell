@@ -6,7 +6,7 @@
 #    By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/08 10:15:50 by zdevove           #+#    #+#              #
-#    Updated: 2023/01/03 09:15:06 by zdevove          ###   ########.fr        #
+#    Updated: 2023/04/26 16:57:06 by mnouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,7 @@ SRCS				=			ft_atoi.c\
 								ft_memset.c\
 								ft_strdup.c\
 								ft_strncmp.c\
+								ft_strcmp.c\
 								get_next_line.c\
 								get_next_line_utils.c
 

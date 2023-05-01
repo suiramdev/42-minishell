@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 13:51:43 by zdevove           #+#    #+#             */
-/*   Updated: 2023/04/14 16:54:12 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/04/26 16:57:26 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ size_t	ft_strlen(const char *s);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+
+int		ft_strcmp(const char *s1, const char *s2);
 
 char	*ft_strnstr(const char *s1, const char *s2, size_t n);
 

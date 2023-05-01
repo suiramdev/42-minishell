@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   command.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/01 16:36:16 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/01 16:50:27 by mnouchet         ###   ########.fr       */
+/*   Created: 2023/04/26 14:44:04 by mnouchet          #+#    #+#             */
+/*   Updated: 2023/05/01 16:47:58 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+#ifndef COMMAND_H
+# define COMMAND_H
 
-/// @brief Handle the SIGINT signal
-/// @param signal The signal to handle
-/// @return void
-void	signal_handler(int signal) 
+# include "types/env.h"
+# include <sys/types.h>
+
+typedef struct s_cmd
 {
-    if (signal == SIGINT) {
-        printf("\n");
-        rl_on_new_line();
-        rl_replace_line("", 0);
-        rl_redisplay();
-    }
-}
+	char			*name;
+	char			**args;
+	t_env			*env;
+	pid_t			pid;
+	struct s_cmd	*next;
+}	t_cmd;
+
+t_cmd	*last_cmd(t_cmd *cmds);
+void	add_cmd(t_cmd **cmds, t_cmd *new);
+t_cmd	*new_cmd(char **tokens, int start, int end);
+t_cmd	*init_cmds(char **tokens);
+int		exec_cmds(t_cmd *cmds);
+
+#endif
