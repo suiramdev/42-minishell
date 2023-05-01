@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 23:16:48 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/04/26 23:37:41 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/01 18:18:31 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ char	*join_path(char *s1, char *s2)
 	output[s1_len + s2_len + 1] = '\0';
 	return (output);
 }
+
+#include <stdio.h>
 
 /// @brief Resolve a path from a file name based on the PATH environment 
 /// variable or the current directory if the file name is a relative path

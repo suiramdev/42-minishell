@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 00:11:36 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/04/27 01:56:19 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/01 18:23:04 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@
 
 /// @brief Attempt to execute a builtin command
 /// @param cmd The command to execute
+/// @param envs The environment variables
 /// @return EXIT_SUCCESS if the command was executed, EXIT_FAILURE otherwise
-int	builtins(t_cmd *cmd)
+int	builtins(t_cmd *cmd, t_env *envs)
 {
 	t_builtin	builtins[5];
 	size_t		i;
@@ -34,7 +35,7 @@ int	builtins(t_cmd *cmd)
 	{
 		if (ft_strcmp(builtins[i].name, cmd->name) == 0)
 		{
-			builtins[i].func(cmd);
+			builtins[i].func(cmd, envs);
 			return (EXIT_SUCCESS);
 		}
 		i++;

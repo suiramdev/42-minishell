@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:01:48 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/04/27 00:22:33 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/01 17:54:00 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	builtin_pwd(t_cmd *cmd)
 {
 	char	path[1024];
 
-	if (cmd->args)
+	if (cmd->args && cmd->args[1])
 	{
 		ft_putstr_fd("pwd: too many arguments\n", STDERR_FILENO);
 		return ;

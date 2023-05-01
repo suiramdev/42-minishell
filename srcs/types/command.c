@@ -20,6 +20,9 @@
 #include <sys/wait.h>
 #include <stdio.h>
 
+/// @brief Fetch the last command in the commands linked list
+/// @param cmds The commands linked list
+/// @return The last command
 t_cmd	*last_cmd(t_cmd *cmds)
 {
 	while (cmds->next)
@@ -27,6 +30,9 @@ t_cmd	*last_cmd(t_cmd *cmds)
 	return (cmds);
 }
 
+/// @brief Add a command to the commands linked list
+/// @param cmds The commands linked list
+/// @param new The command to add
 void	add_cmd(t_cmd **cmds, t_cmd *new)
 {
 	t_cmd	*last;
@@ -43,6 +49,11 @@ void	add_cmd(t_cmd **cmds, t_cmd *new)
 	}
 }
 
+/// @brief Create a new command from the tokens array
+/// @param tokens The tokens array
+/// @param start The start index of the command in the tokens array
+/// @param end The end index of the command in the tokens array
+/// @return The new command
 t_cmd	*new_cmd(char **tokens, int start, int end)
 {
     t_cmd	*cmd;
@@ -50,11 +61,12 @@ t_cmd	*new_cmd(char **tokens, int start, int end)
 
     i = 0;
     cmd = (t_cmd *)malloc(sizeof(t_cmd));
-    if (!cmd)
-        return 0;
+	if (!cmd)
+		return (NULL);
+	cmd->name = ft_strdup(tokens[start]);
     cmd->args = (char **)malloc((end - start + 1) * sizeof(char *));
     if (!cmd->args)
-        return 0;
+        return (NULL);
     while (start + i < end)
     {
         cmd->args[i] = tokens[start + i];
@@ -65,6 +77,9 @@ t_cmd	*new_cmd(char **tokens, int start, int end)
     return (cmd);
 }
 
+/// @brief Initialize the commands linked list from the tokens array
+/// @param tokens The tokens array
+/// @return The commands linked list
 t_cmd	*init_cmds(char **tokens)
 {
     t_cmd	*cmds;
@@ -104,7 +119,7 @@ static void	close_pipes(int pipes[2][2])
 	close(pipes[1][1]);
 }
 
-static int	child_process(size_t index, int pipes[2][2], t_cmd *cmd)
+static int	child_process(size_t index, int pipes[2][2], t_cmd *cmd, t_env *envs)
 {
 	char	*path;
 	char	**envp;
@@ -115,10 +130,10 @@ static int	child_process(size_t index, int pipes[2][2], t_cmd *cmd)
 	if (cmd->next)
 		dup2(pipes[index % 2][1], STDOUT_FILENO);
 	close_pipes(pipes);
-	if (builtins(cmd) == EXIT_FAILURE)
+	if (builtins(cmd, envs) == EXIT_FAILURE)
 	{
-		path = resolve_path(cmd->name, cmd->env);
-		envp = format_env(cmd->env);
+		path = resolve_path(cmd->name, envs);
+		envp = format_env(envs);
 		execve(path, cmd->args, envp);
 		free(path);
 		i = 0;
@@ -137,7 +152,7 @@ static int	child_process(size_t index, int pipes[2][2], t_cmd *cmd)
 /// @param cmds The list of commands to execute
 /// @return EXIT_SUCCESS if the command was executed successfully
 /// EXIT_FAILURE otherwise
-int	exec_cmds(t_cmd *cmds)
+int	exec_cmds(t_cmd *cmds, t_env *envs)
 {
 	t_cmd	*cmd;
 	size_t	i;
@@ -155,7 +170,7 @@ int	exec_cmds(t_cmd *cmds)
 		if (cmd->pid == -1)
 			return (EXIT_FAILURE);
 		if (cmd->pid == 0)
-			child_process(i, pipes, cmd);
+			child_process(i, pipes, cmd, envs);
 		close_pipes(pipes);
 		i++;
 		cmd = cmd->next;

@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:01:31 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/04/26 17:48:51 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/01 18:21:35 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@
 
 /// @brief Execute the env builtin command
 /// @param cmd The command data structure
-void	builtin_env(t_cmd *cmd)
+/// @param envs The environment variables
+void	builtin_env(t_cmd *cmd, t_env *envs)
 {
 	char	**formatted_env;
 	size_t	i;
 
-	formatted_env = format_env(cmd->env);
+	(void)cmd;
+	formatted_env = format_env(envs);
 	i = 0;
 	while (formatted_env[i])
 	{
