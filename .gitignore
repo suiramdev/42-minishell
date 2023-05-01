@@ -8,3 +8,4 @@ minishell
 # Compiled Object files
 **/*.o
 **/*.gch
+**/*.a
