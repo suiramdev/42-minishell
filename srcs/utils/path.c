@@ -42,8 +42,6 @@ char	*join_path(char *s1, char *s2)
 	return (output);
 }
 
-#include <stdio.h>
-
 /// @brief Resolve a path from a file name based on the PATH environment 
 /// variable or the current directory if the file name is a relative path
 /// @param file The file name to resolve

@@ -23,7 +23,7 @@ void	builtin_cd(t_cmd *cmd, t_env *envs)
 {
 	t_env	*env;
 	char	*path;
-	
+
 	if (cmd->args && cmd->args[1])
 		path = cmd->args[1];
 	else

@@ -1,11 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */ /*   command.c                                          :+:      :+:    :+:   */
+/*                                                        :::      ::::::::   */
+/*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/26 14:28:40 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/04/27 15:31:52 by mnouchet         ###   ########.fr       */
+/*   Created: 2023/05/01 18:34:30 by mnouchet          #+#    #+#             */
+/*   Updated: 2023/05/01 18:37:50 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,25 +57,25 @@ void	add_cmd(t_cmd **cmds, t_cmd *new)
 /// @return The new command
 t_cmd	*new_cmd(char **tokens, int start, int end)
 {
-    t_cmd	*cmd;
-    int		i;
+	t_cmd	*cmd;
+	int		i;
 
-    i = 0;
-    cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	i = 0;
+	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
 	cmd->name = ft_strdup(tokens[start]);
-    cmd->args = (char **)malloc((end - start + 1) * sizeof(char *));
-    if (!cmd->args)
-        return (NULL);
-    while (start + i < end)
-    {
-        cmd->args[i] = tokens[start + i];
-        i++;
-    }
-    cmd->args[i] = 0;
-    cmd->next = 0;
-    return (cmd);
+	cmd->args = (char **)malloc((end - start + 1) * sizeof(char *));
+	if (!cmd->args)
+		return (NULL);
+	while (start + i < end)
+	{
+		cmd->args[i] = tokens[start + i];
+		i++;
+	}
+	cmd->args[i] = 0;
+	cmd->next = 0;
+	return (cmd);
 }
 
 /// @brief Initialize the commands linked list from the tokens array
@@ -82,32 +83,32 @@ t_cmd	*new_cmd(char **tokens, int start, int end)
 /// @return The commands linked list
 t_cmd	*init_cmds(char **tokens)
 {
-    t_cmd	*cmds;
-    t_cmd	*new;
-    int		start;
-    int		i;
+	t_cmd	*cmds;
+	t_cmd	*new;
+	int		start;
+	int		i;
 
-    cmds = NULL;
-    start = 0;
-    i = 0;
-    while (tokens[i])
-    {
-        // If there is a pipe
-        if (has_pipes(tokens[i]))
-        {
-            // Create a node with args[start] to args[i]
-            new = new_cmd(tokens, start, i);
-            add_cmd(&cmds, new);
-            // Jump the pipe
-            start = i + 1;
-        }
-        i++;
-    }
-    // Create node from 0 to end if no pipe
-    // Or create last node from pipe to end if pipe
-    new = new_cmd(tokens, start, i);
-    add_cmd(&cmds, new);
-    return (cmds);
+	cmds = NULL;
+	start = 0;
+	i = 0;
+	while (tokens[i])
+	{
+		// If there is a pipe
+		if (has_pipes(tokens[i]))
+		{
+			// Create a node with args[start] to args[i]
+			new = new_cmd(tokens, start, i);
+			add_cmd(&cmds, new);
+			// Jump the pipe
+			start = i + 1;
+		}
+		i++;
+	}
+	// Create node from 0 to end if no pipe
+	// Or create last node from pipe to end if pipe
+	new = new_cmd(tokens, start, i);
+	add_cmd(&cmds, new);
+	return (cmds);
 }
 
 // Should be replaced, this is just for testing
@@ -119,7 +120,8 @@ static void	close_pipes(int pipes[2][2])
 	close(pipes[1][1]);
 }
 
-static int	child_process(size_t index, int pipes[2][2], t_cmd *cmd, t_env *envs)
+static int	child_process(size_t index, int pipes[2][2],
+	t_cmd *cmd, t_env *envs)
 {
 	char	*path;
 	char	**envp;

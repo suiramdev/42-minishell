@@ -19,12 +19,13 @@
 /// @brief Handle the SIGINT signal
 /// @param signal The signal to handle
 /// @return void
-void	signal_handler(int signal) 
+void	signal_handler(int signal)
 {
-    if (signal == SIGINT) {
-        printf("\n");
-        rl_on_new_line();
-        rl_replace_line("", 0);
-        rl_redisplay();
-    }
+	if (signal == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }

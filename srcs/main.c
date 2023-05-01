@@ -48,28 +48,28 @@ static t_env	*init_envs(char **envp)
 /// @return The exit status
 static int	readentry(t_cmd *cmds, t_env *envs)
 {
-    char	*line;
-    char	**tokens;
+	char	*line;
+	char	**tokens;
 
-    cmds = 0;
-    while (1)
-    {
-        // If ctrl+c signal, force loop again
+	cmds = 0;
+	while (1)
+	{
+		// If ctrl+c signal, force loop again
 		signal(SIGINT, &signal_handler);
-        line = readline("minishell$ ");
-        if (!line)
-            break;
-        add_history(line);
-        tokens = tokenize(line);
-        if (!tokens)
-            return (free(line), free_tokens(tokens), EXIT_FAILURE);
-        if (tokens[0])
-            cmds = init_cmds(tokens);
+		line = readline("minishell$ ");
+		if (!line)
+			break ;
+		add_history(line);
+		tokens = tokenize(line);
+		if (!tokens)
+			return (free(line), free_tokens(tokens), EXIT_FAILURE);
+		if (tokens[0])
+			cmds = init_cmds(tokens);
 		exec_cmds(cmds, envs);
-        free(line);
-        free_tokens(tokens);
-    }
-    return (EXIT_SUCCESS);
+		free(line);
+		free_tokens(tokens);
+	}
+	return (EXIT_SUCCESS);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -81,7 +81,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	envs = init_envs(envp);
 	if (!readentry(&cmds, envs))
-        return (0);
+		return (EXIT_FAILURE);
 	free_envs(envs);
 	return (EXIT_SUCCESS);
 }

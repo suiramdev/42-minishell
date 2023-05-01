@@ -40,14 +40,14 @@ int	skip_quotes(char *line)
 /// @return 1 if the line contains pipes, 0 otherwise
 int	has_pipes(char *str)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (str[i])
-    {
-        if (str[i] == '|')
-            return (1);
-        i++;
-    }
-    return (0);
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '|')
+			return (1);
+		i++;
+	}
+	return (0);
 }
