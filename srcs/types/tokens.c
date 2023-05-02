@@ -13,34 +13,34 @@
 #include "utils/parsing.h"
 #include "libft.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 /// @brief Get next token with space ' or " as delimiter
 /// @param line_ptr The line's pointer to parse
 /// @return char* The next token
-static char	*next_token(char **line)
+static char	*get_next_token(char **line)
 {
 	char	*token;
-	int		i;
+	size_t	start;
+	size_t	end;
 
-	i = 0;
-	// Skip leading spaces
-	while (is_space((*line)[i]))
-		i++;
-	// While it's a character and not a white spice keep going
-	while (((*line)[i] && !is_space((*line)[i])))
+	start = 0;
+	while (is_space((*line)[start]))
+		start++;
+	end = start;
+	while (((*line)[end] && !is_space((*line)[end])))
 	{
-		// if it's a ' or ", skip it and keep going
-		if ((*line)[i] == '\'' || (*line)[i] == '"')
-			i += skip_quotes(*line + i);
+		if ((*line)[end] == '\'' || (*line)[end] == '"')
+			end += skip_quotes(*line + end);
 		else
-			i++;
+			end++;
 	}
 	// Malloc token
-	token = ft_substr(*line, 0, i);
+	token = ft_substr(*line, start, end - start);
 	if (!token)
 		return (0);
 	// Update line_ptr so we don't get same token over and over
-	line += i;
+	*line += end;
 	return (token);
 }
 
@@ -83,11 +83,11 @@ char	**tokenize(char *line)
 	// Allocate memory for tokens array
 	tokens = (char **)malloc(sizeof(char *) * (tokens_count + 1));
 	if (!tokens)
-		return (0);
+		return (NULL);
 	// Put each token in tokens
 	while (i < tokens_count)
-		tokens[i++] = next_token(&line);
-	tokens[i] = 0;
+		tokens[i++] = get_next_token(&line);
+	tokens[i] = NULL;
 	return (tokens);
 }
 
