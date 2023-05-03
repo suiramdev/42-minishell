@@ -18,37 +18,6 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <stdio.h>
-#include <fcntl.h>
-
-/// @brief Fetch the last command in the commands linked list
-/// @param cmds The commands linked list
-/// @return The last command
-t_cmd	*last_cmd(t_cmd *cmds)
-{
-	while (cmds->next)
-		cmds = cmds->next;
-	return (cmds);
-}
-
-/// @brief Add a command to the commands linked list
-/// @param cmds The commands linked list
-/// @param new The command to add
-void	add_cmd(t_cmd **cmds, t_cmd *new)
-{
-	t_cmd	*last;
-
-	if (new)
-	{
-		if (!*cmds)
-		{
-			*cmds = new;
-			return ;
-		}
-		last = last_cmd(*cmds);
-		last->next = new;
-	}
-}
 
 /// @brief Create a new command from the tokens array
 /// @param tokens The tokens array
@@ -76,6 +45,27 @@ t_cmd	*new_cmd(char **tokens, int start, int end)
 	cmd->args[i] = NULL;
 	cmd->next = NULL;
 	return (cmd);
+}
+
+/// @brief Add a command to the commands linked list
+/// @param cmds The commands linked list
+/// @param new The command to add
+void	add_cmd(t_cmd **cmds, t_cmd *new)
+{
+	t_cmd	*last;
+
+	if (new)
+	{
+		if (!*cmds)
+		{
+			*cmds = new;
+			return ;
+		}
+		last = *cmds;
+		while (last->next)
+			last = last->next;
+		last->next = new;
+	}
 }
 
 /// @brief Initialize the commands linked list from the tokens array
