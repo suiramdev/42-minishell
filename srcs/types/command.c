@@ -7,8 +7,7 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 18:34:30 by mnouchet          #+#    #+#             */
 /*   Updated: 2023/05/01 18:37:50 by mnouchet         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+/*                                                                            */ /* ************************************************************************** */
 
 #include "types/command.h"
 #include "builtins.h"
@@ -20,6 +19,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdio.h>
+#include <fcntl.h>
 
 /// @brief Fetch the last command in the commands linked list
 /// @param cmds The commands linked list
@@ -60,7 +60,6 @@ t_cmd	*new_cmd(char **tokens, int start, int end)
 	t_cmd	*cmd;
 	int		i;
 
-	i = 0;
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
@@ -68,13 +67,14 @@ t_cmd	*new_cmd(char **tokens, int start, int end)
 	cmd->args = (char **)malloc((end - start + 1) * sizeof(char *));
 	if (!cmd->args)
 		return (NULL);
+	i = 0;
 	while (start + i < end)
 	{
 		cmd->args[i] = tokens[start + i];
 		i++;
 	}
-	cmd->args[i] = 0;
-	cmd->next = 0;
+	cmd->args[i] = NULL;
+	cmd->next = NULL;
 	return (cmd);
 }
 
@@ -162,18 +162,21 @@ int	exec_cmds(t_cmd *cmds, t_env *envs)
 
 	cmd = cmds;
 	i = 0;
-	if (pipe(pipes[0]) == -1 || pipe(pipes[1]) == -1)
+	if (pipe(pipes[1]) == -1)
 		return (EXIT_FAILURE);
 	while (cmd)
 	{
-		if (i > 0 && pipe(pipes[i % 2]) == -1)
+		if (pipe(pipes[i % 2]) == -1)
 			return (EXIT_FAILURE);
 		cmd->pid = fork();
 		if (cmd->pid == -1)
 			return (EXIT_FAILURE);
 		if (cmd->pid == 0)
-			child_process(i, pipes, cmd, envs);
-		close_pipes(pipes);
+			return (child_process(i, pipes, cmd, envs));
+		if (i > 0)
+			close(pipes[(i - 1) % 2][0]);
+		if (cmd->next)
+			close(pipes[i % 2][1]);
 		i++;
 		cmd = cmd->next;
 	}
@@ -183,5 +186,6 @@ int	exec_cmds(t_cmd *cmds, t_env *envs)
 		waitpid(cmd->pid, NULL, 0);
 		cmd = cmd->next;
 	}
+	close_pipes(pipes);
 	return (EXIT_SUCCESS);
 }
