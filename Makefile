@@ -44,7 +44,7 @@ SRCS		:= main.c				\
 			   utils/signals.c		\
 			   types/command.c		\
 			   types/env.c			\
-			   types/tokens.c		\
+			   types/token.c		\
 			   builtins/cd.c		\
 			   builtins/echo.c		\
 			   builtins/env.c		\

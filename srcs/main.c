@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "types/env.h"
-#include "types/tokens.h"
+#include "types/token.h"
 #include "types/command.h"
 #include "utils/signal.h"
 #include "libft.h"

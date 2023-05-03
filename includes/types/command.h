@@ -24,7 +24,6 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-t_cmd	*last_cmd(t_cmd *cmds);
 void	add_cmd(t_cmd **cmds, t_cmd *new);
 t_cmd	*new_cmd(char **tokens, int start, int end);
 t_cmd	*init_cmds(char **tokens);

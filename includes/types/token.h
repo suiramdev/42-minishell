@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOKENS_H
-# define TOKENS_H
+#ifndef TOKEN_H
+# define TOKEN_H
 
 char	**tokenize(char *line);
 void	free_tokens(char **tokens);
