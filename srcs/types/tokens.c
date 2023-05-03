@@ -45,10 +45,10 @@ static char	*get_next_token(char **line)
 }
 
 // Count the number of tokens in the line
-static int	count_token(char *line)
+static size_t	count_token(char *line)
 {
-	int	i;
-	int	tokens_count;
+	size_t	i;
+	size_t	tokens_count;
 
 	i = 0;
 	tokens_count = 0;
@@ -74,8 +74,8 @@ static int	count_token(char *line)
 /// @return An array of tokens
 char	**tokenize(char *line)
 {
-	int		i;
-	int		tokens_count;
+	size_t	i;
+	size_t	tokens_count;
 	char	**tokens;
 
 	i = 0;
@@ -95,11 +95,9 @@ char	**tokenize(char *line)
 /// @param tokens The tokens to free
 void	free_tokens(char **tokens)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (tokens[i])
-		i++;
-	while (i--)
-		free(tokens[i]);
+		free(tokens[i++]);
 }
