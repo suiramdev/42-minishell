@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:01:39 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/01 18:21:58 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/05 14:55:29 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /// @brief Execute the exit builtin command
 /// @param cmd The command to execute
 /// @param envs The environment variables
-void	builtin_exit(t_cmd *cmd, t_env *envs)
+int	builtin_exit(t_cmd *cmd, t_env *envs)
 {
 	int		exit_code;
 
@@ -24,5 +24,5 @@ void	builtin_exit(t_cmd *cmd, t_env *envs)
 	exit_code = 0;
 	if (cmd->args && cmd->args[1])
 		exit_code = ft_atoi(cmd->args[1]);
-	exit(exit_code);
+	return (exit_code);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokens.c                                           :+:      :+:    :+:   */
+/*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:31:08 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/01 16:42:57 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/05 14:30:02 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,9 @@ static char	*get_next_token(char **line)
 		else
 			end++;
 	}
-	// Malloc token
 	token = ft_substr(*line, start, end - start);
 	if (!token)
 		return (0);
-	// Update line_ptr so we don't get same token over and over
 	*line += end;
 	return (token);
 }
@@ -80,11 +78,9 @@ char	**tokenize(char *line)
 
 	i = 0;
 	tokens_count = count_token(line);
-	// Allocate memory for tokens array
 	tokens = (char **)malloc(sizeof(char *) * (tokens_count + 1));
 	if (!tokens)
 		return (NULL);
-	// Put each token in tokens
 	while (i < tokens_count)
 		tokens[i++] = get_next_token(&line);
 	tokens[i] = NULL;
@@ -100,4 +96,5 @@ void	free_tokens(char **tokens)
 	i = 0;
 	while (tokens[i])
 		free(tokens[i++]);
+	free(tokens);
 }

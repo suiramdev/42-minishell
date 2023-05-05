@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/01 18:23:40 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/05 14:52:42 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "types/token.h"
 #include "types/command.h"
 #include "utils/signal.h"
+#include "utils/parsing.h"
+#include "exec.h"
 #include "libft.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -43,18 +45,46 @@ static t_env	*init_envs(char **envp)
 	return (env);
 }
 
+/// @brief Initialize the commands linked list from the tokens array
+/// @param tokens The tokens array
+/// @return The commands linked list
+t_cmd	*init_cmds(char **tokens)
+{
+	t_cmd	*cmds;
+	t_cmd	*new;
+	int		start;
+	int		i;
+
+	cmds = NULL;
+	start = 0;
+	i = 0;
+	while (tokens[i])
+	{
+		if (has_pipes(tokens[i]))
+		{
+			new = new_cmd(tokens, start, i);
+			add_cmd(&cmds, new);
+			start = i + 1;
+		}
+		i++;
+	}
+	new = new_cmd(tokens, start, i);
+	add_cmd(&cmds, new);
+	return (cmds);
+}
+
 /// @brief Loop to read user input and execute commands
 /// @param envs The environment variables linked list
-/// @return The exit status
-static int	readentry(t_cmd *cmds, t_env *envs)
+/// @return The exit status of the command or the main process
+static int	readentry(t_cmd **cmds, t_env *envs)
 {
 	char	*line;
 	char	**tokens;
+	int		exit_status;
 
-	cmds = 0;
+	*cmds = NULL;
 	while (1)
 	{
-		// If ctrl+c signal, force loop again
 		signal(SIGINT, &signal_handler);
 		line = readline("minishell$ ");
 		if (!line)
@@ -62,12 +92,15 @@ static int	readentry(t_cmd *cmds, t_env *envs)
 		add_history(line);
 		tokens = tokenize(line);
 		if (!tokens)
-			return (free(line), free_tokens(tokens), EXIT_FAILURE);
+			return (free(line), EXIT_FAILURE);
 		if (tokens[0])
-			cmds = init_cmds(tokens);
-		exec_cmds(cmds, envs);
+			*cmds = init_cmds(tokens);
+		exit_status = exec_cmds(*cmds, envs);
 		free(line);
 		free_tokens(tokens);
+		free_cmds(*cmds);
+		if ((*cmds)->pid == 0)
+			return (exit_status);
 	}
 	return (EXIT_SUCCESS);
 }
@@ -75,13 +108,13 @@ static int	readentry(t_cmd *cmds, t_env *envs)
 int	main(int argc, char **argv, char **envp)
 {
 	t_env	*envs;
-	t_cmd	cmds;
+	t_cmd	*cmds;
+	int		exit_status;
 
 	(void)argc;
 	(void)argv;
 	envs = init_envs(envp);
-	if (!readentry(&cmds, envs))
-		return (EXIT_FAILURE);
+	exit_status = readentry(&cmds, envs);
 	free_envs(envs);
-	return (EXIT_SUCCESS);
+	return (exit_status);
 }

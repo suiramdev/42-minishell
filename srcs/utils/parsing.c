@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:34:15 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/01 16:39:28 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/05 14:30:29 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	skip_quotes(char *line)
 	char	quote;
 
 	i = 1;
-	quote = line[0]; // ' or "
+	quote = line[0];
 	while (line[i] && line[i] != quote)
 			i++;
 	if (line[i] == quote)

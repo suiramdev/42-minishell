@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 00:11:36 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/01 18:23:04 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/05 14:56:56 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ int	builtins(t_cmd *cmd, t_env *envs)
 	{
 		if (ft_strcmp(builtins[i].name, cmd->name) == 0)
 		{
-			builtins[i].func(cmd, envs);
-			return (EXIT_SUCCESS);
+			return (builtins[i].func(cmd, envs));
 		}
 		i++;
 	}
