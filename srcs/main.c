@@ -6,22 +6,13 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/05 14:52:42 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/08 17:13:30 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "types/env.h"
-#include "types/token.h"
-#include "types/command.h"
-#include "utils/signal.h"
-#include "utils/parsing.h"
-#include "exec.h"
-#include "libft.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <signal.h>
+#include "minishell.h"
+
+int	g_force_exit;
 
 /// @brief Initialize the environment variables from the envp array
 /// @param envp The environment variables array
@@ -75,7 +66,7 @@ t_cmd	*init_cmds(char **tokens)
 
 /// @brief Loop to read user input and execute commands
 /// @param envs The environment variables linked list
-/// @return The exit status of the command or the main process
+/// @return EXIT_SUCCESS or EXIT_FAILURE if an error occured
 static int	readentry(t_cmd **cmds, t_env *envs)
 {
 	char	*line;
@@ -95,10 +86,12 @@ static int	readentry(t_cmd **cmds, t_env *envs)
 			return (free(line), EXIT_FAILURE);
 		if (tokens[0])
 			*cmds = init_cmds(tokens);
-		exit_status = exec_cmds(*cmds, envs);
+		exit_status = exec(*cmds, envs);
 		free(line);
 		free_tokens(tokens);
 		free_cmds(*cmds);
+		if (g_force_exit != -1)
+			return (g_force_exit);
 		if ((*cmds)->pid == 0)
 			return (exit_status);
 	}
@@ -113,6 +106,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	g_force_exit = -1;
 	envs = init_envs(envp);
 	exit_status = readentry(&cmds, envs);
 	free_envs(envs);

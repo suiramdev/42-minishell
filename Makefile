@@ -6,7 +6,7 @@
 #    By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/06 22:19:57 by mnouchet          #+#    #+#              #
-#    Updated: 2023/05/03 14:57:09 by mnouchet         ###   ########.fr        #
+#    Updated: 2023/05/08 14:42:35 by mnouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,6 @@ INCS		:= includes				\
 
 SRCS_DIR	:= srcs
 SRCS		:= main.c				\
-			   builtins.c			\
 			   exec.c				\
 			   utils/parsing.c		\
 			   utils/path.c			\

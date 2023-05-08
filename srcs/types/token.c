@@ -6,14 +6,11 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:31:08 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/05 14:30:02 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/08 16:27:52 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils/parsing.h"
-#include "libft.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include "minishell.h"
 
 /// @brief Get next token with space ' or " as delimiter
 /// @param line_ptr The line's pointer to parse

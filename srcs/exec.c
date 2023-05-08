@@ -6,18 +6,13 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:50:53 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/05 14:52:08 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/08 17:11:17 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "types/command.h"
-#include "utils/path.h"
-#include "builtins.h"
-#include "libft.h"
+#include "exec.h"
+#include "minishell.h"
 #include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 
 // Should be replaced, this is just for testing
 static void	close_pipes(int pipes[2][2])
@@ -28,40 +23,62 @@ static void	close_pipes(int pipes[2][2])
 	close(pipes[1][1]);
 }
 
-static int	child_process(size_t index, int pipes[2][2],
-	t_cmd *cmd, t_env *envs)
+static int	builtins_exec(t_cmd *cmd, t_env *envs)
+{
+	t_builtin	builtins[5];
+	size_t		i;
+
+	builtins[0] = (t_builtin){.name = "cd", .func = builtin_cd};
+	builtins[1] = (t_builtin){.name = "echo", .func = builtin_echo};
+	builtins[2] = (t_builtin){.name = "env", .func = builtin_env};
+	builtins[3] = (t_builtin){.name = "exit", .func = builtin_exit};
+	builtins[4] = (t_builtin){.name = "pwd", .func = builtin_pwd};
+	i = 0;
+	while (i < 5)
+	{
+		if (ft_strcmp(builtins[i].name, cmd->name) == 0)
+		{
+			return (builtins[i].func(cmd, envs));
+		}
+		i++;
+	}
+	return (BUILTIN_NOT_FOUND);
+}
+
+static int	default_exec(t_cmd *cmd, t_env *envs)
 {
 	char	*path;
 	char	**envp;
 	size_t	i;
 
+	path = resolve_path(cmd->name, envs);
+	envp = format_env(envs);
+	execve(path, cmd->args, envp);
+	free(path);
+	i = 0;
+	while (envp[i])
+		free(envp[i++]);
+	free(envp);
+	ft_putstr_fd("Command not found: ", STDERR_FILENO);
+	ft_putstr_fd(cmd->name, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
+	return (EXIT_FAILURE);
+}
+
+static int	child_process(size_t index, int pipes[2][2],
+	t_cmd *cmd, t_env *envs)
+{
 	if (index > 0)
 		dup2(pipes[(index - 1) % 2][0], STDIN_FILENO);
 	if (cmd->next)
 		dup2(pipes[index % 2][1], STDOUT_FILENO);
 	close_pipes(pipes);
-	if (builtins(cmd, envs) == EXIT_FAILURE)
-	{
-		path = resolve_path(cmd->name, envs);
-		envp = format_env(envs);
-		execve(path, cmd->args, envp);
-		free(path);
-		i = 0;
-		while (envp[i])
-			free(envp[i++]);
-		free(envp);
-		ft_putstr_fd("Command not found: ", STDERR_FILENO);
-		ft_putstr_fd(cmd->name, STDERR_FILENO);
-		ft_putstr_fd("\n", STDERR_FILENO);
-		return (EXIT_FAILURE);
-	}
+	if (builtins_exec(cmd, envs) == BUILTIN_NOT_FOUND)
+		return (default_exec(cmd, envs));
 	return (EXIT_SUCCESS);
 }
 
-/// @brief Execute a list of commands in parallel processes
-/// @param cmds The list of commands to execute
-/// @return The exit status of the command or the main process
-int	exec_cmds(t_cmd *cmds, t_env *envs)
+static int	piped_exec(t_cmd *cmds, t_env *envs)
 {
 	t_cmd	*cmd;
 	size_t	i;
@@ -73,10 +90,10 @@ int	exec_cmds(t_cmd *cmds, t_env *envs)
 		return (EXIT_FAILURE);
 	while (cmd)
 	{
-		if (pipe(pipes[i % 2]) == -1)
+		if (pipe(pipes[i % 2]) == -1) // We should close the pipes
 			return (EXIT_FAILURE);
 		cmd->pid = fork();
-		if (cmd->pid == -1)
+		if (cmd->pid == -1) // We should close the pipes
 			return (EXIT_FAILURE);
 		if (cmd->pid == 0)
 			return (child_process(i, pipes, cmd, envs));
@@ -95,4 +112,27 @@ int	exec_cmds(t_cmd *cmds, t_env *envs)
 	}
 	close_pipes(pipes);
 	return (EXIT_SUCCESS);
+}
+
+/// @brief Executes commands
+/// @param cmds The commands to execute
+/// @param envs The environment variables
+/// @return EXIT_SUCCESS or EXIT_FAILURE if an error occured
+int	exec(t_cmd *cmds, t_env *envs)
+{
+	int	exit_status;
+
+	if (cmds->next)
+		return (piped_exec(cmds, envs));
+	exit_status = builtins_exec(cmds, envs);
+	if (exit_status == BUILTIN_NOT_FOUND)
+	{
+		cmds->pid = fork();
+		if (cmds->pid == -1)
+			return (EXIT_FAILURE);
+		if (cmds->pid == 0)
+			return (default_exec(cmds, envs));
+		waitpid(cmds->pid, NULL, 0);
+	}
+	return (exit_status);
 }

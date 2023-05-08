@@ -6,13 +6,11 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 23:16:48 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/01 18:18:31 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/08 16:27:33 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "types/env.h"
-#include "libft.h"
-#include <unistd.h>
+#include "minishell.h"
 
 /// @brief Join two path together with a '/' between them
 /// @param s1 First path

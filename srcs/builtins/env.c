@@ -6,13 +6,11 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:01:31 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/05 14:54:58 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/08 16:25:08 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "types/command.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include "minishell.h"
 
 /// @brief Execute the env builtin command
 /// @param cmd The command data structure

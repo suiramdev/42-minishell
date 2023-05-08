@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:53:58 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/03 14:56:46 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/08 17:12:17 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include "types/command.h"
 # include "types/env.h"
 
-int	exec_cmds(t_cmd *cmds, t_env *envs);
+# define BUILTIN_NOT_FOUND -1
+
+int	exec(t_cmd *cmds, t_env *envs);
 
 #endif

@@ -6,14 +6,11 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:03:54 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/05 14:30:19 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/08 16:27:48 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "types/env.h"
-#include "libft.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include "minishell.h"
 
 /// @brief Get an environment variable from the list
 /// @param envs The head of the list of environment variables

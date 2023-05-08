@@ -6,19 +6,11 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:30:39 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/05 14:30:41 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/08 16:27:42 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "types/command.h"
-#include "builtins.h"
-#include "utils/path.h"
-#include "utils/parsing.h"
-#include "libft.h"
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+#include "minishell.h"
 
 /// @brief Create a new command from the tokens array
 /// @param tokens The tokens array
@@ -44,6 +36,7 @@ t_cmd	*new_cmd(char **tokens, int start, int end)
 		i++;
 	}
 	cmd->args[i] = NULL;
+	cmd->pid = -1;
 	cmd->next = NULL;
 	return (cmd);
 }
