@@ -14,7 +14,7 @@
 # define PARSING_H
 
 int	is_space(char c);
-int	skip_quotes(char *line);
+int	is_quote(char c);
 int	has_pipes(char *str);
 
 #endif

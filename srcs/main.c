@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/08 17:13:30 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/08 20:42:02 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,27 +41,30 @@ static t_env	*init_envs(char **envp)
 /// @return The commands linked list
 t_cmd	*init_cmds(char **tokens)
 {
-	t_cmd	*cmds;
-	t_cmd	*new;
-	int		start;
-	int		i;
+    t_cmd	*cmds;
+    t_cmd	*new;
+    size_t	start;
+    size_t	i;
 
 	cmds = NULL;
-	start = 0;
-	i = 0;
-	while (tokens[i])
-	{
-		if (has_pipes(tokens[i]))
-		{
-			new = new_cmd(tokens, start, i);
-			add_cmd(&cmds, new);
-			start = i + 1;
-		}
-		i++;
-	}
-	new = new_cmd(tokens, start, i);
-	add_cmd(&cmds, new);
-	return (cmds);
+    start = 0;
+    i = 0;
+    while (tokens[i])
+    {
+        if (has_pipes(tokens[i]))
+        {
+            new = new_cmd(tokens, start, i);
+            add_cmd(&cmds, new);
+            start = i + 1;
+        }
+        i++;
+    }
+    if (tokens[start])
+    {
+        new = new_cmd(tokens, start, i);
+        add_cmd(&cmds, new);
+    }
+    return (cmds);
 }
 
 /// @brief Loop to read user input and execute commands
@@ -69,33 +72,38 @@ t_cmd	*init_cmds(char **tokens)
 /// @return EXIT_SUCCESS or EXIT_FAILURE if an error occured
 static int	readentry(t_cmd **cmds, t_env *envs)
 {
-	char	*line;
-	char	**tokens;
+    char	*line;
+    char	**tokens;
 	int		exit_status;
 
-	*cmds = NULL;
-	while (1)
-	{
+    while (1)
+    {
 		signal(SIGINT, &signal_handler);
-		line = readline("minishell$ ");
-		if (!line)
-			break ;
-		add_history(line);
-		tokens = tokenize(line);
-		if (!tokens)
-			return (free(line), EXIT_FAILURE);
-		if (tokens[0])
-			*cmds = init_cmds(tokens);
-		exit_status = exec(*cmds, envs);
+        line = readline("minishell$ ");
+        if (!line)
+            break;
+        add_history(line);
+        tokens = tokenize(line);
 		free(line);
-		free_tokens(tokens);
-		free_cmds(*cmds);
-		if (g_force_exit != -1)
-			return (g_force_exit);
-		if ((*cmds)->pid == 0)
-			return (exit_status);
-	}
-	return (EXIT_SUCCESS);
+		if (!tokens)
+			continue ;
+		*cmds = init_cmds(tokens);
+		if (*cmds)
+		{
+			(void)envs;
+			exit_status = exec(*cmds, envs);
+			if ((*cmds)->pid == 0)
+			{
+				free_cmds(*cmds);
+				return (exit_status);
+			}
+			free_cmds(*cmds);
+			if (g_force_exit != -1)
+				return (g_force_exit);
+		}
+		//free_tokens(tokens);
+    }
+    return (EXIT_SUCCESS);
 }
 
 int	main(int argc, char **argv, char **envp)

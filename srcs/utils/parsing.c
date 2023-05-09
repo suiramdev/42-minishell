@@ -18,21 +18,12 @@ int	is_space(char c)
 	return ((c >= 9 && c <= 13) || c == 32);
 }
 
-/// @brief Skip quotes in a line
-/// @param line The line to skip quotes from
-/// @return The index of the next character after the quotes
-int	skip_quotes(char *line)
+/// @brief Check if the character is a quote
+/// @param c The character to check
+/// @return 1 if the character is a quote, 0 otherwise
+int	is_quote(char c)
 {
-	int		i;
-	char	quote;
-
-	i = 1;
-	quote = line[0];
-	while (line[i] && line[i] != quote)
-			i++;
-	if (line[i] == quote)
-		return (i + 1);
-	return (-1);
+	return (c == '\'' || c == '"');
 }
 
 /// @brief Check if the line contains pipes
@@ -40,9 +31,11 @@ int	skip_quotes(char *line)
 /// @return 1 if the line contains pipes, 0 otherwise
 int	has_pipes(char *str)
 {
-	int	i;
+    int	i;
 
 	i = 0;
+	if (str[i] == '\'' || str[i] == '"')
+		return (0);
 	while (str[i])
 	{
 		if (str[i] == '|')
