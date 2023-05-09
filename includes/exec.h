@@ -18,6 +18,6 @@
 
 # define BUILTIN_NOT_FOUND -1
 
-int	exec(t_cmd *cmds, t_env *envs);
+int	exec(t_cmd *cmds, t_env **envs);
 
 #endif

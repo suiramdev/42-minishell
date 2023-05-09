@@ -13,9 +13,11 @@
 #include "minishell.h"
 
 // See issue in export.c
-int	builtin_unset(t_cmd *cmd, t_env *envs)
+int	builtin_unset(t_cmd *cmd, t_env **envs)
 {
-	(void)cmd;
-	(void)envs;
+	if (!cmd->args[1])
+		return (EXIT_FAILURE);
+	if (!remove_env(envs, cmd->args[1]))
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

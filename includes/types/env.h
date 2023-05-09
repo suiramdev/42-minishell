@@ -21,8 +21,8 @@ typedef struct s_env
 }	t_env;
 
 t_env	*get_env(t_env *envs, char *key);
-t_env	*add_env(t_env **envs, char *key, char *value);
-t_env	*remove_env(t_env *envs, char *key);
+t_env	*set_env(t_env **envs, char *key, char *value);
+t_env	*remove_env(t_env **envs, char *key);
 void	free_envs(t_env *envs);
 char	**format_env(t_env *envs);
 

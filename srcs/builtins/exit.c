@@ -15,8 +15,9 @@
 /// @brief Execute the exit builtin command
 /// @param cmd The command to execute
 /// @param envs The environment variables
+/// @return The exit status
 /// @note Should be executed in the main process
-int	builtin_exit(t_cmd *cmd, t_env *envs)
+int	builtin_exit(t_cmd *cmd, t_env **envs)
 {
 	(void)envs;
 	g_force_exit = 0;

@@ -15,9 +15,25 @@
 // Issue there, is that cmd->env is a copy of the env,
 // not the actual env we should make it a pointer to env,
 // and have also its own copy of the env maybe
-int	builtin_export(t_cmd *cmd, t_env *envs)
+int	builtin_export(t_cmd *cmd, t_env **envs)
 {
-	(void)cmd;
-	(void)envs;
+	size_t	i;
+	size_t	j;
+
+	i = 1;
+	while (cmd->args && cmd->args[i])
+	{
+		j = 0;
+		while (cmd->args[i][j] && cmd->args[i][j] != '=')
+			j++;
+		if (cmd->args[i][j] == '=')
+		{
+			cmd->args[i][j] = '\0';
+			if (!set_env(envs, cmd->args[i], &cmd->args[i][j + 1]))
+				return (EXIT_FAILURE);
+			cmd->args[i][j] = '=';
+		}
+		i++;
+	}
 	return (EXIT_SUCCESS);
 }

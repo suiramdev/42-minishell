@@ -15,8 +15,8 @@
 /// @brief Execute the cd builtin command
 /// @param cmd The command data structure
 /// @param envs The environment variables
-/// @return The exit status
-int	builtin_cd(t_cmd *cmd, t_env *envs)
+/// @return EXIT_SUCCESS or EXIT_FAILURE if an error occured
+int	builtin_cd(t_cmd *cmd, t_env **envs)
 {
 	t_env	*env;
 	char	*path;
@@ -25,7 +25,7 @@ int	builtin_cd(t_cmd *cmd, t_env *envs)
 		path = cmd->args[1];
 	else
 	{
-		env = get_env(envs, "HOME");
+		env = get_env(*envs, "HOME");
 		if (!env)
 		{
 			ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO);

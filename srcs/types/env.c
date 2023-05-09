@@ -35,7 +35,7 @@ t_env	*get_env(t_env *envs, char *key)
 /// @param key The key of the new environment variable
 /// @param value The value of the new environment variable
 /// @return The new environment variable
-t_env	*add_env(t_env **envs, char *key, char *value)
+t_env	*set_env(t_env **envs, char *key, char *value)
 {
 	t_env	*new;
 	t_env	*last;
@@ -50,8 +50,8 @@ t_env	*add_env(t_env **envs, char *key, char *value)
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return (NULL);
-	new->key = key;
-	new->value = value;
+	new->key = ft_strdup(key);
+	new->value = ft_strdup(value);
 	new->next = NULL;
 	if (!*envs)
 	{
@@ -66,26 +66,39 @@ t_env	*add_env(t_env **envs, char *key, char *value)
 }
 
 /// @brief Remove an environment variable from the list
-/// @param envs The envs of the list of environment variables
+/// @param envs The head of the list of environment variables
 /// @param key The key of the environment variable to remove
-/// @return The envs of the list, or NULL if the environment
-/// variable was not found
-t_env	*remove_env(t_env *envs, char *key)
+/// @return The new head of the list of environment variables
+/// or NULL if the environment variable was not found
+t_env	*remove_env(t_env **envs, char *key)
 {
+	t_env	*current;
 	t_env	*tmp;
 
-	tmp = envs;
-	while (tmp)
+	if (!*envs)
+		return (NULL);
+	if (ft_strcmp((*envs)->key, key) == 0)
 	{
-		if (ft_strncmp(tmp->key, key, ft_strlen(tmp->key)
-				+ ft_strlen(key)) == 0)
+		tmp = *envs;
+		*envs =	(*envs)->next;
+		free(tmp->key);
+		free(tmp->value);
+		free(tmp);
+		return (*envs);
+	}
+	current = *envs;
+	while (current->next)
+	{
+		if (ft_strcmp(current->next->key, key) == 0)
 		{
+			tmp = current->next;
+			current->next = current->next->next;
 			free(tmp->key);
 			free(tmp->value);
 			free(tmp);
-			return (envs);
+			return (*envs);
 		}
-		tmp = tmp->next;
+		current = current->next;
 	}
 	return (NULL);
 }

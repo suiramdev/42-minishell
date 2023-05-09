@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "exec.h"
+#include "builtins.h"
 #include "minishell.h"
 #include <stdlib.h>
 
@@ -23,18 +24,20 @@ static void	close_pipes(int pipes[2][2])
 	close(pipes[1][1]);
 }
 
-static int	builtins_exec(t_cmd *cmd, t_env *envs)
+static int	builtins_exec(t_cmd *cmd, t_env **envs)
 {
-	t_builtin	builtins[5];
+	t_builtin	builtins[7];
 	size_t		i;
 
 	builtins[0] = (t_builtin){.name = "cd", .func = builtin_cd};
 	builtins[1] = (t_builtin){.name = "echo", .func = builtin_echo};
 	builtins[2] = (t_builtin){.name = "env", .func = builtin_env};
 	builtins[3] = (t_builtin){.name = "exit", .func = builtin_exit};
-	builtins[4] = (t_builtin){.name = "pwd", .func = builtin_pwd};
+	builtins[4] = (t_builtin){.name = "export", .func = builtin_export};
+	builtins[5] = (t_builtin){.name = "pwd", .func = builtin_pwd};
+	builtins[6] = (t_builtin){.name = "unset", .func = builtin_unset};
 	i = 0;
-	while (i < 5)
+	while (i < 7)
 	{
 		if (ft_strcmp(builtins[i].name, cmd->name) == 0)
 		{
@@ -45,14 +48,14 @@ static int	builtins_exec(t_cmd *cmd, t_env *envs)
 	return (BUILTIN_NOT_FOUND);
 }
 
-static int	default_exec(t_cmd *cmd, t_env *envs)
+static int	default_exec(t_cmd *cmd, t_env **envs)
 {
 	char	*path;
 	char	**envp;
 	size_t	i;
 
-	path = resolve_path(cmd->name, envs);
-	envp = format_env(envs);
+	path = resolve_path(cmd->name, *envs);
+	envp = format_env(*envs);
 	execve(path, cmd->args, envp);
 	free(path);
 	i = 0;
@@ -66,7 +69,7 @@ static int	default_exec(t_cmd *cmd, t_env *envs)
 }
 
 static int	child_process(size_t index, int pipes[2][2],
-	t_cmd *cmd, t_env *envs)
+	t_cmd *cmd, t_env **envs)
 {
 	if (index > 0)
 		dup2(pipes[(index - 1) % 2][0], STDIN_FILENO);
@@ -78,7 +81,7 @@ static int	child_process(size_t index, int pipes[2][2],
 	return (EXIT_SUCCESS);
 }
 
-static int	piped_exec(t_cmd *cmds, t_env *envs)
+static int	piped_exec(t_cmd *cmds, t_env **envs)
 {
 	t_cmd	*cmd;
 	size_t	i;
@@ -118,7 +121,7 @@ static int	piped_exec(t_cmd *cmds, t_env *envs)
 /// @param cmds The commands to execute
 /// @param envs The environment variables
 /// @return EXIT_SUCCESS or EXIT_FAILURE if an error occured
-int	exec(t_cmd *cmds, t_env *envs)
+int	exec(t_cmd *cmds, t_env **envs)
 {
 	int	exit_status;
 

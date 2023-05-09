@@ -16,7 +16,7 @@
 /// @param cmd The command data structure
 /// @param envs The environment variables
 /// @return EXIT_SUCCESS or EXIT_FAILURE if an error occured
-int	builtin_pwd(t_cmd *cmd, t_env *envs)
+int	builtin_pwd(t_cmd *cmd, t_env **envs)
 {
 	char	path[1024];
 

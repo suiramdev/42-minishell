@@ -15,13 +15,14 @@
 /// @brief Execute the env builtin command
 /// @param cmd The command data structure
 /// @param envs The environment variables
-int	builtin_env(t_cmd *cmd, t_env *envs)
+/// @return EXIT_SUCCESS, EXIT_FAILURE if an error occured
+int	builtin_env(t_cmd *cmd, t_env **envs)
 {
 	char	**formatted_env;
 	size_t	i;
 
 	(void)cmd;
-	formatted_env = format_env(envs);
+	formatted_env = format_env(*envs);
 	i = 0;
 	while (formatted_env[i])
 	{

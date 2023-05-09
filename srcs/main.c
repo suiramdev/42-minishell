@@ -30,7 +30,7 @@ static t_env	*init_envs(char **envp)
 		while ((*envp)[i] != '=')
 			i++;
 		name = ft_substr(*envp, 0, i);
-		add_env(&env, name, ft_strdup(getenv(name)));
+		set_env(&env, name, ft_strdup(getenv(name)));
 		envp++;
 	}
 	return (env);
@@ -68,9 +68,10 @@ t_cmd	*init_cmds(char **tokens)
 }
 
 /// @brief Loop to read user input and execute commands
+/// @param cmds The commands linked list
 /// @param envs The environment variables linked list
-/// @return EXIT_SUCCESS or EXIT_FAILURE if an error occured
-static int	readentry(t_cmd **cmds, t_env *envs)
+/// @return The exit status
+static int	readentry(t_cmd **cmds, t_env **envs)
 {
     char	*line;
     char	**tokens;
@@ -116,7 +117,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	g_force_exit = -1;
 	envs = init_envs(envp);
-	exit_status = readentry(&cmds, envs);
+	exit_status = readentry(&cmds, &envs);
 	free_envs(envs);
 	return (exit_status);
 }
