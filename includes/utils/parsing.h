@@ -13,8 +13,13 @@
 #ifndef PARSING_H
 # define PARSING_H
 
-int	is_space(char c);
-int	is_quote(char c);
-int	has_pipes(char *str);
+# include <stddef.h>
+
+int		is_space(char c);
+void	skip_spaces(char *line, size_t *i);
+int		skip_quotes(char *line);
+int		handle_quotes(char *line, size_t *i);
+void    increase_token_index(size_t *count, size_t *i);
+int		has_pipes(char *str);
 
 #endif

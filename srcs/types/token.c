@@ -17,78 +17,67 @@
 /// @return char* The next token
 static char	*get_next_token(char **line)
 {
-	size_t	i;
-	char	quote;
 	char	*token;
+	size_t	i;
+	int		skip;
 
-	while (is_space(*(*line)))
-		(*line)++;
 	i = 0;
-	quote = '\0';
-	if (is_quote((*line)[i]))
+    skip_spaces(*line, &i);
+    while ((*line)[i] && !is_space((*line)[i]))
 	{
-		quote = *(*line);
-		(*line)++;
-		while ((*line)[i] && (*line)[i] != quote)
+		skip = 0;
+		if ((*line)[i] == '\'' || (*line)[i] == '"')
+		{
+			skip = skip_quotes(*line + i);
+			if (skip == -1)
+				return (printf("error: quote not closed\n"), NULL);
+			i += skip;
+		}
+		else if ((*line)[i] == ' ' || (*line)[i] == '|' || (*line)[i + 1] == '|')
+		{
 			i++;
-	}
-	else if ((*line)[i] == '|')
-		i += 1 + (*line)[i + 1] == '|';
-	else
-	{
-		while ((*line)[i] && !is_space((*line)[i])
-			&& !is_quote((*line)[i]) && (*line)[i] != '|')
+			break ;
+		}
+		else
 			i++;
 	}
 	token = ft_substr(*line, 0, i);
 	if (!token)
-		return (NULL);
-    *line += i + (quote != '\0');
+		return (0);
+    skip_spaces(*line, &i);
+    *line += i;
 	return (token);
 }
 
 // Count the number of tokens in the line
 static size_t	count_tokens(char *line)
 {
-	size_t	i;
-	size_t	count;
-	char	quote;
+    size_t	i;
+    size_t	count;
 
-	i = 0;
-	count = 0;
-	while (line[i])
-	{
-		while (is_space(line[i]))
+    i = 0;
+    count = 0;
+    skip_spaces(line, &i);
+    while (line[i])
+    {
+		if (line[i] == '\'' || line[i] == '"')
+        {
+            if (!handle_quotes(line, &i))
+                return (printf("error: quote not closed\n"), 0);
+        }
+		else if (line[i] == ' ' || line[i] == '|')
+        {
+            if (line[i] == '|' && line[i - 1] != ' ')
+                increase_token_index(&count, &i);
+            increase_token_index(&count, &i);
+            skip_spaces(line, &i);
+        }
+		else
 			i++;
-		if (is_quote(line[i]))
-		{
-			quote = line[i];
-			i++;
-			while (line[i] && line[i] != quote)
-				i++;
-			if (line[i] != quote)
-				return (printf("error: quote not closed\n"), 0);
-			count++;
-			i++;
-		}
-		else if (line[i] == '|')
-		{
-			count++;
-			if (line[i + 1] == '|')
-				i++;
-			if (line[i + 1] == '|')
-				return (printf("error: syntax error near unexpected token `||\n"), 0);
-			i++;
-		}
-		else if (line[i])
-		{
-			count++;
-			while (line[i] && !is_space(line[i])
-				&& !is_quote(line[i]) && line[i] != '|')
-				i++;
-		}
-	}
-	return (count);
+    }
+    if (line[i] == '\0' && !is_space(line[i - 1]))
+        count++;
+    return (count);
 }
 
 /// @brief Tokenize a line

@@ -35,6 +35,8 @@ t_cmd	*new_cmd(char **tokens, size_t start, size_t end)
 		cmd->args[i] = tokens[start + i];
 		i++;
 	}
+	if (cmd->args[i - 1][0] == '|')
+		i--;
 	cmd->args[i] = NULL;
 	cmd->infile = -1;
 	cmd->outfile = -1;
