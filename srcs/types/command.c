@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:30:39 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/08 18:54:00 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/09 16:05:22 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,18 @@ t_cmd	*new_cmd(char **tokens, size_t start, size_t end)
 	i = 0;
 	while (start + i < end)
 	{
-		cmd->args[i] = tokens[start + i];
-		i++;
+        if ((tokens[start + i][0] == '>' || tokens[start + i][0] == '<')
+            && cmd->infile == -1 && cmd->outfile == -1)
+        {
+            if (!handle_redirection(tokens, start + i, cmd))
+                return (NULL);
+            start += 2;
+        }
+        else
+        {
+            cmd->args[i] = tokens[start + i];
+            i++;
+        }
 	}
 	if (cmd->args[i - 1][0] == '|')
 		i--;

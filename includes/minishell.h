@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 14:37:48 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/08 17:52:24 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/09 16:06:33 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "utils/signal.h"
 # include "builtins.h"
 # include "exec.h"
+# include "utils/handle_files.h"
 # include "libft.h"
 # include <stdlib.h>
 # include <unistd.h>
