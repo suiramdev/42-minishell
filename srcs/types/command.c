@@ -26,8 +26,6 @@ t_cmd	*new_cmd(char **tokens, size_t start, size_t end)
 	if (!cmd)
 		return (NULL);
 	cmd->name = ft_strdup(tokens[start]);
-	cmd->infile = -1;
-	cmd->outfile = -1;
 	cmd->args = (char **)malloc((end - start + 1) * sizeof(char *));
 	if (!cmd->args)
 		return (NULL);
@@ -38,6 +36,8 @@ t_cmd	*new_cmd(char **tokens, size_t start, size_t end)
 		i++;
 	}
 	cmd->args[i] = NULL;
+	cmd->infile = -1;
+	cmd->outfile = -1;
 	cmd->pid = -1;
 	cmd->next = NULL;
 	return (cmd);

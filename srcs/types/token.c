@@ -21,10 +21,10 @@ static char	*get_next_token(char **line)
 	char	quote;
 	char	*token;
 
-
 	while (is_space(*(*line)))
 		(*line)++;
 	i = 0;
+	quote = '\0';
 	if (is_quote((*line)[i]))
 	{
 		quote = *(*line);
@@ -32,15 +32,18 @@ static char	*get_next_token(char **line)
 		while ((*line)[i] && (*line)[i] != quote)
 			i++;
 	}
+	else if ((*line)[i] == '|')
+		i += 1 + (*line)[i + 1] == '|';
 	else
 	{
-		while ((*line)[i] && !is_space((*line)[i]) && !is_quote((*line)[i]))
+		while ((*line)[i] && !is_space((*line)[i])
+			&& !is_quote((*line)[i]) && (*line)[i] != '|')
 			i++;
 	}
 	token = ft_substr(*line, 0, i);
 	if (!token)
 		return (NULL);
-    *line += i + 1;
+    *line += i + (quote != '\0');
 	return (token);
 }
 
@@ -68,10 +71,20 @@ static size_t	count_tokens(char *line)
 			count++;
 			i++;
 		}
+		else if (line[i] == '|')
+		{
+			count++;
+			if (line[i + 1] == '|')
+				i++;
+			if (line[i + 1] == '|')
+				return (printf("error: syntax error near unexpected token `||\n"), 0);
+			i++;
+		}
 		else if (line[i])
 		{
 			count++;
-			while (line[i] && !is_space(line[i]) && !is_quote(line[i]))
+			while (line[i] && !is_space(line[i])
+				&& !is_quote(line[i]) && line[i] != '|')
 				i++;
 		}
 	}
