@@ -28,10 +28,9 @@ static int	heredoc(char *eof, int fd)
 			printf("minishell: warning: here-document delimited by end-of-file (wanted `%s')", eof);
 			return (EXIT_FAILURE);
 		}
-		if (ft_strncmp(line, eof, ft_strlen(line)
-				+ ft_strlen(eof)) == 0)
+		if (ft_strcmp(line, eof) == 0)
 		{
-			free(eof);
+			free(line);
 			break ;
 		}
 		ft_putendl_fd(line, fd);
