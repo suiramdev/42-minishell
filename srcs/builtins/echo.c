@@ -20,10 +20,12 @@
 /// we should have a custom printf function in order to skip quotes and replace environment variables
 int	builtin_echo(t_cmd *cmd, t_env **envs)
 {
+	int		n_option;
 	size_t	i;
 
 	(void)envs;
-	i = 1;
+	n_option = ft_strcmp(cmd->args[1], "-n") == 0;
+	i = 1 + n_option;
 	while (cmd->args && cmd->args[i])
 	{
 		printf("%s", cmd->args[i]);
@@ -31,6 +33,7 @@ int	builtin_echo(t_cmd *cmd, t_env **envs)
 			printf(" ");
 		i++;
 	}
-	printf("\n");
+	if (!n_option)
+		printf("\n");
 	return (EXIT_SUCCESS);
 }
