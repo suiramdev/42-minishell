@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/01 16:36:16 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/08 16:27:27 by mnouchet         ###   ########.fr       */
+/*   Created: 2023/05/01 16:34:40 by mnouchet          #+#    #+#             */
+/*   Updated: 2023/05/01 16:44:04 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef PARSING_H
+# define PARSING_H
 
-/// @brief Handle the SIGINT signal
-/// @param signal The signal to handle
-/// @return void
-void	signal_handler(int signal)
-{
-	if (signal == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-}
+# include <stddef.h>
+
+int		is_space(char c);
+void	skip_spaces(char *line, size_t *i);
+int		skip_quotes(char *line);
+int		handle_quotes(char *line, size_t *i);
+void    increase_token_index(size_t *count, size_t *i);
+int		has_pipes(char *str);
+int		valid_last_command(char **tokens, int i);
+void	cmds_has_pipes(t_cmd *cmds);
+
+#endif

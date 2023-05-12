@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/01 16:36:16 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/08 16:27:27 by mnouchet         ###   ########.fr       */
+/*   Created: 2022/11/08 10:14:52 by zdevove           #+#    #+#             */
+/*   Updated: 2022/11/08 13:20:43 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-/// @brief Handle the SIGINT signal
-/// @param signal The signal to handle
-/// @return void
-void	signal_handler(int signal)
+char	*ft_strdup(const char *src)
 {
-	if (signal == SIGINT)
+	char	*dst;
+	int		i;
+
+	i = 0;
+	dst = malloc((ft_strlen(src) + 1) * sizeof(char));
+	if (!dst)
+		return (0);
+	while (src[i] != '\0')
 	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		dst[i] = src[i];
+		i++;
 	}
+	dst[i] = '\0';
+	return (dst);
 }

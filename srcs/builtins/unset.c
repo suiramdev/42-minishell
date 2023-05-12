@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/01 16:36:16 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/08 16:27:27 by mnouchet         ###   ########.fr       */
+/*   Created: 2023/04/25 16:01:56 by mnouchet          #+#    #+#             */
+/*   Updated: 2023/05/08 16:25:54 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/// @brief Handle the SIGINT signal
-/// @param signal The signal to handle
-/// @return void
-void	signal_handler(int signal)
+// See issue in export.c
+int	builtin_unset(t_cmd *cmd, t_env **envs)
 {
-	if (signal == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
+	if (!cmd->args[1])
+		return (EXIT_FAILURE);
+	if (!remove_env(envs, cmd->args[1]))
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }

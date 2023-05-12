@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/01 16:36:16 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/08 16:27:27 by mnouchet         ###   ########.fr       */
+/*   Created: 2022/11/14 14:27:16 by zdevove           #+#    #+#             */
+/*   Updated: 2022/12/22 10:01:31 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-/// @brief Handle the SIGINT signal
-/// @param signal The signal to handle
-/// @return void
-void	signal_handler(int signal)
+t_list	*ft_lstlast(t_list *lst)
 {
-	if (signal == SIGINT)
+	while (lst)
 	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		if (!lst->next)
+			return (lst);
+		lst = lst->next;
 	}
+	return (lst);
 }
