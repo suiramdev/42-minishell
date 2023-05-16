@@ -12,34 +12,20 @@
 
 #include "minishell.h"
 
-static int cmd_init(t_cmd **cmd, size_t end, size_t start, char *name)
-{
-	(*cmd) = (t_cmd *)malloc(sizeof(t_cmd));
-	if (!(*cmd))
-		return (0);
-	(*cmd)->infile = -1;
-	(*cmd)->outfile = -1;
-	(*cmd)->has_heredoc = 0;
-	(*cmd)->has_pipe = 0;
-	(*cmd)->pid = -1;
-	(*cmd)->name = ft_strdup(name);
-	(*cmd)->args = (char **)malloc((end - start + 1) * sizeof(char *));
-	if (!(*cmd)->args)
-		return (0);
-	return (1);
-}
-
-/// @brief Create a new command from the tokens array
+/// @brief Initialize the arguments of a command
+/// @param cmd The command
 /// @param tokens The tokens array
 /// @param start The start index of the command in the tokens array
 /// @param end The end index of the command in the tokens array
-/// @return The new command
-t_cmd	*new_cmd(char **tokens, size_t start, size_t end)
+/// @return The arguments array
+/// @note Also handle the redirections arguments
+static char	**init_args(t_cmd *cmd, char **tokens, size_t start, size_t end)
 {
-	t_cmd	*cmd;
+	char	**args;
 	size_t	i;
 
-	if (!cmd_init(&cmd, end, start, tokens[start]))
+	args = (char **)malloc((end - start + 1) * sizeof(char *));
+	if (!args)
 		return (NULL);
 	i = 0;
 	while (start + i < end)
@@ -52,16 +38,36 @@ t_cmd	*new_cmd(char **tokens, size_t start, size_t end)
         }
         else
         {
-            cmd->args[i] = tokens[start + i];
+            args[i] = tokens[start + i];
             i++;
         }
 	}
-	if (i > 0 && cmd->args[i - 1][0] == '|')
+	if (i > 0 && args[i - 1][0] == '|')
 		i--;
-	cmd->args[i] = NULL;
+	args[i] = NULL;
+	return (args);
+}
+
+/// @brief Create a new command from the tokens array
+/// @param tokens The tokens array
+/// @param start The start index of the command in the tokens array
+/// @param end The end index of the command in the tokens array
+/// @return The new command
+t_cmd	*new_cmd(char **tokens, size_t start, size_t end)
+{
+	t_cmd	*cmd;
+	size_t	i;
+
+	cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	if (!cmd)
+		return (NULL);
 	cmd->infile = -1;
 	cmd->outfile = -1;
+	cmd->has_heredoc = 0;
+	cmd->has_pipe = 0;
 	cmd->pid = -1;
+	cmd->name = ft_strdup(tokens[start]);
+	cmd->args = init_args(cmd, tokens, start, end);
 	cmd->next = NULL;
 	return (cmd);
 }
