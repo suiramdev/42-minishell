@@ -51,7 +51,7 @@ t_cmd	*init_cmds(char **tokens)
     i = 0;
     while (tokens[i])
     {
-        if (has_pipes(tokens[i]))
+        if (has_pipes(tokens[i]) && valid_last_command(tokens, i))
         {
             new = new_cmd(tokens, start, i);
             add_cmd(&cmds, new);
@@ -77,6 +77,7 @@ static int	readentry(t_cmd **cmds, t_env **envs)
     char	**tokens;
 	int		exit_status;
 
+    (void)envs;
     while (1)
     {
 		signal(SIGINT, &signal_handler);
@@ -91,16 +92,17 @@ static int	readentry(t_cmd **cmds, t_env **envs)
 		*cmds = init_cmds(tokens);
 		if (*cmds)
 		{
-			(void)envs;
+			if ((*cmds)->next)
+				cmds_has_pipes(*cmds);
 			exit_status = exec(*cmds, envs);
 			if ((*cmds)->pid == 0)
 			{
-				free_cmds(*cmds);
-				return (exit_status);
+			    free_cmds(*cmds);
+			    return (exit_status);
 			}
 			free_cmds(*cmds);
 			if (g_force_exit != -1)
-				return (g_force_exit);
+			    return (g_force_exit);
 		}
 		//free_tokens(tokens);
     }

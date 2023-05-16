@@ -23,6 +23,7 @@ static char	*get_next_token(char **line)
 
 	i = 0;
     skip_spaces(*line, &i);
+    *line += i;
     while ((*line)[i] && !is_space((*line)[i]))
 	{
 		skip = 0;
@@ -32,6 +33,7 @@ static char	*get_next_token(char **line)
 			if (skip == -1)
 				return (printf("error: quote not closed\n"), NULL);
 			i += skip;
+            break ;
 		}
 		else if ((*line)[i] == ' ' || (*line)[i] == '|' || (*line)[i + 1] == '|')
 		{
@@ -64,6 +66,7 @@ static size_t	count_tokens(char *line)
         {
             if (!handle_quotes(line, &i))
                 return (printf("error: quote not closed\n"), 0);
+            count++;
         }
 		else if (line[i] == ' ' || line[i] == '|')
         {
@@ -75,7 +78,7 @@ static size_t	count_tokens(char *line)
 		else
 			i++;
     }
-    if (line[i] == '\0' && !is_space(line[i - 1]))
+    if (line[i] == '\0' && !is_space(line[i - 1]) && line[i - 1] != '\'' && line[i - 1] != '"')
         count++;
     return (count);
 }
@@ -90,6 +93,7 @@ char	**tokenize(char *line) {
 
     i = 0;
     tokens_count = count_tokens(line);
+    printf("tokens count: %ld\n", tokens_count);
     if (tokens_count <= 0)
         return (NULL);
     tokens = (char **)malloc(sizeof(char *) * (tokens_count + 1));

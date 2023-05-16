@@ -14,26 +14,24 @@
 
 /// @brief Read entry from stdin until the end of file,
 /// and write it in the file descriptor fd.
-/// @param eof The string that will stop the reading.
+/// @param delimiter The string that will stop the reading.
 /// @return EXIT_SUCCESS or EXIT_FAILURE if an error occured.
-static int	handle_heredoc(char *eof, int fd)
+static int	handle_heredoc(char *delimiter, t_cmd *node)
 {
     char	*line;
 
+	node->infile = open("heredoc.tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (node->infile < 0)
+		return (printf("heredoc: No such file or directory"), 0);
+	node->has_heredoc = 1;
     while (1)
     {
 		line = readline("> ");
 		if (!line)
-		{
-			printf("minishell: warning: here-document delimited by end-of-file (wanted `%s')", eof);
-			return (EXIT_FAILURE);
-		}
-		if (ft_strcmp(line, eof) == 0)
-		{
-			free(line);
-			break ;
-		}
-		ft_putendl_fd(line, fd);
+			return (printf("minishell: warning: here-document delimited by end-of-file (wanted `%s')", delimiter), EXIT_FAILURE);
+		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
+			return (free(line), EXIT_SUCCESS);
+		ft_putendl_fd(line, node->infile);
 		free(line);
     }
 	return (EXIT_SUCCESS);
@@ -58,13 +56,15 @@ static int    handle_input(char *filename, t_cmd *node)
 	return (1);
 }
 
-int    handle_redirection(char **tokens, size_t i, t_cmd *node)
+int    handle_redirection(char **tokens, int i, t_cmd *node)
 {
 	int	r;
 
 	r = 1;
     if (tokens[i][0] == '>')
 	{
+		if (node->outfile > 2)
+			close(node->outfile);
 		if (tokens[i][1] == '>')
         	r = handle_output(tokens[i + 1], node, 1);
 		else
@@ -72,8 +72,10 @@ int    handle_redirection(char **tokens, size_t i, t_cmd *node)
 	}
     else if (tokens[i][0] == '<')
 	{
+		if (node->infile > 2)
+			close(node->outfile);
 		if (tokens[i][1] == '<')
-        	r = handle_heredoc(tokens[i + 1], node->infile);
+        	r = handle_heredoc(tokens[i + 1], node);
 		else
 			r = handle_input(tokens[i + 1], node);
 	}

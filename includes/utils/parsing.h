@@ -21,5 +21,7 @@ int		skip_quotes(char *line);
 int		handle_quotes(char *line, size_t *i);
 void    increase_token_index(size_t *count, size_t *i);
 int		has_pipes(char *str);
+int		valid_last_command(char **tokens, int i);
+void	cmds_has_pipes(t_cmd *cmds);
 
 #endif

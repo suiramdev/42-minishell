@@ -75,3 +75,22 @@ int	has_pipes(char *str)
 	}
 	return (0);
 }
+
+int valid_last_command(char **tokens, int i)
+{
+    if (tokens[i][0] == '|' && tokens[i + 1][0] == '>' && !tokens[i + 3])
+        return (0);
+    return (1);
+}
+
+void	cmds_has_pipes(t_cmd *cmds)
+{
+	t_cmd *head;
+
+	head = cmds;
+	while (head)
+	{
+		head->has_pipe = 1;
+		head = head->next;
+	}
+}

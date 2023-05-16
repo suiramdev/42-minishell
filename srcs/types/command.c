@@ -12,6 +12,23 @@
 
 #include "minishell.h"
 
+static int cmd_init(t_cmd **cmd, size_t end, size_t start, char *name)
+{
+	(*cmd) = (t_cmd *)malloc(sizeof(t_cmd));
+	if (!(*cmd))
+		return (0);
+	(*cmd)->infile = -1;
+	(*cmd)->outfile = -1;
+	(*cmd)->has_heredoc = 0;
+	(*cmd)->has_pipe = 0;
+	(*cmd)->pid = -1;
+	(*cmd)->name = ft_strdup(name);
+	(*cmd)->args = (char **)malloc((end - start + 1) * sizeof(char *));
+	if (!(*cmd)->args)
+		return (0);
+	return (1);
+}
+
 /// @brief Create a new command from the tokens array
 /// @param tokens The tokens array
 /// @param start The start index of the command in the tokens array
@@ -22,18 +39,12 @@ t_cmd	*new_cmd(char **tokens, size_t start, size_t end)
 	t_cmd	*cmd;
 	size_t	i;
 
-	cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	if (!cmd)
-		return (NULL);
-	cmd->name = ft_strdup(tokens[start]);
-	cmd->args = (char **)malloc((end - start + 1) * sizeof(char *));
-	if (!cmd->args)
+	if (!cmd_init(&cmd, end, start, tokens[start]))
 		return (NULL);
 	i = 0;
 	while (start + i < end)
 	{
-        if ((tokens[start + i][0] == '>' || tokens[start + i][0] == '<')
-            && cmd->infile == -1 && cmd->outfile == -1)
+        if (tokens[start + i][0] == '>' || tokens[start + i][0] == '<')
         {
             if (!handle_redirection(tokens, start + i, cmd))
                 return (NULL);
@@ -45,7 +56,7 @@ t_cmd	*new_cmd(char **tokens, size_t start, size_t end)
             i++;
         }
 	}
-	if (cmd->args[i - 1][0] == '|')
+	if (i > 0 && cmd->args[i - 1][0] == '|')
 		i--;
 	cmd->args[i] = NULL;
 	cmd->infile = -1;
