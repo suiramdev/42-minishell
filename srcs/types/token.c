@@ -93,7 +93,6 @@ char	**tokenize(char *line) {
 
     i = 0;
     tokens_count = count_tokens(line);
-    printf("tokens count: %ld\n", tokens_count);
     if (tokens_count <= 0)
         return (NULL);
     tokens = (char **)malloc(sizeof(char *) * (tokens_count + 1));
