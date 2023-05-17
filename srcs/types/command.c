@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:30:39 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/17 10:57:58 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/17 11:17:47 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static char	**init_args(t_cmd *cmd, char **tokens, size_t start, size_t end)
 	{
         if (tokens[start + i][0] == '>' || tokens[start + i][0] == '<')
         {
-            if (!handle_redirection(tokens, start + i, cmd))
+            if (!init_redirs(tokens, start + i, cmd))
                 return (NULL);
             start += 2;
         }
