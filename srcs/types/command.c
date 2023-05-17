@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:30:39 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/17 11:17:47 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/17 11:28:57 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int	exec_cmds(t_cmd *cmds, t_env **envs)
 	int	exit_status;
 
 	if (cmds->next)
-		return (piped_exec(cmds, envs));
+		return (pipeline(cmds, envs));
 	backups[0] = dup(STDIN_FILENO);
 	backups[1] = dup(STDOUT_FILENO);
 	redirs(cmds);

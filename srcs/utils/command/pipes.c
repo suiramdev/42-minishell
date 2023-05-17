@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:46:36 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/17 10:06:21 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/17 11:28:43 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	wait_processes(t_cmd *cmds)
 /// @param cmds The commands to execute
 /// @param envs The environment variables
 /// @return EXIT_SUCCESS, EXIT_FAILURE, or the exit code of the command
-int	piped_exec(t_cmd *cmds, t_env **envs)
+int	pipeline(t_cmd *cmds, t_env **envs)
 {
 	t_cmd	*cmd;
 	size_t	i;
