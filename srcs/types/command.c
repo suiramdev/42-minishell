@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:30:39 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/09 16:05:22 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/17 10:57:58 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,10 @@
 /// @note Also handle the redirections arguments
 static char	**init_args(t_cmd *cmd, char **tokens, size_t start, size_t end)
 {
-	char	**args;
 	size_t	i;
 
-	args = (char **)malloc((end - start + 1) * sizeof(char *));
-	if (!args)
+	cmd->args = (char **)malloc((end - start + 1) * sizeof(char *));
+	if (!cmd->args)
 		return (NULL);
 	i = 0;
 	while (start + i < end)
@@ -38,14 +37,14 @@ static char	**init_args(t_cmd *cmd, char **tokens, size_t start, size_t end)
         }
         else
         {
-            args[i] = tokens[start + i];
+            cmd->args[i] = tokens[start + i];
             i++;
         }
 	}
-	if (i > 0 && args[i - 1][0] == '|')
+	if (i > 0 && cmd->args[i - 1][0] == '|')
 		i--;
-	args[i] = NULL;
-	return (args);
+	cmd->args[i] = NULL;
+	return (cmd->args);
 }
 
 /// @brief Create a new command from the tokens array
@@ -56,7 +55,6 @@ static char	**init_args(t_cmd *cmd, char **tokens, size_t start, size_t end)
 t_cmd	*new_cmd(char **tokens, size_t start, size_t end)
 {
 	t_cmd	*cmd;
-	size_t	i;
 
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
@@ -67,7 +65,7 @@ t_cmd	*new_cmd(char **tokens, size_t start, size_t end)
 	cmd->has_pipe = 0;
 	cmd->pid = -1;
 	cmd->name = ft_strdup(tokens[start]);
-	cmd->args = init_args(cmd, tokens, start, end);
+	init_args(cmd, tokens, start, end);
 	cmd->next = NULL;
 	return (cmd);
 }
@@ -111,4 +109,37 @@ void	free_cmds(t_cmd *cmds)
 		free(tmp->args);
 		free(tmp);
 	}
+}
+
+/// @brief Execute the commands linked list
+/// @param cmds The commands linked list
+/// @param envs The environment variables linked list
+int	exec_cmds(t_cmd *cmds, t_env **envs)
+{
+	int	backups[2];
+	int	exit_status;
+
+	if (cmds->next)
+		return (piped_exec(cmds, envs));
+	backups[0] = dup(STDIN_FILENO);
+	backups[1] = dup(STDOUT_FILENO);
+	redirs(cmds);
+	exit_status = exec_builtin(cmds, envs);
+	if (exit_status == BUILTIN_NOT_FOUND)
+	{
+		cmds->pid = fork();
+		if (cmds->pid == -1)
+			return (EXIT_FAILURE);
+		if (cmds->pid == 0)
+			return (exec_relative(cmds, envs));
+		close_redirs(cmds);
+		dup2(backups[0], STDIN_FILENO);
+		dup2(backups[1], STDOUT_FILENO);
+		wait_processes(cmds);
+		return (EXIT_SUCCESS);
+	}
+	close_redirs(cmds);
+	dup2(backups[0], STDIN_FILENO);
+	dup2(backups[1], STDOUT_FILENO);
+	return (exit_status);
 }

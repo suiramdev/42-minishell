@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/08 20:42:02 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/17 10:58:46 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static int	readentry(t_cmd **cmds, t_env **envs)
 		{
 			if ((*cmds)->next)
 				cmds_has_pipes(*cmds);
-			exit_status = exec(*cmds, envs);
+			exit_status = exec_cmds(*cmds, envs);
 			if ((*cmds)->pid == 0)
 			{
 			    free_cmds(*cmds);

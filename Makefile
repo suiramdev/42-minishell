@@ -6,7 +6,7 @@
 #    By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/06 22:19:57 by mnouchet          #+#    #+#              #
-#    Updated: 2023/05/09 16:07:18 by zdevove          ###   ########.fr        #
+#    Updated: 2023/05/17 11:00:17 by mnouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,21 +37,23 @@ INCS		:= includes				\
 			   libs/libft
 
 SRCS_DIR	:= srcs
-SRCS		:= main.c				\
-			   exec.c				\
-			   utils/handle_files.c \
-			   utils/parsing.c		\
-			   utils/path.c			\
-			   utils/signals.c		\
-			   types/command.c		\
-			   types/env.c			\
-			   types/token.c		\
-			   builtins/cd.c		\
-			   builtins/echo.c		\
-			   builtins/env.c		\
-			   builtins/exit.c		\
-			   builtins/export.c	\
-			   builtins/pwd.c		\
+SRCS		:= main.c					\
+			   utils/command/exec.c		\
+			   utils/command/pipes.c	\
+			   utils/command/redirs.c	\
+			   utils/handle_files.c		\
+			   utils/parsing.c			\
+			   utils/path.c				\
+			   utils/signals.c			\
+			   types/command.c			\
+			   types/env.c				\
+			   types/token.c			\
+			   builtins/cd.c			\
+			   builtins/echo.c			\
+			   builtins/env.c			\
+			   builtins/exit.c			\
+			   builtins/export.c		\
+			   builtins/pwd.c			\
 			   builtins/unset.c
 
 SRCS		:= $(SRCS:%=$(SRCS_DIR)/%)

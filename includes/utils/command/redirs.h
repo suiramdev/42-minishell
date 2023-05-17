@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.h                                             :+:      :+:    :+:   */
+/*   redirs.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/03 14:53:58 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/08 17:12:17 by mnouchet         ###   ########.fr       */
+/*   Created: 2023/05/17 09:33:26 by mnouchet          #+#    #+#             */
+/*   Updated: 2023/05/17 09:58:44 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXEC_H
-# define EXEC_H
+#ifndef REDIRS_H
+# define REDIRS_H
 
 # include "types/command.h"
-# include "types/env.h"
 
-# define BUILTIN_NOT_FOUND -1
+# define HEREDOC_FILE "/tmp/heredoc"
 
-int	exec(t_cmd *cmds, t_env **envs);
+int		init_redirs(char **tokens, int i, t_cmd *node);
+void	redirs(t_cmd *cmd);
+void	close_redirs(t_cmd *cmds);
 
 #endif

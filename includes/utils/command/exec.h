@@ -1,37 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command.h                                          :+:      :+:    :+:   */
+/*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/26 14:44:04 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/17 10:59:02 by mnouchet         ###   ########.fr       */
+/*   Created: 2023/05/17 09:33:06 by mnouchet          #+#    #+#             */
+/*   Updated: 2023/05/17 10:07:04 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMAND_H
-# define COMMAND_H
+#ifndef EXEC_H
+# define EXEC_H
 
+# include "types/command.h"
 # include "types/env.h"
-# include <sys/types.h>
 
-typedef struct s_cmd
-{
-	char			*name;
-	char			**args;
-	int				infile;
-	int				outfile;
-	int				has_heredoc;
-	int				has_pipe;
-	pid_t			pid;
-	struct s_cmd	*next;
-}	t_cmd;
+# define BUILTIN_NOT_FOUND -1
 
-void	add_cmd(t_cmd **cmds, t_cmd *new);
-t_cmd	*new_cmd(char **tokens, size_t start, size_t end);
-t_cmd	*init_cmds(char **tokens);
-void	free_cmds(t_cmd *cmds);
-int		exec_cmds(t_cmd *cmds, t_env **envs);
+int	exec_builtin(t_cmd *cmd, t_env **envs);
+int	exec_relative(t_cmd *cmd, t_env **envs);
 
 #endif

@@ -1,37 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command.h                                          :+:      :+:    :+:   */
+/*   pipes.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/26 14:44:04 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/17 10:59:02 by mnouchet         ###   ########.fr       */
+/*   Created: 2023/05/17 09:33:16 by mnouchet          #+#    #+#             */
+/*   Updated: 2023/05/17 10:06:57 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMAND_H
-# define COMMAND_H
+#ifndef PIPES_H
+# define PIPES_H
 
+# include "types/command.h"
 # include "types/env.h"
-# include <sys/types.h>
 
-typedef struct s_cmd
-{
-	char			*name;
-	char			**args;
-	int				infile;
-	int				outfile;
-	int				has_heredoc;
-	int				has_pipe;
-	pid_t			pid;
-	struct s_cmd	*next;
-}	t_cmd;
-
-void	add_cmd(t_cmd **cmds, t_cmd *new);
-t_cmd	*new_cmd(char **tokens, size_t start, size_t end);
-t_cmd	*init_cmds(char **tokens);
-void	free_cmds(t_cmd *cmds);
-int		exec_cmds(t_cmd *cmds, t_env **envs);
+void	wait_processes(t_cmd *cmds);
+int		piped_exec(t_cmd *cmds, t_env **envs);
 
 #endif
