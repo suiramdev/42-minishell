@@ -81,7 +81,7 @@ t_env	*remove_env(t_env **envs, char *key)
 	if (ft_strcmp((*envs)->key, key) == 0)
 	{
 		tmp = *envs;
-		*envs =	(*envs)->next;
+		*envs = (*envs)->next;
 		free(tmp->key);
 		free(tmp->value);
 		free(tmp);

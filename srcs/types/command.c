@@ -29,17 +29,17 @@ static char	**init_args(t_cmd *cmd, char **tokens, size_t start, size_t end)
 	i = 0;
 	while (start + i < end)
 	{
-        if (tokens[start + i][0] == '>' || tokens[start + i][0] == '<')
-        {
-            if (!init_redirs(tokens, start + i, cmd))
-                return (NULL);
-            start += 2;
-        }
-        else
-        {
-            cmd->args[i] = ft_strdup(tokens[start + i]);
-            i++;
-        }
+		if (tokens[start + i][0] == '>' || tokens[start + i][0] == '<')
+		{
+			if (!init_redirs(tokens, start + i, cmd))
+				return (NULL);
+			start += 2;
+		}
+		else
+		{
+			cmd->args[i] = ft_strdup(tokens[start + i]);
+			i++;
+		}
 	}
 	if (i > 0 && cmd->args[i - 1][0] == '|')
 		i--;

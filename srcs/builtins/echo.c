@@ -17,7 +17,8 @@
 /// @param envs The environment variables
 /// @return EXIT_SUCCESS or EXIT_FAILURE if an error occured
 /// @todo Handle the -n option
-/// we should have a custom printf function in order to skip quotes and replace environment variables
+/// we should have a custom printf function in order to skip quotes
+/// and replace environment variables
 int	builtin_echo(t_cmd *cmd, t_env **envs)
 {
 	int		n_option;

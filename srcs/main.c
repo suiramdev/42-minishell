@@ -42,30 +42,30 @@ static t_env	*init_envs(char **envp)
 /// @return The commands linked list
 t_cmd	*init_cmds(char **tokens)
 {
-    t_cmd	*cmds;
-    t_cmd	*new;
-    size_t	start;
-    size_t	i;
+	t_cmd	*cmds;
+	t_cmd	*new;
+	size_t	start;
+	size_t	i;
 
 	cmds = NULL;
-    start = 0;
-    i = 0;
-    while (tokens[i])
-    {
-        if (has_pipes(tokens[i]) && valid_last_command(tokens, i))
-        {
-            new = new_cmd(tokens, start, i);
-            add_cmd(&cmds, new);
-            start = i + 1;
-        }
-        i++;
-    }
-    if (tokens[start])
-    {
-        new = new_cmd(tokens, start, i);
-        add_cmd(&cmds, new);
-    }
-    return (cmds);
+	start = 0;
+	i = 0;
+	while (tokens[i])
+	{
+		if (has_pipes(tokens[i]) && valid_last_command(tokens, i))
+		{
+			new = new_cmd(tokens, start, i);
+			add_cmd(&cmds, new);
+			start = i + 1;
+		}
+		i++;
+	}
+	if (tokens[start])
+	{
+		new = new_cmd(tokens, start, i);
+		add_cmd(&cmds, new);
+	}
+	return (cmds);
 }
 
 /// @brief Loop to read user input and execute commands
@@ -74,19 +74,19 @@ t_cmd	*init_cmds(char **tokens)
 /// @return The exit status
 static int	readentry(t_cmd **cmds, t_env **envs)
 {
-    char	*line;
-    char	**tokens;
+	char	*line;
+	char	**tokens;
 	int		exit_status;
 
-    (void)envs;
-    while (1)
-    {
+	(void)envs;
+	while (1)
+	{
 		signal(SIGINT, &signal_handler);
-        line = readline("minishell$ ");
-        if (!line)
-            break;
-        add_history(line);
-        tokens = tokenize(line);
+		line = readline("minishell$ ");
+		if (!line)
+			break ;
+		add_history(line);
+		tokens = tokenize(line);
 		free(line);
 		if (!tokens)
 			continue ;
@@ -104,10 +104,10 @@ static int	readentry(t_cmd **cmds, t_env **envs)
 			}
 			free_cmds(*cmds);
 			if (g_force_exit != -1)
-			    return (g_force_exit);
+				return (g_force_exit);
 		}
-    }
-    return (EXIT_SUCCESS);
+	}
+	return (EXIT_SUCCESS);
 }
 
 int	main(int argc, char **argv, char **envp)

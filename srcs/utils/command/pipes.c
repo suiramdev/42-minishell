@@ -60,10 +60,10 @@ int	pipeline(t_cmd *cmds, t_env **envs)
 	i = 0;
 	while (cmd)
 	{
-		if (pipe(pipes[i % 2]) == -1) // We should close the pipes
+		if (pipe(pipes[i % 2]) == -1)
 			return (EXIT_FAILURE);
 		cmd->pid = fork();
-		if (cmd->pid == -1) // We should close the pipes
+		if (cmd->pid == -1)
 			return (EXIT_FAILURE);
 		if (cmd->pid == 0)
 			return (child_process(i, pipes, cmd, envs));
@@ -78,4 +78,3 @@ int	pipeline(t_cmd *cmds, t_env **envs)
 	close_pipes(pipes);
 	return (EXIT_SUCCESS);
 }
-

@@ -15,14 +15,14 @@
 
 static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 {
-    char	*line;
+	char	*line;
 
 	cmd->infile = open(HEREDOC_FILE, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (cmd->infile < 0)
 		return (perror("heredoc"), false);
 	cmd->has_heredoc = 1;
-    while (1)
-    {
+	while (1)
+	{
 		line = readline("> ");
 		if (!line)
 			return (printf("minishell: warning: here-document delimited by end-of-file (wanted `%s')", delimiter), false);
@@ -30,7 +30,7 @@ static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 			return (free(line), false);
 		ft_putendl_fd(line, cmd->infile);
 		free(line);
-    }
+	}
 	return (true);
 }
 
@@ -57,21 +57,22 @@ static bool	redir_input(char *filename, t_cmd *node)
 /// @param tokens The tokens array
 /// @param i The index of the redirection token
 /// @param node The command
-/// @return true if the redirections were successfully initialized, false otherwise
+/// @return true if the redirections were successfully initialized,
+/// false otherwise
 bool	init_redirs(char **tokens, size_t i, t_cmd *node)
 {
-    if (tokens[i][0] == '>')
+	if (tokens[i][0] == '>')
 	{
-		if (node->outfile > 2) // Shouldn't it be > 0 ?
+		if (node->outfile > 2)
 			close(node->outfile);
 		return (redir_output(tokens[i + 1], node, tokens[i][1] == '>'));
 	}
-    else if (tokens[i][0] == '<')
+	else if (tokens[i][0] == '<')
 	{
-		if (node->infile > 2) // Shouldn't it be > 0 ?
+		if (node->infile > 2)
 			close(node->outfile);
 		if (tokens[i][1] == '<')
-        	return (redir_heredoc(tokens[i + 1], node));
+			return (redir_heredoc(tokens[i + 1], node));
 		return (redir_input(tokens[i + 1], node));
 	}
 	return (true);

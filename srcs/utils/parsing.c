@@ -27,8 +27,8 @@ bool	is_space(char c)
 /// @return void
 void	skip_spaces(char *line, size_t *inc)
 {
-    while (is_space(line[(*inc)]))
-        (*inc)++;
+	while (is_space(line[(*inc)]))
+		(*inc)++;
 }
 
 /// @brief Skip the content of the quotes
@@ -56,7 +56,7 @@ bool	handle_quotes(char *line, size_t *inc)
 /// @return true if the line contains pipes, false otherwise
 bool	has_pipes(char *str)
 {
-    int	i;
+	int	i;
 
 	i = 0;
 	if (str[i] == '\'' || str[i] == '"')
@@ -70,16 +70,16 @@ bool	has_pipes(char *str)
 	return (false);
 }
 
-bool valid_last_command(char **tokens, size_t i)
+bool	valid_last_command(char **tokens, size_t i)
 {
-    return (tokens[i][0] == '|' && tokens[i + 1][0] == '>' && !tokens[i + 3]);
+	return (tokens[i][0] == '|' && tokens[i + 1][0] == '>' && !tokens[i + 3]);
 }
 
 /// @brief Set all the commands has_pipe to true
 /// @param cmds The commands to set
 void	cmds_has_pipes(t_cmd *cmds)
 {
-	t_cmd *head;
+	t_cmd	*head;
 
 	head = cmds;
 	while (head)
