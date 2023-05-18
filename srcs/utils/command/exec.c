@@ -50,6 +50,13 @@ int	exec_relative(t_cmd *cmd, t_env **envs)
 	size_t	i;
 
 	path = resolve_path(cmd->name, *envs);
+	if (!path)
+	{
+		ft_putstr_fd("Command not found: ", STDERR_FILENO);
+		ft_putstr_fd(cmd->name, STDERR_FILENO);
+		ft_putstr_fd("\n", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
 	envp = format_env(*envs);
 	execve(path, cmd->args, envp);
 	free(path);
@@ -57,8 +64,5 @@ int	exec_relative(t_cmd *cmd, t_env **envs)
 	while (envp[i])
 		free(envp[i++]);
 	free(envp);
-	ft_putstr_fd("Command not found: ", STDERR_FILENO);
-	ft_putstr_fd(cmd->name, STDERR_FILENO);
-	ft_putstr_fd("\n", STDERR_FILENO);
 	return (EXIT_FAILURE);
 }
