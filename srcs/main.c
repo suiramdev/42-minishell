@@ -104,7 +104,7 @@ static int	readentry(t_cmd **cmds, t_env **envs)
 			if (g_force_exit != -1)
 			    return (g_force_exit);
 		}
-		//free_tokens(tokens);
+		free_tokens(tokens);
     }
     return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:44:04 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/17 10:59:02 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/17 16:15:42 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "types/env.h"
 # include <sys/types.h>
+# include <stdbool.h>
 
 typedef struct s_cmd
 {
@@ -22,8 +23,8 @@ typedef struct s_cmd
 	char			**args;
 	int				infile;
 	int				outfile;
-	int				has_heredoc;
-	int				has_pipe;
+	bool			has_heredoc;
+	bool			has_pipe;
 	pid_t			pid;
 	struct s_cmd	*next;
 }	t_cmd;

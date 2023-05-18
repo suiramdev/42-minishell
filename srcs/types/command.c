@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:30:39 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/17 11:28:57 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/17 16:16:13 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static char	**init_args(t_cmd *cmd, char **tokens, size_t start, size_t end)
         }
         else
         {
-            cmd->args[i] = tokens[start + i];
+            cmd->args[i] = ft_strdup(tokens[start + i]);
             i++;
         }
 	}
@@ -61,8 +61,8 @@ t_cmd	*new_cmd(char **tokens, size_t start, size_t end)
 		return (NULL);
 	cmd->infile = -1;
 	cmd->outfile = -1;
-	cmd->has_heredoc = 0;
-	cmd->has_pipe = 0;
+	cmd->has_heredoc = false;
+	cmd->has_pipe = false;
 	cmd->pid = -1;
 	cmd->name = ft_strdup(tokens[start]);
 	init_args(cmd, tokens, start, end);

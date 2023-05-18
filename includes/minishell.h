@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 14:37:48 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/17 11:18:06 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/17 16:07:37 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
+# include <stdbool.h>
 
 extern int	g_force_exit;
 
