@@ -35,6 +35,7 @@ t_env	*get_env(t_env *envs, char *key)
 /// @param key The key of the new environment variable
 /// @param value The value of the new environment variable
 /// @return The new environment variable
+/// @note The key and value are duplicated
 t_env	*set_env(t_env **envs, char *key, char *value)
 {
 	t_env	*new;

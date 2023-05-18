@@ -30,7 +30,8 @@ static t_env	*init_envs(char **envp)
 		while ((*envp)[i] != '=')
 			i++;
 		name = ft_substr(*envp, 0, i);
-		set_env(&env, name, ft_strdup(getenv(name)));
+		set_env(&env, name, getenv(name));
+		free(name);
 		envp++;
 	}
 	return (env);
@@ -90,6 +91,7 @@ static int	readentry(t_cmd **cmds, t_env **envs)
 		if (!tokens)
 			continue ;
 		*cmds = init_cmds(tokens);
+		free_tokens(tokens);
 		if (*cmds)
 		{
 			if ((*cmds)->next)
@@ -97,14 +99,13 @@ static int	readentry(t_cmd **cmds, t_env **envs)
 			exit_status = exec_cmds(*cmds, envs);
 			if ((*cmds)->pid == 0)
 			{
-			    free_cmds(*cmds);
-			    return (exit_status);
+				free_cmds(*cmds);
+				return (exit_status);
 			}
 			free_cmds(*cmds);
 			if (g_force_exit != -1)
 			    return (g_force_exit);
 		}
-		free_tokens(tokens);
     }
     return (EXIT_SUCCESS);
 }
