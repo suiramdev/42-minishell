@@ -16,12 +16,15 @@
 # include "types/command.h"
 # include "types/env.h"
 # include "types/token.h"
+# include "utils/commandutils.h"
+# include "utils/envutils.h"
 # include "utils/parsing.h"
 # include "utils/path.h"
 # include "utils/signal.h"
+# include "utils/handle_files.h"
+# include "utils/error.h"
 # include "builtins.h"
 # include "exec.h"
-# include "utils/handle_files.h"
 # include "libft.h"
 # include <stdlib.h>
 # include <unistd.h>
@@ -32,6 +35,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
+# include <errno.h>
 
 extern int	g_force_exit;
 

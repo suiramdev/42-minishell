@@ -6,7 +6,7 @@
 #    By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/06 22:19:57 by mnouchet          #+#    #+#              #
-#    Updated: 2023/05/09 16:07:18 by zdevove          ###   ########.fr        #
+#    Updated: 2023/05/18 13:09:16 by zdevove          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,10 +39,13 @@ INCS		:= includes				\
 SRCS_DIR	:= srcs
 SRCS		:= main.c				\
 			   exec.c				\
+			   utils/commands.c		\
+			   utils/env.c			\
 			   utils/handle_files.c \
 			   utils/parsing.c		\
 			   utils/path.c			\
 			   utils/signals.c		\
+			   utils/error.c		\
 			   types/command.c		\
 			   types/env.c			\
 			   types/token.c		\

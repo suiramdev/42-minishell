@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/08 20:42:02 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/18 15:13:22 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,23 +78,24 @@ static int	readentry(t_cmd **cmds, t_env **envs)
 	// int		exit_status;
 	(void)envs;
 
-	t_cmd *head;
-
     while (1)
     {
 		signal(SIGINT, &signal_handler);
         line = readline("minishell$ ");
-        if (!line)
+		// printf("line: %s\n", line);
+        if (line == NULL)
+		{
+			// printf("test");	// ne s'affiche pas ???????????
             break;
+		}
         add_history(line);
-        tokens = tokenize(line);
+        tokens = tokenize(line, *envs);
 		free(line);
 		if (!tokens)
 			continue ;
 
         // A delete c'est juste pour print les tokens
 		// print line
-        printf("-----\nline: %s\n-----\n", line);
 		// print tokens
         if (tokens)
 			for (int k = 0; tokens[k]; k++)
@@ -105,6 +106,7 @@ static int	readentry(t_cmd **cmds, t_env **envs)
 		{
 	        // A delete c'est juste pour print les nodes
 			// print nodes
+			t_cmd *head;
             head = *cmds;
             int jj = 0;
             while (head)
@@ -116,8 +118,6 @@ static int	readentry(t_cmd **cmds, t_env **envs)
                 jj++;
             }
 
-
-			// If there is a next, then there is pipes, set has pipe true to every nodes
 			if ((*cmds)->next)
 				cmds_has_pipes(*cmds);
 
@@ -132,9 +132,9 @@ static int	readentry(t_cmd **cmds, t_env **envs)
 			// if (g_force_exit != -1)
 			// 	return (g_force_exit);
 		}
-		//free_tokens(tokens);
+		free_tokens(tokens);
     }
-    return (EXIT_SUCCESS);
+    return (1);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -145,9 +145,14 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	(void)envp;
+	cmds = NULL;
 	g_force_exit = -1;
 	envs = init_envs(envp);
 	exit_status = readentry(&cmds, &envs);
-	free_envs(envs);
+	if (cmds)
+		free_cmds(cmds);
+	if (envs)
+		free_envs(envs);
 	return (exit_status);
 }

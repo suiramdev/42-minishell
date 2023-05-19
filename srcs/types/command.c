@@ -6,12 +6,18 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:30:39 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/09 16:05:22 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/18 13:35:14 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Initialize a command structure
+/// @param cmd The pointer to a command structure
+/// @param end The end index of the command in the tokens array
+/// @param start The start index of the command in the tokens array
+/// @param name The name of the command
+/// @return 1 on successful initialization, 0 otherwise
 static int cmd_init(t_cmd **cmd, size_t end, size_t start, char *name)
 {
 	(*cmd) = (t_cmd *)malloc(sizeof(t_cmd));
@@ -89,17 +95,18 @@ void	add_cmd(t_cmd **cmds, t_cmd *new)
 void	free_cmds(t_cmd *cmds)
 {
 	t_cmd	*tmp;
-	size_t	i;
-
 	while (cmds)
 	{
 		tmp = cmds;
 		cmds = cmds->next;
-		free(tmp->name);
-		i = 0;
-		while (tmp->args[i])
-			free(tmp->args[i++]);
-		free(tmp->args);
+		if (tmp->name)
+			free(tmp->name);
+		if (tmp->args)
+			free(tmp->args);
+		if (tmp->infile > 2)
+			close(tmp->infile);
+		if (tmp->outfile > 2)
+			close(tmp->outfile);
 		free(tmp);
 	}
 }

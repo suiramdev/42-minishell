@@ -62,9 +62,7 @@ static int	default_exec(t_cmd *cmd, t_env **envs)
 	while (envp[i])
 		free(envp[i++]);
 	free(envp);
-	ft_putstr_fd("Command not found: ", STDERR_FILENO);
-	ft_putstr_fd(cmd->name, STDERR_FILENO);
-	ft_putstr_fd("\n", STDERR_FILENO);
+	ft_errorendl("Command not found: ", cmd->name);
 	return (EXIT_FAILURE);
 }
 

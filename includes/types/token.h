@@ -13,7 +13,7 @@
 #ifndef TOKEN_H
 # define TOKEN_H
 
-char	**tokenize(char *line);
+char	**tokenize(char *line, t_env *envs);
 void	free_tokens(char **tokens);
 
 #endif

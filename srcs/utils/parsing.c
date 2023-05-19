@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:34:15 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/05 14:30:29 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/18 14:22:46 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,19 @@ int	is_space(char c)
 	return ((c >= 9 && c <= 13) || c == 32);
 }
 
+/// @brief Skip all space characters in a line starting from a given index
+/// @param line The line of text to process
+/// @param i Pointer to the index in line from where to start skipping spaces
+/// @return This function doesn't return a value. The index i is updated in place to the next non-space character.
 void	skip_spaces(char *line, size_t *i)
 {
     while (is_space(line[(*i)]))
         (*i)++;
 }
 
+/// @brief Determine the length of a quoted string in a line, including the quotes
+/// @param line The line of text that starts with a quote
+/// @return The length of the quoted string including the quotes. If the closing quote is not found, returns -1.
 int	skip_quotes(char *line)
 {
 	int		i;
@@ -40,6 +47,10 @@ int	skip_quotes(char *line)
 	return (-1);
 }
 
+/// @brief Handle quoted strings in a line starting from a given index
+/// @param line The line of text to process
+/// @param i Pointer to the index in line where the quoted string starts
+/// @return 1 if a quoted string was successfully processed. 0 if the quoted string was not correctly formatted (i.e., it was missing a closing quote).
 int handle_quotes(char *line, size_t *i)
 {
     int skip;
@@ -51,46 +62,12 @@ int handle_quotes(char *line, size_t *i)
     return (1);
 }
 
+/// @brief Increase a count variable and an index variable by one
+/// @param count Pointer to the count variable to be increased
+/// @param i Pointer to the index variable to be increased
+/// @return This function doesn't return a value. Both count and i are updated in place.
 void    increase_token_index(size_t *count, size_t *i)
 {
     (*count)++;
     (*i)++;
-}
-
-/// @brief Check if the line contains pipes
-/// @param str The line to check
-/// @return 1 if the line contains pipes, 0 otherwise
-int	has_pipes(char *str)
-{
-    int	i;
-
-	i = 0;
-	if (str[i] == '\'' || str[i] == '"')
-		return (0);
-	while (str[i])
-	{
-		if (str[i] == '|')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int valid_last_command(char **tokens, int i)
-{
-    if (tokens[i][0] == '|' && tokens[i + 1][0] == '>' && !tokens[i + 3])
-        return (0);
-    return (1);
-}
-
-void	cmds_has_pipes(t_cmd *cmds)
-{
-	t_cmd *head;
-
-	head = cmds;
-	while (head)
-	{
-		head->has_pipe = 1;
-		head = head->next;
-	}
 }
