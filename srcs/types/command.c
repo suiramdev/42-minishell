@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:30:39 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/17 16:16:13 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/19 15:38:29 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,17 +96,19 @@ void	add_cmd(t_cmd **cmds, t_cmd *new)
 void	free_cmds(t_cmd *cmds)
 {
 	t_cmd	*tmp;
-	size_t	i;
 
 	while (cmds)
 	{
 		tmp = cmds;
 		cmds = cmds->next;
-		free(tmp->name);
-		i = 0;
-		while (tmp->args[i])
-			free(tmp->args[i++]);
-		free(tmp->args);
+		if (tmp->name)
+			free(tmp->name);
+		if (tmp->args)
+			free(tmp->args);
+		if (tmp->infile > 2)
+			close(tmp->infile);
+		if (tmp->outfile > 2)
+			close(tmp->outfile);
 		free(tmp);
 	}
 }

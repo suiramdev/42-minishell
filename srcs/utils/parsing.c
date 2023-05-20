@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:34:15 by mnouchet          #+#    #+#             */
 /*   Updated: 2023/05/17 16:20:06 by mnouchet         ###   ########.fr       */
@@ -51,40 +51,8 @@ bool	handle_quotes(char *line, size_t *inc)
 	return (true);
 }
 
-/// @brief Check if the line contains pipes
-/// @param str The line to check
-/// @return true if the line contains pipes, false otherwise
-bool	has_pipes(char *str)
+void	increase_token_index(size_t *count, size_t *i)
 {
-	int	i;
-
-	i = 0;
-	if (str[i] == '\'' || str[i] == '"')
-		return (false);
-	while (str[i])
-	{
-		if (str[i] == '|')
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-bool	valid_last_command(char **tokens, size_t i)
-{
-	return (tokens[i][0] == '|' && tokens[i + 1][0] == '>' && !tokens[i + 3]);
-}
-
-/// @brief Set all the commands has_pipe to true
-/// @param cmds The commands to set
-void	cmds_has_pipes(t_cmd *cmds)
-{
-	t_cmd	*head;
-
-	head = cmds;
-	while (head)
-	{
-		head->has_pipe = true;
-		head = head->next;
-	}
+	(*count)++;
+	(*i)++;
 }

@@ -6,26 +6,31 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:51:58 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/17 16:23:50 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/19 17:14:47 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdlib.h>
 
+/// @brief Read entry from stdin until the end of file,
+/// and write it in the file descriptor fd.
+/// @param delimiter The string that will stop the reading.
+/// @param node The command node where the infile field is updated 
+/// with the file descriptor of a temporary file containing the input data.
+/// @return EXIT_SUCCESS or EXIT_FAILURE if an error occured.
 static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 {
 	char	*line;
 
 	cmd->infile = open(HEREDOC_FILE, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (cmd->infile < 0)
-		return (perror("heredoc"), false);
-	cmd->has_heredoc = 1;
+		return (error("heredoc", strerror(errno)), 0);
+	cmd->has_heredoc = true;
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
-			return (printf("minishell: warning: here-document delimited by end-of-file (wanted `%s')", delimiter), false);
+			return (error_heredoc(delimiter), EXIT_FAILURE);
 		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
 			return (free(line), false);
 		ft_putendl_fd(line, cmd->infile);
@@ -34,46 +39,36 @@ static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 	return (true);
 }
 
-static bool	redir_output(char *filename, t_cmd *node, int append_flag)
-{
-	if (append_flag)
-		node->outfile = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else
-		node->outfile = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (node->outfile < 0)
-		return (perror("minishell"), false);
-	return (true);
-}
-
-static bool	redir_input(char *filename, t_cmd *node)
-{
-	node->infile = open(filename, O_RDONLY);
-	if (node->infile < 0)
-		return (perror("minishell"), false);
-	return (true);
-}
-
-/// @brief Initialize the redirections for the command
-/// @param tokens The tokens array
-/// @param i The index of the redirection token
-/// @param node The command
-/// @return true if the redirections were successfully initialized,
-/// false otherwise
-bool	init_redirs(char **tokens, size_t i, t_cmd *node)
+/// @brief Process redirection operations ('>', '>>', '<', '<<')
+/// in shell command.
+/// @param tokens The array of command tokens.
+/// @param i The index of the redirection operator in the tokens array.
+/// @param node The command node where the infile and outfile fields
+/// are updated based on the redirection operations.
+/// @return true if the redirection handling was successful, or false
+/// if an error occurred.
+bool	init_redirs(char **tokens, size_t i, t_cmd *cmd)
 {
 	if (tokens[i][0] == '>')
 	{
-		if (node->outfile > 2)
-			close(node->outfile);
-		return (redir_output(tokens[i + 1], node, tokens[i][1] == '>'));
+		if (cmd->outfile > 2)
+			close(cmd->outfile);
+		if (tokens[i][1] == '>')
+			cmd->outfile = open(tokens[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			cmd->outfile = open(tokens[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (cmd->outfile < 0)
+			return (perror("minishell"), false);
 	}
 	else if (tokens[i][0] == '<')
 	{
-		if (node->infile > 2)
-			close(node->outfile);
+		if (cmd->infile > 2)
+			close(cmd->outfile);
 		if (tokens[i][1] == '<')
-			return (redir_heredoc(tokens[i + 1], node));
-		return (redir_input(tokens[i + 1], node));
+			return (redir_heredoc(tokens[i + 1], cmd));
+		cmd->infile = open(tokens[i + 1], O_RDONLY);
+		if (cmd->infile < 0)
+			return (perror("minishell"), false);
 	}
 	return (true);
 }

@@ -6,12 +6,13 @@
 #    By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/06 22:19:57 by mnouchet          #+#    #+#              #
-#    Updated: 2023/05/17 11:17:58 by mnouchet         ###   ########.fr        #
+#    Updated: 2023/05/20 13:44:25 by mnouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		:= minishell
-## ########################################################################## ## #   INGREDIENTS																  ##
+## ########################################################################## ## 
+#   INGREDIENTS																  ##
 ## ########################################################################## ##
 # LIBS			libraries to be used
 # LIBS_TARGET	libraries to be built
@@ -38,12 +39,15 @@ INCS		:= includes				\
 
 SRCS_DIR	:= srcs
 SRCS		:= main.c					\
-			   utils/command/exec.c		\
-			   utils/command/pipes.c	\
 			   utils/command/redirs.c	\
+			   utils/command/pipeline.c	\
+			   utils/command/pipes.c	\
+			   utils/command/exec.c		\
+			   utils/envutils.c			\
 			   utils/parsing.c			\
 			   utils/path.c				\
 			   utils/signals.c			\
+               utils/error.c		    \
 			   types/command.c			\
 			   types/env.c				\
 			   types/token.c			\

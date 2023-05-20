@@ -1,25 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.h                                          :+:      :+:    :+:   */
+/*   error.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/01 16:34:40 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/19 16:06:55 by mnouchet         ###   ########.fr       */
+/*   Created: 2023/05/19 15:29:24 by mnouchet          #+#    #+#             */
+/*   Updated: 2023/05/19 17:14:24 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSING_H
-# define PARSING_H
+#ifndef ERROR_H
+# define ERROR_H
 
-# include "types/command.h"
-# include <stddef.h>
-# include <stdbool.h>
-
-bool	is_space(char c);
-void	skip_spaces(char *line, size_t *inc);
-bool	handle_quotes(char *line, size_t *inc);
-void	increase_token_index(size_t *count, size_t *i);
+void	error(char *msg, char *more);
+void	error_heredoc(char *delimiter);
 
 #endif

@@ -1,25 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.h                                          :+:      :+:    :+:   */
+/*   envutils.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/01 16:34:40 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/19 16:06:55 by mnouchet         ###   ########.fr       */
+/*   Created: 2023/05/19 15:29:07 by mnouchet          #+#    #+#             */
+/*   Updated: 2023/05/19 17:29:57 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSING_H
-# define PARSING_H
+#ifndef ENVUTILS_H
+# define ENVUTILS_H
 
-# include "types/command.h"
-# include <stddef.h>
-# include <stdbool.h>
+# include "types/env.h"
 
-bool	is_space(char c);
-void	skip_spaces(char *line, size_t *inc);
-bool	handle_quotes(char *line, size_t *inc);
-void	increase_token_index(size_t *count, size_t *i);
+char	*trim_token_quote(char **token, char quote, int len, t_env *envs);
 
 #endif

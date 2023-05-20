@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/17 09:33:16 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/17 11:28:51 by mnouchet         ###   ########.fr       */
+/*   Created: 2023/05/19 15:28:51 by mnouchet          #+#    #+#             */
+/*   Updated: 2023/05/19 16:36:53 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 # define PIPES_H
 
 # include "types/command.h"
-# include "types/env.h"
+# include <stddef.h>
 
-void	wait_processes(t_cmd *cmds);
-int		pipeline(t_cmd *cmds, t_env **envs);
+bool	has_pipes(char *str);
+bool	valid_last_command(char **tokens, size_t i);
+void	cmds_has_pipes(t_cmd *cmds);
 
 #endif

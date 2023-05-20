@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/17 10:58:46 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/19 15:36:38 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static int	readentry(t_cmd **cmds, t_env **envs)
 		if (!line)
 			break ;
 		add_history(line);
-		tokens = tokenize(line);
+		tokens = tokenize(line, *envs);
 		free(line);
 		if (!tokens)
 			continue ;
@@ -118,9 +118,14 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	(void)envp;
+	cmds = NULL;
 	g_force_exit = -1;
 	envs = init_envs(envp);
 	exit_status = readentry(&cmds, &envs);
-	free_envs(envs);
+	if (cmds)
+		free_cmds(cmds);
+	if (envs)
+		free_envs(envs);
 	return (exit_status);
 }

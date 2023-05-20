@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.h                                          :+:      :+:    :+:   */
+/*   pipeline.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/01 16:34:40 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/19 16:06:55 by mnouchet         ###   ########.fr       */
+/*   Created: 2023/05/17 09:33:16 by mnouchet          #+#    #+#             */
+/*   Updated: 2023/05/19 16:34:30 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSING_H
-# define PARSING_H
+#ifndef PIPELINE_H
+# define PIPELINE_H
 
 # include "types/command.h"
-# include <stddef.h>
-# include <stdbool.h>
+# include "types/env.h"
 
-bool	is_space(char c);
-void	skip_spaces(char *line, size_t *inc);
-bool	handle_quotes(char *line, size_t *inc);
-void	increase_token_index(size_t *count, size_t *i);
+void	wait_processes(t_cmd *cmds);
+int		pipeline(t_cmd *cmds, t_env **envs);
 
 #endif
