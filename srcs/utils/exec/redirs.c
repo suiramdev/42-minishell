@@ -31,7 +31,7 @@ static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 		line = readline("> ");
 		if (!line)
 			return (error_heredoc(delimiter), EXIT_FAILURE);
-		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
+		if (ft_strcmp(line, delimiter) == 0)
 			return (free(line), false);
 		ft_putendl_fd(line, cmd->infile);
 		free(line);
