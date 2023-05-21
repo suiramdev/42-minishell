@@ -23,6 +23,7 @@ int	builtin_exit(t_cmd *cmd, t_env **envs)
 	g_force_exit = 0;
 	if (cmd->args && cmd->args[1])
 		g_force_exit = ft_atoi(cmd->args[1]);
-	printf("exit\n"); // This musn't be printf when it's in a pipe...
+	if (!cmd->has_pipe)
+		printf("exit\n");
 	return (g_force_exit);
 }

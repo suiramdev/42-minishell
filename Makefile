@@ -6,12 +6,13 @@
 #    By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/06 22:19:57 by mnouchet          #+#    #+#              #
-#    Updated: 2023/05/18 13:09:16 by zdevove          ###   ########.fr        #
+#    Updated: 2023/05/21 17:00:32 by mnouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		:= minishell
-## ########################################################################## ## #   INGREDIENTS																  ##
+## ########################################################################## ## 
+#   INGREDIENTS																  ##
 ## ########################################################################## ##
 # LIBS			libraries to be used
 # LIBS_TARGET	libraries to be built
@@ -37,24 +38,25 @@ INCS		:= includes				\
 			   libs/libft
 
 SRCS_DIR	:= srcs
-SRCS		:= main.c				\
-			   exec.c				\
-			   utils/commands.c		\
-			   utils/env.c			\
-			   utils/handle_files.c \
-			   utils/parsing.c		\
-			   utils/path.c			\
-			   utils/signals.c		\
-			   utils/error.c		\
-			   types/command.c		\
-			   types/env.c			\
-			   types/token.c		\
-			   builtins/cd.c		\
-			   builtins/echo.c		\
-			   builtins/env.c		\
-			   builtins/exit.c		\
-			   builtins/export.c	\
-			   builtins/pwd.c		\
+SRCS		:= main.c					\
+			   types/command.c			\
+			   types/env.c				\
+			   types/token.c			\
+			   utils/error.c			\
+			   utils/signal.c			\
+			   utils/str.c				\
+			   utils/pipes.c			\
+			   utils/env.c				\
+			   utils/path.c				\
+			   utils/exec/redirs.c		\
+			   utils/exec/pipeline.c	\
+			   utils/exec/exec.c		\
+			   builtins/cd.c			\
+			   builtins/echo.c			\
+			   builtins/env.c			\
+			   builtins/exit.c			\
+			   builtins/export.c		\
+			   builtins/pwd.c			\
 			   builtins/unset.c
 
 SRCS		:= $(SRCS:%=$(SRCS_DIR)/%)

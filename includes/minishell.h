@@ -6,25 +6,16 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 14:37:48 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/09 16:06:33 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/21 16:58:40 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "types/command.h"
-# include "types/env.h"
-# include "types/token.h"
-# include "utils/commandutils.h"
-# include "utils/envutils.h"
-# include "utils/parsing.h"
-# include "utils/path.h"
-# include "utils/signal.h"
-# include "utils/handle_files.h"
-# include "utils/error.h"
+# include "types.h"
+# include "utils.h"
 # include "builtins.h"
-# include "exec.h"
 # include "libft.h"
 # include <stdlib.h>
 # include <unistd.h>
@@ -36,6 +27,7 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <errno.h>
+# include <string.h>
 
 extern int	g_force_exit;
 
