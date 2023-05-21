@@ -61,7 +61,7 @@ static char	*replace_env_var(t_env *envs, char *token)
 	size_t	key_len;
 	char	*key;
 
-	i = 0;
+	i = -1;
 	while (token[++i])
 	{
 		if (token[i] == '$')
@@ -98,19 +98,29 @@ char	*trim_token_quote(char **token, char quote, int len, t_env *envs)
 	while (src[i])
 		if (src[i++] == quote)
 			j++;
-	dst = malloc((len - j + 3) * sizeof(char));
+	dst = malloc((len - j + 1) * sizeof(char));
 	if (!dst)
 		return (NULL);
 	i = -1;
-	j = 1;
-	dst[0] = quote;
+	j = 0;
 	while (++i < len)
 		if (src[i] != quote)
 			dst[j++] = src[i];
-	dst[j++] = quote;
 	dst[j] = '\0';
 	free(*token);
 	if (quote == '"' && ft_strchr(dst, '$'))
 		return (replace_env_var(envs, dst));
 	return (dst);
+}
+
+/// @brief Free tokens
+/// @param tokens The tokens to free
+void	free_tokens(char **tokens)
+{
+	size_t	i;
+
+	i = 0;
+	while (tokens[i])
+		free(tokens[i++]);
+	free(tokens);
 }

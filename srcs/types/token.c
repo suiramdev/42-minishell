@@ -33,13 +33,12 @@ static bool	loop_get_next_token(char *line, char *quote, size_t *i)
 			if ((*i) > 0 && !is_space(line[(*i) - 1]))
 				break ;
 			(*i)++;
+			if (line[(*i)] == line[*i - 1])
+				(*i)++;
 			break ;
 		}
 		else if (line[*i] == ' ' || line[*i] == '|' || line[(*i) + 1] == '|')
-		{
-			(*i)++;
-			break ;
-		}
+			return ((*i)++, true);
 		else
 			(*i)++;
 	}
@@ -72,6 +71,35 @@ static char	*get_next_token(char **line, t_env *envs)
 	return (token);
 }
 
+static int loop_count_tokens(char *line, size_t *i, size_t *count)
+{
+	if (line[(*i)] == '\'' || line[(*i)] == '"')
+	{
+		if (!handle_quotes(line, i))
+			return (error("unclosed quotes ", 0), 0);
+	}
+	else if (line[(*i)] == '<' || line[(*i)] == '>')
+	{
+		if ((*i) > 0 && line[(*i) - 1] != ' ' && line != line + (*i))
+			(*count)++;
+		increase_token_index(count, i);
+		if ((*i) > 0 && line[(*i) - 1] == line[(*i)])
+			(*i)++;
+		skip_spaces(line, i);
+	}
+	else if (line[(*i)] == ' ' || line[(*i)] == '|')
+	{
+		if (line[(*i)] == '|' && (*i) > 0 && line[(*i) - 1] != ' ' 
+			&& line[(*i) - 1] != '<' && line[(*i) - 1] != '>' )
+			(*count)++;
+		increase_token_index(count, i);
+		skip_spaces(line, i);
+	}
+	else
+		(*i)++;
+	return (1);
+}
+
 /// @brief Count the number of tokens in the input line
 /// @param line The input line to count tokens in
 /// @return The number of tokens in the line
@@ -85,30 +113,10 @@ static size_t	count_tokens(char *line)
 	skip_spaces(line, &i);
 	while (line[i])
 	{
-		if (line[i] == '\'' || line[i] == '"')
-		{
-			if (!handle_quotes(line, &i))
-				return (error("unclosed quotes ", 0), 0);
-		}
-		else if (line[i] == '<' || line[i] == '>')
-		{
-			if (line[i - 1] != ' ')
-				count++;
-			increase_token_index(&count, &i);
-			skip_spaces(line, &i);
-		}
-		else if (line[i] == ' ' || line[i] == '|')
-		{
-			if (line[i] == '|' && line[i - 1] != ' ' && line[i - 1] != '<'
-				&& line[i - 1] != '>' )
-				count++;
-			increase_token_index(&count, &i);
-			skip_spaces(line, &i);
-		}
-		else
-			i++;
+		if (!loop_count_tokens(line, &i, &count))
+			return (0);
 	}
-	if (line[i] == '\0' && !is_space(line[i - 1]))
+	if (line[i] == '\0' && !is_space(line[i - 1]) && line[i - 1] != '<' && line[i - 1] != '>')
 		count++;
 	return (count);
 }
@@ -125,6 +133,7 @@ char	**tokenize(char *line, t_env *envs)
 
 	i = 0;
 	tokens_count = count_tokens(line);
+	printf("count: %ld\n", tokens_count);
 	if (tokens_count <= 0)
 		return (NULL);
 	tokens = (char **)malloc(sizeof(char *) * (tokens_count + 1));
@@ -134,16 +143,4 @@ char	**tokenize(char *line, t_env *envs)
 		tokens[i++] = get_next_token(&line, envs);
 	tokens[i] = NULL;
 	return (tokens);
-}
-
-/// @brief Free tokens
-/// @param tokens The tokens to free
-void	free_tokens(char **tokens)
-{
-	size_t	i;
-
-	i = 0;
-	while (tokens[i])
-		free(tokens[i++]);
-	free(tokens);
 }
