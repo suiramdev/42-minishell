@@ -1,22 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command.h                                          :+:      :+:    :+:   */
+/*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/26 14:44:04 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/17 16:15:42 by mnouchet         ###   ########.fr       */
+/*   Created: 2023/05/21 16:31:23 by mnouchet          #+#    #+#             */
+/*   Updated: 2023/05/21 16:55:15 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMAND_H
-# define COMMAND_H
+#ifndef TYPES_H
+# define TYPES_H
 
-# include "types/env.h"
 # include <sys/types.h>
 # include <stdbool.h>
 
+// types/env.c
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
+
+t_env	*get_env(t_env *envs, char *key);
+t_env	*set_env(t_env **envs, char *key, char *value);
+t_env	*remove_env(t_env **envs, char *key);
+void	free_env(t_env *envs);
+char	**format_env(t_env *envs);
+
+// types/token.c
+char	**tokenize(char *line, t_env *envs);
+void	free_tokens(char **tokens);
+
+// types/cmd.c
 typedef struct s_cmd
 {
 	char			*name;

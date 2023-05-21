@@ -65,8 +65,9 @@ t_cmd	*new_cmd(char **tokens, size_t start, size_t end)
 	cmd->has_pipe = false;
 	cmd->pid = -1;
 	cmd->name = ft_strdup(tokens[start]);
-	init_args(cmd, tokens, start, end);
 	cmd->next = NULL;
+	if (!init_args(cmd, tokens, start, end))
+		return (free_cmds(cmd), NULL);
 	return (cmd);
 }
 

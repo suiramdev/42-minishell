@@ -6,15 +6,14 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 16:34:03 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/08 16:26:27 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/21 16:50:06 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
-# include "types/command.h"
-# include "types/env.h"
+# include "types.h"
 
 typedef struct s_builtin
 {

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   envutils.c                                         :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -100,7 +100,7 @@ char	*trim_token_quote(char **token, char quote, int len, t_env *envs)
 			j++;
 	dst = malloc((len - j + 3) * sizeof(char));
 	if (!dst)
-		return (0);
+		return (NULL);
 	i = -1;
 	j = 1;
 	dst[0] = quote;

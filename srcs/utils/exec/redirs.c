@@ -54,9 +54,11 @@ bool	init_redirs(char **tokens, size_t i, t_cmd *cmd)
 		if (cmd->outfile > 2)
 			close(cmd->outfile);
 		if (tokens[i][1] == '>')
-			cmd->outfile = open(tokens[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+			cmd->outfile = open(tokens[i + 1], O_WRONLY | O_CREAT
+					| O_APPEND, 0644);
 		else
-			cmd->outfile = open(tokens[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			cmd->outfile = open(tokens[i + 1], O_WRONLY | O_CREAT
+					| O_TRUNC, 0644);
 		if (cmd->outfile < 0)
 			return (perror("minishell"), false);
 	}

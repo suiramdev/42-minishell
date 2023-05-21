@@ -43,7 +43,6 @@ static t_env	*init_envs(char **envp)
 t_cmd	*init_cmds(char **tokens)
 {
 	t_cmd	*cmds;
-	t_cmd	*new;
 	size_t	start;
 	size_t	i;
 
@@ -54,17 +53,13 @@ t_cmd	*init_cmds(char **tokens)
 	{
 		if (has_pipes(tokens[i]) && valid_last_command(tokens, i))
 		{
-			new = new_cmd(tokens, start, i);
-			add_cmd(&cmds, new);
+			add_cmd(&cmds, new_cmd(tokens, start, i));
 			start = i + 1;
 		}
 		i++;
 	}
 	if (tokens[start])
-	{
-		new = new_cmd(tokens, start, i);
-		add_cmd(&cmds, new);
-	}
+		add_cmd(&cmds, new_cmd(tokens, start, i));
 	return (cmds);
 }
 
@@ -78,7 +73,6 @@ static int	readentry(t_cmd **cmds, t_env **envs)
 	char	**tokens;
 	int		exit_status;
 
-	(void)envs;
 	while (1)
 	{
 		signal(SIGINT, &signal_handler);
@@ -98,10 +92,7 @@ static int	readentry(t_cmd **cmds, t_env **envs)
 				cmds_has_pipes(*cmds);
 			exit_status = exec_cmds(*cmds, envs);
 			if ((*cmds)->pid == 0)
-			{
-				free_cmds(*cmds);
-				return (exit_status);
-			}
+				return (free_cmds(*cmds), exit_status);
 			free_cmds(*cmds);
 			if (g_force_exit != -1)
 				return (g_force_exit);
@@ -115,15 +106,20 @@ int	main(int argc, char **argv, char **envp)
 	t_env	*envs;
 	t_cmd	*cmds;
 	int		exit_status;
+	t_env	*tmp;
 
 	(void)argc;
 	(void)argv;
-	(void)envp;
 	cmds = NULL;
 	g_force_exit = -1;
 	envs = init_envs(envp);
 	exit_status = readentry(&cmds, &envs);
 	rl_clear_history();
-	free_envs(envs);
+	while (envs)
+	{
+		tmp = envs;
+		envs = envs->next;
+		free_env(tmp);
+	}
 	return (exit_status);
 }

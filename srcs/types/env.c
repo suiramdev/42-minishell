@@ -54,15 +54,15 @@ t_env	*set_env(t_env **envs, char *key, char *value)
 	new->key = ft_strdup(key);
 	new->value = ft_strdup(value);
 	new->next = NULL;
-	if (!*envs)
+	if (*envs)
 	{
-		*envs = new;
-		return (new);
+		last = *envs;
+		while (last->next)
+			last = last->next;
+		last->next = new;
 	}
-	last = *envs;
-	while (last->next)
-		last = last->next;
-	last->next = new;
+	else
+		*envs = new;
 	return (new);
 }
 
@@ -82,9 +82,7 @@ t_env	*remove_env(t_env **envs, char *key)
 	{
 		tmp = *envs;
 		*envs = (*envs)->next;
-		free(tmp->key);
-		free(tmp->value);
-		free(tmp);
+		free_env(tmp);
 		return (*envs);
 	}
 	current = *envs;
@@ -94,9 +92,7 @@ t_env	*remove_env(t_env **envs, char *key)
 		{
 			tmp = current->next;
 			current->next = current->next->next;
-			free(tmp->key);
-			free(tmp->value);
-			free(tmp);
+			free_env(tmp);
 			return (*envs);
 		}
 		current = current->next;
@@ -104,21 +100,13 @@ t_env	*remove_env(t_env **envs, char *key)
 	return (NULL);
 }
 
-/// @brief Free the list of environment variables
-/// @param list The envs of the list of environment variables
-/// @return void
-void	free_envs(t_env *envs)
+/// @brief Free an environment variable
+/// @param envs The environment variable to free
+void	free_env(t_env *envs)
 {
-	t_env	*tmp;
-
-	while (envs)
-	{
-		tmp = envs;
-		envs = envs->next;
-		free(tmp->key);
-		free(tmp->value);
-		free(tmp);
-	}
+	free(envs->key);
+	free(envs->value);
+	free(envs);
 }
 
 /// @brief Format the list of environment variables to an array of strings
