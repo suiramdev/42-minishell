@@ -84,7 +84,7 @@ static int	readentry(t_cmd **cmds, t_env **envs)
 		signal(SIGINT, &signal_handler);
 		line = readline("minishell$ ");
 		if (!line)
-			break ;
+			return (EXIT_FAILURE);
 		add_history(line);
 		tokens = tokenize(line, *envs);
 		free(line);
@@ -123,9 +123,7 @@ int	main(int argc, char **argv, char **envp)
 	g_force_exit = -1;
 	envs = init_envs(envp);
 	exit_status = readentry(&cmds, &envs);
-	if (cmds)
-		free_cmds(cmds);
-	if (envs)
-		free_envs(envs);
+	rl_clear_history();
+	free_envs(envs);
 	return (exit_status);
 }

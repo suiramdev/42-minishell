@@ -44,6 +44,7 @@ static char	*replace_env_var2(char *token, int key_len, t_env *head, int i)
 	free(temp);
 	temp = token;
 	token = ft_strjoin(token, after);
+	free(temp);
 	if (before)
 		free(before);
 	free(after);
@@ -56,7 +57,6 @@ static char	*replace_env_var2(char *token, int key_len, t_env *head, int i)
 /// @return The updated token string after environment variable replacement.
 static char	*replace_env_var(t_env *envs, char *token)
 {
-	t_env	*head;
 	size_t	i;
 	size_t	key_len;
 	char	*key;
@@ -70,10 +70,7 @@ static char	*replace_env_var(t_env *envs, char *token)
 			while (!special_char(token[i + key_len]))
 				key_len++;
 			key = ft_substr(token, i + 1, key_len - 1);
-			head = envs;
-			while (head && ft_strncmp(key, head->key, ft_strlen(key)) != 0)
-				head = head->next;
-			token = replace_env_var2(token, key_len, head, i);
+			token = replace_env_var2(token, key_len, get_env(envs, key), i);
 			free(key);
 		}
 	}
