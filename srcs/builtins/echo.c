@@ -25,7 +25,9 @@ int	builtin_echo(t_cmd *cmd, t_env **envs)
 	size_t	i;
 
 	(void)envs;
-	n_option = ft_strcmp(cmd->args[1], "-n") == 0;
+	n_option = 0;
+	if (cmd->args && cmd->args[1])
+		n_option = ft_strcmp(cmd->args[1], "-n") == 0;
 	i = 1 + n_option;
 	while (cmd->args && cmd->args[i])
 	{
