@@ -80,17 +80,17 @@ static int loop_count_tokens(char *line, size_t *i, size_t *count)
 	}
 	else if (line[(*i)] == '<' || line[(*i)] == '>')
 	{
-		if (line[(*i) - 1] != ' ' && line != line + (*i))
+		if ((*i) > 0 && line[(*i) - 1] != ' ' && line != line + (*i))
 			(*count)++;
 		increase_token_index(count, i);
-		if (line[(*i) - 1] == line[(*i)])
+		if ((*i) > 0 && line[(*i) - 1] == line[(*i)])
 			(*i)++;
 		skip_spaces(line, i);
 	}
 	else if (line[(*i)] == ' ' || line[(*i)] == '|')
 	{
-		if (line[(*i)] == '|' && line[(*i) - 1] != ' ' && line[(*i) - 1] != '<'
-			&& line[(*i) - 1] != '>' )
+		if (line[(*i)] == '|' && (*i) > 0 && line[(*i) - 1] != ' ' 
+			&& line[(*i) - 1] != '<' && line[(*i) - 1] != '>' )
 			(*count)++;
 		increase_token_index(count, i);
 		skip_spaces(line, i);
