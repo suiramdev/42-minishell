@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 16:46:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/21 16:57:50 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/21 17:22:21 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ char	*trim_token_quote(char **token, char quote, int len, t_env *envs);
 char	*join_path(char *s1, char *s2);
 char	*resolve_path(char *file, t_env *envs);
 
-
 // utils/exec/redirs.c
 # define HEREDOC_FILE "/tmp/heredoc"
 
@@ -57,7 +56,8 @@ int		pipeline(t_cmd *cmds, t_env **envs);
 // utils/exec/exec.c
 # define BUILTIN_NOT_FOUND -1
 
-int	exec_builtin(t_cmd *cmd, t_env **envs);
-int	exec_relative(t_cmd *cmd, t_env **envs);
+int		exec_builtin(t_cmd *cmd, t_env **envs);
+int		exec_relative(t_cmd *cmd, t_env **envs);
+int		exec_cmds(t_cmd *cmds, t_env **envs);
 
 #endif

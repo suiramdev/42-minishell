@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 16:31:23 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/21 16:55:15 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/21 17:21:52 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,5 @@ void	add_cmd(t_cmd **cmds, t_cmd *new);
 t_cmd	*new_cmd(char **tokens, size_t start, size_t end);
 t_cmd	*init_cmds(char **tokens);
 void	free_cmds(t_cmd *cmds);
-int		exec_cmds(t_cmd *cmds, t_env **envs);
 
 #endif

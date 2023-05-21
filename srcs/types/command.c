@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:30:39 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/19 15:38:29 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/21 17:23:31 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,37 +114,4 @@ void	free_cmds(t_cmd *cmds)
 			close(tmp->outfile);
 		free(tmp);
 	}
-}
-
-/// @brief Execute the commands linked list
-/// @param cmds The commands linked list
-/// @param envs The environment variables linked list
-int	exec_cmds(t_cmd *cmds, t_env **envs)
-{
-	int	backups[2];
-	int	exit_status;
-
-	if (cmds->next)
-		return (pipeline(cmds, envs));
-	backups[0] = dup(STDIN_FILENO);
-	backups[1] = dup(STDOUT_FILENO);
-	redirs(cmds);
-	exit_status = exec_builtin(cmds, envs);
-	if (exit_status == BUILTIN_NOT_FOUND)
-	{
-		cmds->pid = fork();
-		if (cmds->pid == -1)
-			return (EXIT_FAILURE);
-		if (cmds->pid == 0)
-			return (exec_relative(cmds, envs));
-		close_redirs(cmds);
-		dup2(backups[0], STDIN_FILENO);
-		dup2(backups[1], STDOUT_FILENO);
-		wait_processes(cmds);
-		return (EXIT_SUCCESS);
-	}
-	close_redirs(cmds);
-	dup2(backups[0], STDIN_FILENO);
-	dup2(backups[1], STDOUT_FILENO);
-	return (exit_status);
 }
