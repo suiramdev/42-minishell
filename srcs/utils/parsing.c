@@ -14,29 +14,29 @@
 
 /// @brief Check if the character is a space
 /// @param c The character to check
-/// @return true if the character is a space, false otherwise
+/// @return 1 if the character is a space, 0 otherwise
 bool	is_space(char c)
 {
 	return ((c >= 9 && c <= 13) || c == 32);
 }
 
-/// @brief Skip the spaces in the line
-/// @param line The line to parse
-/// @param inc The increment variable pointer which will be incremented by the
-/// number of spaces
-/// @return void
-void	skip_spaces(char *line, size_t *inc)
+/// @brief Skip all space characters in a line starting from a given index
+/// @param line The line of text to process
+/// @param i Pointer to the index in line from where to start skipping spaces
+/// @return This function doesn't return a value. The index i is updated
+/// in place to the next non-space character.
+void	skip_spaces(char *line, size_t *i)
 {
-	while (is_space(line[(*inc)]))
-		(*inc)++;
+	while (is_space(line[(*i)]))
+		(*i)++;
 }
 
-/// @brief Skip the content of the quotes
-/// @param line The line to parse
-/// @param inc The increment variable pointer which will be incremented by the 
-/// number of characters in the quote
-/// @return true if the quote is closed, false otherwise
-bool	handle_quotes(char *line, size_t *inc)
+/// @brief Determine the length of a quoted string in a line, including
+/// the quotes
+/// @param line The line of text that starts with a quote
+/// @return The length of the quoted string including the quotes.
+/// If the closing quote is not found, returns -1.
+int	skip_quotes(char *line)
 {
 	int		i;
 	char	quote;
@@ -45,12 +45,32 @@ bool	handle_quotes(char *line, size_t *inc)
 	quote = line[0];
 	while (line[i] && line[i] != quote)
 			i++;
-	if (line[i] != quote)
+	if (line[i] == quote)
+		return (i + 1);
+	return (-1);
+}
+
+/// @brief Handle quoted strings in a line starting from a given index
+/// @param line The line of text to process
+/// @param i Pointer to the index in line where the quoted string starts
+/// @return 1 if a quoted string was successfully processed. 0 if the quoted
+/// string was not correctly formatted (i.e., it was missing a closing quote).
+bool	handle_quotes(char *line, size_t *i)
+{
+	int	skip;
+
+	skip = skip_quotes(line + (*i));
+	if (skip == -1)
 		return (false);
-	*inc = i + 1;
+	(*i) += skip;
 	return (true);
 }
 
+/// @brief Increase a count variable and an index variable by one
+/// @param count Pointer to the count variable to be increased
+/// @param i Pointer to the index variable to be increased
+/// @return This function doesn't return a value. Both count and i
+/// are updated in place.
 void	increase_token_index(size_t *count, size_t *i)
 {
 	(*count)++;

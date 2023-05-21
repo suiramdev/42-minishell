@@ -15,7 +15,7 @@
 /// @brief Check if a command token string contains any special characters.
 /// @param c The character to check.
 /// @return 1 if the character is special, 0 otherwise.
-static int	special_char(char c)
+static bool	special_char(char c)
 {
 	return (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
 			|| (c >= '0' && c <= '9') || (c == '_')));

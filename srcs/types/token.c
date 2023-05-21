@@ -19,23 +19,23 @@
 /// @return Returns true on successful parsing, false on encountering an error.
 static bool	loop_get_next_token(char *line, char *quote, size_t *i)
 {
-	while (line[(*i)] && !is_space(line[(*i)]))
+	while (line[*i] && !is_space(line[*i]))
 	{
-		if (line[(*i)] == '\'' || line[(*i)] == '"')
+		if (line[*i] == '\'' || line[*i] == '"')
 		{
 			if (!(*quote))
-				(*quote) = line[(*i)];
+				(*quote) = line[*i];
 			if (!handle_quotes(line, i))
-				return (error("unclosed quotes ", NULL), false);
+				return (error("unclosed quotes ", 0), false);
 		}
-		else if ((line[(*i)] == '<' || line[(*i)] == '>'))
+		else if ((line[*i] == '<' || line[*i] == '>'))
 		{
-			if (*i > 0 && !is_space(line[*i - 1]))
+			if ((*i) > 0 && !is_space(line[(*i) - 1]))
 				break ;
 			(*i)++;
 			break ;
 		}
-		else if (line[*i] == ' ' || line[*i] == '|' || line[*i + 1] == '|')
+		else if (line[*i] == ' ' || line[*i] == '|' || line[(*i) + 1] == '|')
 		{
 			(*i)++;
 			break ;
@@ -48,8 +48,8 @@ static bool	loop_get_next_token(char *line, char *quote, size_t *i)
 
 /// @brief Get next token with space ' or " as delimiter
 /// @param line_ptr The line's pointer to parse
-/// @param envs The environment variables to replace by their
-/// values if double quotes
+/// @param envs The environment variables to replace by their values if 
+/// double quotes
 /// @return char* The next token
 static char	*get_next_token(char **line, t_env *envs)
 {
@@ -58,7 +58,7 @@ static char	*get_next_token(char **line, t_env *envs)
 	size_t	i;
 
 	i = 0;
-	handle_quotes(*line, &i);
+	skip_spaces(*line, &i);
 	*line += i;
 	i = 0;
 	quote = 0;
@@ -67,7 +67,7 @@ static char	*get_next_token(char **line, t_env *envs)
 	token = ft_substr(*line, 0, i);
 	if (quote)
 		token = trim_token_quote(&token, quote, i, envs);
-	handle_quotes(*line, &i);
+	skip_spaces(*line, &i);
 	*line += i;
 	return (token);
 }
@@ -82,13 +82,13 @@ static size_t	count_tokens(char *line)
 
 	i = 0;
 	count = 0;
-	handle_quotes(line, &i);
+	skip_spaces(line, &i);
 	while (line[i])
 	{
 		if (line[i] == '\'' || line[i] == '"')
 		{
 			if (!handle_quotes(line, &i))
-				return (error("unclosed quotes ", NULL), 0);
+				return (error("unclosed quotes ", 0), 0);
 		}
 		else if (line[i] == '<' || line[i] == '>')
 		{
@@ -125,6 +125,7 @@ char	**tokenize(char *line, t_env *envs)
 
 	i = 0;
 	tokens_count = count_tokens(line);
+	printf("tokens count: %ld\n", tokens_count);
 	if (tokens_count <= 0)
 		return (NULL);
 	tokens = (char **)malloc(sizeof(char *) * (tokens_count + 1));

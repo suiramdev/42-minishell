@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENVUTILS_H
-# define ENVUTILS_H
+#ifndef ARGS_H
+# define ARGS_H
 
 # include "types/env.h"
 

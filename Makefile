@@ -39,11 +39,11 @@ INCS		:= includes				\
 
 SRCS_DIR	:= srcs
 SRCS		:= main.c					\
-			   utils/command/redirs.c	\
+			   utils/command/args.c		\
+			   utils/command/exec.c		\
 			   utils/command/pipeline.c	\
 			   utils/command/pipes.c	\
-			   utils/command/exec.c		\
-			   utils/envutils.c			\
+			   utils/command/redirs.c	\
 			   utils/parsing.c			\
 			   utils/path.c				\
 			   utils/signals.c			\

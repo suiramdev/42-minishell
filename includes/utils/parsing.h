@@ -18,8 +18,8 @@
 # include <stdbool.h>
 
 bool	is_space(char c);
-void	skip_spaces(char *line, size_t *inc);
-bool	handle_quotes(char *line, size_t *inc);
+void	skip_spaces(char *line, size_t *i);
+bool	handle_quotes(char *line, size_t *i);
 void	increase_token_index(size_t *count, size_t *i);
 
 #endif
