@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+         #
+#    By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/06 22:19:57 by mnouchet          #+#    #+#              #
-#    Updated: 2023/05/22 01:24:31 by mnouchet         ###   ########.fr        #
+#    Updated: 2023/05/22 17:14:39 by mnouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -104,6 +104,7 @@ $(BUILD_DIR)/%.o: $(SRCS_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ $(CPPFLAGS)
 
 $(NAME): $(LIBS_TARGET) $(OBJS)
+	make -C libs/libft
 	$(CC) $(OBJS) -o $(NAME) $(LDLIBS) $(LDFLAGS)
 	echo "\033[0;32m✓ $@ READY\033[0m"
 
@@ -111,9 +112,11 @@ bonus: all
 
 clean:
 	echo "→ Removing objects"
+	make clean -C libs/libft
 	$(RM) $(OBJS)
 
 fclean: clean
+	make fclean -C libs/libft
 	echo "→ Removing binaries"
 	$(RM) $(NAME)
 
