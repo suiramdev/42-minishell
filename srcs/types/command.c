@@ -21,10 +21,11 @@
 /// @note Also handle the redirections arguments
 static char	**init_args(t_cmd *cmd, char **tokens, size_t start, size_t end)
 {
+	char	**args;
 	size_t	i;
 
-	cmd->args = (char **)malloc((end - start + 1) * sizeof(char *));
-	if (!cmd->args)
+	args = (char **)malloc((end - start + 1) * sizeof(char *));
+	if (!args)
 		return (NULL);
 	i = 0;
 	while (start + i < end)
@@ -34,17 +35,15 @@ static char	**init_args(t_cmd *cmd, char **tokens, size_t start, size_t end)
 			if (!init_redirs(tokens, start + i, cmd))
 				return (NULL);
 			start += 2;
+			continue ;
 		}
-		else
-		{
-			cmd->args[i] = ft_strdup(tokens[start + i]);
-			i++;
-		}
+		args[i] = ft_strdup(tokens[start + i]);
+		i++;
 	}
-	if (i > 0 && cmd->args[i - 1][0] == '|')
+	if (i > 0 && args[i - 1][0] == '|')
 		i--;
-	cmd->args[i] = NULL;
-	return (cmd->args);
+	args[i] = NULL;
+	return (args);
 }
 
 /// @brief Create a new command from the tokens array
@@ -66,7 +65,8 @@ t_cmd	*new_cmd(char **tokens, size_t start, size_t end)
 	cmd->pid = -1;
 	cmd->name = ft_strdup(tokens[start]);
 	cmd->next = NULL;
-	if (!init_args(cmd, tokens, start, end))
+	cmd->args = init_args(cmd, tokens, start, end);
+	if (!cmd->args)
 		return (free_cmds(cmd), NULL);
 	return (cmd);
 }

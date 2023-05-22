@@ -60,7 +60,7 @@ static t_cmd	*init_cmds(char **tokens)
 	}
 	if (tokens[start])
 		add_cmd(&cmds, new_cmd(tokens, start, i));
-	if (cmds->next)
+	if (cmds && cmds->next)
 		cmds_has_pipes(cmds);
 	return (cmds);
 }
