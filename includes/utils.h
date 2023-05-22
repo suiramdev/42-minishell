@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 16:46:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/21 17:22:21 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/22 01:24:01 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,12 @@ bool	has_pipes(char *str);
 bool	valid_last_command(char **tokens, size_t i);
 void	cmds_has_pipes(t_cmd *cmds);
 
-// utils/env.c
+// utils/token.c
 char	*trim_token_quote(char **token, char quote, int len, t_env *envs);
+void	free_tokens(char **tokens);
+
+// utils/env.c
+char	**format_env(t_env *envs);
 
 // utils/path.c
 char	*join_path(char *s1, char *s2);

@@ -6,7 +6,7 @@
 #    By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/06 22:19:57 by mnouchet          #+#    #+#              #
-#    Updated: 2023/05/21 17:00:32 by mnouchet         ###   ########.fr        #
+#    Updated: 2023/05/22 01:24:31 by mnouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,7 @@ SRCS		:= main.c					\
 			   utils/signal.c			\
 			   utils/str.c				\
 			   utils/pipes.c			\
+			   utils/token.c			\
 			   utils/env.c				\
 			   utils/path.c				\
 			   utils/exec/redirs.c		\

@@ -40,7 +40,7 @@ static t_env	*init_envs(char **envp)
 /// @brief Initialize the commands linked list from the tokens array
 /// @param tokens The tokens array
 /// @return The commands linked list
-t_cmd	*init_cmds(char **tokens)
+static t_cmd	*init_cmds(char **tokens)
 {
 	t_cmd	*cmds;
 	size_t	start;
@@ -60,6 +60,30 @@ t_cmd	*init_cmds(char **tokens)
 	}
 	if (tokens[start])
 		add_cmd(&cmds, new_cmd(tokens, start, i));
+	if (cmds->next)
+		cmds_has_pipes(cmds);
+	return (cmds);
+}
+
+/// @brief Read user input, tokenize it and initialize the commands linked list
+/// @param envs The environment variables linked list
+/// @return The commands linked list, or NULL if any error occured
+static t_cmd	*readentry(t_env *envs)
+{
+	char	*line;
+	char	**tokens;
+	t_cmd	*cmds;
+
+	line = readline("minishell$ ");
+	if (!line)
+		return (NULL);
+	add_history(line);
+	tokens = tokenize(line, envs);
+	free(line);
+	if (!tokens)
+		return (NULL);
+	cmds = init_cmds(tokens);
+	free_tokens(tokens);
 	return (cmds);
 }
 
@@ -67,36 +91,22 @@ t_cmd	*init_cmds(char **tokens)
 /// @param cmds The commands linked list
 /// @param envs The environment variables linked list
 /// @return The exit status
-static int	readentry(t_cmd **cmds, t_env **envs)
+static int	program(t_cmd **cmds, t_env **envs)
 {
-	char	*line;
-	char	**tokens;
 	int		exit_status;
 
 	while (1)
 	{
 		signal(SIGINT, &signal_handler);
-		line = readline("minishell$ ");
-		if (!line)
-			return (EXIT_FAILURE);
-		add_history(line);
-		tokens = tokenize(line, *envs);
-		free(line);
-		if (!tokens)
+		*cmds = readentry(*envs);
+		if (!*cmds)
 			continue ;
-		*cmds = init_cmds(tokens);
-		free_tokens(tokens);
-		if (*cmds)
-		{
-			if ((*cmds)->next)
-				cmds_has_pipes(*cmds);
-			exit_status = exec_cmds(*cmds, envs);
-			if ((*cmds)->pid == 0)
-				return (free_cmds(*cmds), exit_status);
-			free_cmds(*cmds);
-			if (g_force_exit != -1)
-				return (g_force_exit);
-		}
+		exit_status = exec_cmds(*cmds, envs);
+		if ((*cmds)->pid == 0)
+			return (free_cmds(*cmds), exit_status);
+		free_cmds(*cmds);
+		if (g_force_exit != -1)
+			return (g_force_exit);
 	}
 	return (EXIT_SUCCESS);
 }
@@ -113,7 +123,7 @@ int	main(int argc, char **argv, char **envp)
 	cmds = NULL;
 	g_force_exit = -1;
 	envs = init_envs(envp);
-	exit_status = readentry(&cmds, &envs);
+	exit_status = program(&cmds, &envs);
 	rl_clear_history();
 	while (envs)
 	{

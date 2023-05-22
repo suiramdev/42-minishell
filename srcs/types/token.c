@@ -71,7 +71,7 @@ static char	*get_next_token(char **line, t_env *envs)
 	return (token);
 }
 
-static int loop_count_tokens(char *line, size_t *i, size_t *count)
+static int	loop_count_tokens(char *line, size_t *i, size_t *count)
 {
 	if (line[(*i)] == '\'' || line[(*i)] == '"')
 	{
@@ -89,7 +89,7 @@ static int loop_count_tokens(char *line, size_t *i, size_t *count)
 	}
 	else if (line[(*i)] == ' ' || line[(*i)] == '|')
 	{
-		if (line[(*i)] == '|' && (*i) > 0 && line[(*i) - 1] != ' ' 
+		if (line[(*i)] == '|' && (*i) > 0 && line[(*i) - 1] != ' '
 			&& line[(*i) - 1] != '<' && line[(*i) - 1] != '>' )
 			(*count)++;
 		increase_token_index(count, i);
@@ -116,7 +116,8 @@ static size_t	count_tokens(char *line)
 		if (!loop_count_tokens(line, &i, &count))
 			return (0);
 	}
-	if (line[i] == '\0' && !is_space(line[i - 1]) && line[i - 1] != '<' && line[i - 1] != '>')
+	if (line[i] == '\0' && !is_space(line[i - 1]) && line[i - 1] != '<'
+		&& line[i - 1] != '>')
 		count++;
 	return (count);
 }
