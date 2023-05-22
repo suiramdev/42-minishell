@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 16:46:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/22 01:24:01 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/22 15:36:19 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	cmds_has_pipes(t_cmd *cmds);
 // utils/token.c
 char	*trim_token_quote(char **token, char quote, int len, t_env *envs);
 void	free_tokens(char **tokens);
+char	*replace_env_var(t_env *envs, char *token);
 
 // utils/env.c
 char	**format_env(t_env *envs);

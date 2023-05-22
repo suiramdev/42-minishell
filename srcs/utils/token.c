@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 16:00:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/22 01:25:40 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/22 16:55:09 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,16 @@ static char	*replace_env_var2(char *token, int key_len, t_env *head, int i)
 	after = ft_strdup(token + i + key_len);
 	temp = token;
 	if (head)
+	{
 		token = ft_strjoin(before, head->value);
+		free(before);
+	}
 	else
 		token = before;
 	free(temp);
 	temp = token;
 	token = ft_strjoin(token, after);
 	free(temp);
-	if (before)
-		free(before);
 	free(after);
 	return (token);
 }
@@ -55,24 +56,27 @@ static char	*replace_env_var2(char *token, int key_len, t_env *head, int i)
 /// @param envs The environment variable list.
 /// @param token The token string.
 /// @return The updated token string after environment variable replacement.
-static char	*replace_env_var(t_env *envs, char *token)
+char	*replace_env_var(t_env *envs, char *token)
 {
 	size_t	i;
 	size_t	key_len;
 	char	*key;
 
-	i = -1;
-	while (token[++i])
+	i = 0;
+	while (token[i])
 	{
 		if (token[i] == '$')
 		{
 			key_len = 1;
-			while (!special_char(token[i + key_len]))
+			while (token[i + key_len] && !special_char(token[i + key_len]))
 				key_len++;
 			key = ft_substr(token, i + 1, key_len - 1);
 			token = replace_env_var2(token, key_len, get_env(envs, key), i);
 			free(key);
+			i = 0;
 		}
+		else
+			i++;
 	}
 	return (token);
 }
