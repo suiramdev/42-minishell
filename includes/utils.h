@@ -47,7 +47,7 @@ char	*join_path(char *s1, char *s2);
 char	*resolve_path(char *file, t_env *envs);
 
 // utils/exec/redirs.c
-# define HEREDOC_FILE "/tmp/heredoc"
+# define HEREDOC_FILE ".heredoc"
 
 bool	init_redirs(char **tokens, size_t i, t_cmd *node);
 void	redirs(t_cmd *cmd);

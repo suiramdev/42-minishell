@@ -63,11 +63,13 @@ t_cmd	*new_cmd(char **tokens, size_t start, size_t end)
 	cmd->has_heredoc = false;
 	cmd->has_pipe = false;
 	cmd->pid = -1;
-	cmd->name = ft_strdup(tokens[start]);
 	cmd->next = NULL;
+	cmd->name = NULL;
 	cmd->args = init_args(cmd, tokens, start, end);
 	if (!cmd->args)
 		return (free_cmds(cmd), NULL);
+	if (cmd->args[0])
+		cmd->name = cmd->args[0];
 	return (cmd);
 }
 
@@ -103,7 +105,6 @@ void	free_cmds(t_cmd *cmds)
 	{
 		tmp = cmds;
 		cmds = cmds->next;
-		free(tmp->name);
 		i = 0;
 		while (tmp->args && tmp->args[i])
 			free(tmp->args[i++]);
