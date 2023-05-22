@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/19 15:36:38 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/22 15:57:43 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,23 +68,22 @@ static t_cmd	*init_cmds(char **tokens)
 /// @brief Read user input, tokenize it and initialize the commands linked list
 /// @param envs The environment variables linked list
 /// @return The commands linked list, or NULL if any error occured
-static t_cmd	*readentry(t_env *envs)
+static int	readentry(t_env *envs, t_cmd **cmds)
 {
 	char	*line;
 	char	**tokens;
-	t_cmd	*cmds;
 
 	line = readline("minishell$ ");
 	if (!line)
-		return (NULL);
+		return (2);
 	add_history(line);
 	tokens = tokenize(line, envs);
 	free(line);
 	if (!tokens)
-		return (NULL);
-	cmds = init_cmds(tokens);
+		return (0);
+	*cmds = init_cmds(tokens);
 	free_tokens(tokens);
-	return (cmds);
+	return (1);
 }
 
 /// @brief Loop to read user input and execute commands
@@ -94,12 +93,15 @@ static t_cmd	*readentry(t_env *envs)
 static int	program(t_cmd **cmds, t_env **envs)
 {
 	int		exit_status;
+	int		res;
 
 	while (1)
 	{
 		signal(SIGINT, &signal_handler);
-		*cmds = readentry(*envs);
-		if (!*cmds)
+		res = readentry(*envs, cmds);
+		if (res == 2)
+			break ;
+		else if (res == 0)
 			continue ;
 		exit_status = exec_cmds(*cmds, envs);
 		if ((*cmds)->pid == 0)

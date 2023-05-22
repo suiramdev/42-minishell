@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:31:08 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/20 13:45:38 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/22 15:35:28 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ static char	*get_next_token(char **line, t_env *envs)
 	token = ft_substr(*line, 0, i);
 	if (quote)
 		token = trim_token_quote(&token, quote, i, envs);
+	else if (ft_strchr(token, '$'))
+		return (replace_env_var(envs, token));
 	skip_spaces(*line, &i);
 	*line += i;
 	return (token);
