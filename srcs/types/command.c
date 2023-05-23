@@ -110,10 +110,7 @@ void	free_cmds(t_cmd *cmds)
 			free(tmp->args[i++]);
 		if (tmp->args)
 			free(tmp->args);
-		if (tmp->infile > 2)
-			close(tmp->infile);
-		if (tmp->outfile > 2)
-			close(tmp->outfile);
+		close_redirs(tmp);
 		free(tmp);
 	}
 }
