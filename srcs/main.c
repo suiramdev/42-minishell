@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/23 15:21:39 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/23 16:02:29 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,10 @@ static int	readentry(t_env *envs, t_cmd **cmds)
 	free(line);
 	if (!tokens)
 		return (0);
+	///
+	for (int a = 0; tokens[a]; a++)
+		printf("token[%d]: %s\n", a, tokens[a]);
+	///
 	*cmds = init_cmds(tokens);
 	free_tokens(tokens);
 	return (1);
@@ -111,6 +115,15 @@ static int	program(t_cmd **cmds, t_env **envs)
 			continue ;
 		if (*cmds)
 		{
+			/// del
+			int e = 0;
+			for (t_cmd *head = *cmds; head; head = head->next)
+			{
+				for (int a = 0; head->args[a]; a++)
+					printf("node[%d]: args[%d]: %s\n", e, a, head->args[a]);
+				e++;
+			}
+			///
 			exit_status = exec_cmds(*cmds, envs);
 			if ((*cmds)->pid == 0)
 				return (free_cmds(*cmds), exit_status);
