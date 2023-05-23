@@ -37,7 +37,7 @@ static t_env	*new_env(char *key, char *value)
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return (NULL);
-	new->key = key;
+	new->key = ft_strdup(key);
 	new->value = value;
 	new->next = NULL;
 	return (new);
@@ -48,7 +48,7 @@ static t_env	*new_env(char *key, char *value)
 /// @param key The key of the new environment variable
 /// @param value The value of the new environment variable
 /// @return The new environment variable
-/// @note The key and value are duplicated
+/// @note The key is duplicated by the function itself, but the value is not
 t_env	*set_env(t_env **envs, char *key, char *value)
 {
 	t_env	*new;

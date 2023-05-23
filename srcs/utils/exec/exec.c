@@ -74,8 +74,8 @@ int	exec_relative(t_cmd *cmd, t_env **envs)
 /// @param envs The environment variables linked list
 int	exec_cmds(t_cmd *cmds, t_env **envs)
 {
-	int	backups[2];
-	int	exit_status;
+	int		backups[2];
+	int		exit_status;
 
 	if (cmds->next)
 		return (pipeline(cmds, envs));

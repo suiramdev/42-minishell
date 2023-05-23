@@ -31,6 +31,7 @@ static t_env	*init_envs(char **envp)
 			i++;
 		name = ft_substr(*envp, 0, i);
 		set_env(&env, name, ft_strdup(getenv(name)));
+		free(name);
 		envp++;
 	}
 	return (env);

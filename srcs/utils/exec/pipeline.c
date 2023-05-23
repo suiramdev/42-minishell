@@ -48,7 +48,7 @@ void	wait_processes(t_cmd *cmds, t_env **envs)
 	while (cmds)
 	{
 		waitpid(cmds->pid, &status, 0);
-		set_env(envs, ft_strdup("?"), ft_itoa(WEXITSTATUS(status)));
+		set_env(envs, "?", ft_itoa(WEXITSTATUS(status)));
 		cmds = cmds->next;
 	}
 }
