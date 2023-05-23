@@ -31,6 +31,7 @@ static int	child_process(size_t index, int pipes[2][2],
 		dup2(pipes[index % 2][1], STDOUT_FILENO);
 	close_pipes(pipes);
 	redirs(cmd);
+	close_redirs(cmd);
 	builtin_exit = exec_builtin(cmd, envs);
 	if (builtin_exit == BUILTIN_NOT_FOUND)
 		return (exec_relative(cmd, envs));
@@ -39,11 +40,15 @@ static int	child_process(size_t index, int pipes[2][2],
 
 /// @brief Waits for all the processes to finish
 /// @param cmds The commands to execute
-void	wait_processes(t_cmd *cmds)
+void	wait_processes(t_cmd *cmds, t_env **envs)
 {
+	int		status;
+
+	status = 0;
 	while (cmds)
 	{
-		waitpid(cmds->pid, NULL, 0);
+		waitpid(cmds->pid, &status, 0);
+		set_env(envs, ft_strdup("?"), ft_itoa(WEXITSTATUS(status)));
 		cmds = cmds->next;
 	}
 }
@@ -74,11 +79,10 @@ int	pipeline(t_cmd *cmds, t_env **envs)
 		if (i > 0)
 			close(pipes[(i - 1) % 2][0]);
 		close(pipes[i % 2][1]);
-		close_redirs(cmd);
 		i++;
 		cmd = cmd->next;
 	}
-	wait_processes(cmds);
-	close_pipes(pipes);
+	wait_processes(cmds, envs);
+	close(pipes[i % 2][0]);
 	return (EXIT_SUCCESS);
 }

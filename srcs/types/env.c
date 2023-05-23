@@ -37,8 +37,8 @@ static t_env	*new_env(char *key, char *value)
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return (NULL);
-	new->key = ft_strdup(key);
-	new->value = ft_strdup(value);
+	new->key = key;
+	new->value = value;
 	new->next = NULL;
 	return (new);
 }
@@ -114,7 +114,11 @@ t_env	*remove_env(t_env **envs, char *key)
 /// @param envs The environment variable to free
 void	free_env(t_env *envs)
 {
-	free(envs->key);
-	free(envs->value);
+	if (!envs)
+		return ;
+	if (envs->key)
+		free(envs->key);
+	if (envs->value)
+		free(envs->value);
 	free(envs);
 }

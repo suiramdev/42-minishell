@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdlib.h>
 
 /// @brief Executes a builtin command
 /// @param cmd The command to execute
@@ -86,6 +85,7 @@ int	exec_cmds(t_cmd *cmds, t_env **envs)
 	dup2(backups[1], STDOUT_FILENO);
 	if (exit_status == BUILTIN_NOT_FOUND)
 		return (pipeline(cmds, envs));
+	set_env(envs, "?", ft_itoa(WEXITSTATUS(exit_status)));
 	close_redirs(cmds);
 	return (exit_status);
 }

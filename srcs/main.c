@@ -30,8 +30,7 @@ static t_env	*init_envs(char **envp)
 		while ((*envp)[i] != '=')
 			i++;
 		name = ft_substr(*envp, 0, i);
-		set_env(&env, name, getenv(name));
-		free(name);
+		set_env(&env, name, ft_strdup(getenv(name)));
 		envp++;
 	}
 	return (env);
@@ -96,6 +95,7 @@ static int	program(t_cmd **cmds, t_env **envs)
 {
 	int		exit_status;
 	int		res;
+	t_cmd	*cmd;
 
 	while (1)
 	{
@@ -115,8 +115,14 @@ static int	program(t_cmd **cmds, t_env **envs)
 					printf("node[%d]: args[%d]: %s\n", j, i, head->args[i]);
 			// A DELETE
 			exit_status = exec_cmds(*cmds, envs);
-			if ((*cmds)->pid == 0)
-				return (free_cmds(*cmds), exit_status);
+			cmd = *cmds; 
+			// If we're in a child process (create a function for it, or existing one)
+			while (cmd)
+			{
+				if (cmd->pid == 0)
+					return (free_cmds(*cmds), exit_status);
+				cmd = cmd->next;
+			}
 			free_cmds(*cmds);
 		}
 		if (g_force_exit != -1)

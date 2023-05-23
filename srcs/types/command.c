@@ -108,7 +108,8 @@ void	free_cmds(t_cmd *cmds)
 		i = 0;
 		while (tmp->args && tmp->args[i])
 			free(tmp->args[i++]);
-		free(tmp->args);
+		if (tmp->args)
+			free(tmp->args);
 		if (tmp->infile > 2)
 			close(tmp->infile);
 		if (tmp->outfile > 2)

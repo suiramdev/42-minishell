@@ -22,7 +22,8 @@ static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 {
 	char	*line;
 
-	cmd->infile = open(HEREDOC_FILE, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	cmd->infile = open(HEREDOC_FILE, O_WRONLY | O_CREAT
+			| O_TRUNC, 0644);
 	if (cmd->infile < 0)
 		return (error("heredoc", strerror(errno)), false);
 	cmd->has_heredoc = true;
@@ -33,7 +34,7 @@ static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 		rl_getc_function = getc;
 		line = readline("> ");
 		if (!line)
-			return (error_heredoc(delimiter), EXIT_FAILURE);
+			return (error_heredoc(delimiter), false);
 		if (ft_strcmp(line, delimiter) == 0)
 			return (free(line), true);
 		ft_putendl_fd(line, cmd->infile);
@@ -70,7 +71,12 @@ bool	init_redirs(char **tokens, size_t i, t_cmd *cmd)
 		if (cmd->infile > 2)
 			close(cmd->infile);
 		if (tokens[i][1] == '<')
-			return (redir_heredoc(tokens[i + 1], cmd));
+		{
+			redir_heredoc(tokens[i + 1], cmd);
+			close(cmd->infile);
+			cmd->infile = open(HEREDOC_FILE, O_RDONLY);
+			return (true);
+		}
 		cmd->infile = open(tokens[i + 1], O_RDONLY);
 		if (cmd->infile < 0)
 			return (perror("minishell"), false);
@@ -83,15 +89,9 @@ bool	init_redirs(char **tokens, size_t i, t_cmd *cmd)
 void	redirs(t_cmd *cmd)
 {
 	if (cmd->infile > 0)
-	{
 		dup2(cmd->infile, STDIN_FILENO);
-		close(cmd->infile);
-	}
 	if (cmd->outfile > 0)
-	{
 		dup2(cmd->outfile, STDOUT_FILENO);
-		close(cmd->outfile);
-	}
 }
 
 void	close_redirs(t_cmd *cmd)
