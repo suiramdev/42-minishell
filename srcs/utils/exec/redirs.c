@@ -85,6 +85,7 @@ bool	init_redirs(char **tokens, size_t i, t_cmd *cmd)
 }
 
 /// @brief Redirect the input and output of the command
+/// on STDIN and STDOUT.
 /// @param cmd The command
 void	redirs(t_cmd *cmd)
 {
@@ -94,6 +95,9 @@ void	redirs(t_cmd *cmd)
 		dup2(cmd->outfile, STDOUT_FILENO);
 }
 
+/// @brief Close the input and output redirections of the command
+/// and delete the temporary file containing the heredoc input.
+/// @param cmd The command
 void	close_redirs(t_cmd *cmd)
 {
 	if (cmd->infile > 2)
