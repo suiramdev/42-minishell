@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:31:08 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/20 13:45:38 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/23 11:54:44 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ static bool	loop_get_next_token(char *line, char *quote, size_t *i)
 				(*quote) = line[*i];
 			if (!handle_quotes(line, i))
 				return (error("unclosed quotes ", 0), false);
+			if (line[(*i)] == '|')
+				return (true);
 		}
 		else if ((line[*i] == '<' || line[*i] == '>'))
 		{
@@ -66,12 +68,14 @@ static char	*get_next_token(char **line, t_env *envs)
 	token = ft_substr(*line, 0, i);
 	if (quote)
 		token = trim_token_quote(&token, quote, i, envs);
+	else if (ft_strchr(token, '$'))
+		token = replace_env_var(envs, token);
 	skip_spaces(*line, &i);
 	*line += i;
 	return (token);
 }
 
-static int loop_count_tokens(char *line, size_t *i, size_t *count)
+static int	loop_count_tokens(char *line, size_t *i, size_t *count)
 {
 	if (line[(*i)] == '\'' || line[(*i)] == '"')
 	{
@@ -89,7 +93,7 @@ static int loop_count_tokens(char *line, size_t *i, size_t *count)
 	}
 	else if (line[(*i)] == ' ' || line[(*i)] == '|')
 	{
-		if (line[(*i)] == '|' && (*i) > 0 && line[(*i) - 1] != ' ' 
+		if (line[(*i)] == '|' && (*i) > 0 && line[(*i) - 1] != ' '
 			&& line[(*i) - 1] != '<' && line[(*i) - 1] != '>' )
 			(*count)++;
 		increase_token_index(count, i);
@@ -116,7 +120,8 @@ static size_t	count_tokens(char *line)
 		if (!loop_count_tokens(line, &i, &count))
 			return (0);
 	}
-	if (line[i] == '\0' && !is_space(line[i - 1]) && line[i - 1] != '<' && line[i - 1] != '>')
+	if (line[i] == '\0' && !is_space(line[i - 1]) && line[i - 1] != '<'
+		&& line[i - 1] != '>')
 		count++;
 	return (count);
 }
@@ -133,7 +138,6 @@ char	**tokenize(char *line, t_env *envs)
 
 	i = 0;
 	tokens_count = count_tokens(line);
-	printf("count: %ld\n", tokens_count);
 	if (tokens_count <= 0)
 		return (NULL);
 	tokens = (char **)malloc(sizeof(char *) * (tokens_count + 1));

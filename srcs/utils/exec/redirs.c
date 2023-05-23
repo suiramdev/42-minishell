@@ -24,15 +24,18 @@ static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 
 	cmd->infile = open(HEREDOC_FILE, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (cmd->infile < 0)
-		return (error("heredoc", strerror(errno)), 0);
+		return (error("heredoc", strerror(errno)), false);
 	cmd->has_heredoc = true;
 	while (1)
 	{
+		signal(SIGINT, &signal_handler);
+		signal(SIGQUIT, SIG_IGN);
+		rl_getc_function = getc;
 		line = readline("> ");
 		if (!line)
 			return (error_heredoc(delimiter), EXIT_FAILURE);
 		if (ft_strcmp(line, delimiter) == 0)
-			return (free(line), false);
+			return (free(line), true);
 		ft_putendl_fd(line, cmd->infile);
 		free(line);
 	}
@@ -65,7 +68,7 @@ bool	init_redirs(char **tokens, size_t i, t_cmd *cmd)
 	else if (tokens[i][0] == '<')
 	{
 		if (cmd->infile > 2)
-			close(cmd->outfile);
+			close(cmd->infile);
 		if (tokens[i][1] == '<')
 			return (redir_heredoc(tokens[i + 1], cmd));
 		cmd->infile = open(tokens[i + 1], O_RDONLY);
@@ -87,9 +90,9 @@ void	redirs(t_cmd *cmd)
 
 void	close_redirs(t_cmd *cmd)
 {
-	if (cmd->infile > 0)
+	if (cmd->infile > 2)
 		close(cmd->infile);
-	if (cmd->outfile > 0)
+	if (cmd->outfile > 2)
 		close(cmd->outfile);
 	if (cmd->has_heredoc)
 		unlink(HEREDOC_FILE);

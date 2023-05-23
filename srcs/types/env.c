@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:03:54 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/08 16:27:48 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/22 01:23:19 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,19 @@ t_env	*get_env(t_env *envs, char *key)
 	return (NULL);
 }
 
+static t_env	*new_env(char *key, char *value)
+{
+	t_env	*new;
+
+	new = malloc(sizeof(t_env));
+	if (!new)
+		return (NULL);
+	new->key = ft_strdup(key);
+	new->value = ft_strdup(value);
+	new->next = NULL;
+	return (new);
+}
+
 /// @brief Add or replace an environment variable to the list
 /// @param envs The head of the list of environment variables, NULL accepted
 /// @param key The key of the new environment variable
@@ -48,12 +61,9 @@ t_env	*set_env(t_env **envs, char *key, char *value)
 		new->value = value;
 		return (new);
 	}
-	new = malloc(sizeof(t_env));
+	new = new_env(key, value);
 	if (!new)
 		return (NULL);
-	new->key = ft_strdup(key);
-	new->value = ft_strdup(value);
-	new->next = NULL;
 	if (*envs)
 	{
 		last = *envs;
@@ -107,37 +117,4 @@ void	free_env(t_env *envs)
 	free(envs->key);
 	free(envs->value);
 	free(envs);
-}
-
-/// @brief Format the list of environment variables to an array of strings
-/// ending with NULL
-/// @param envs The envs of the list of environment variables
-/// @return The array of strings, or NULL if an error occured
-char	**format_env(t_env *envs)
-{
-	size_t	i;
-	t_env	*tmp;
-	char	**output;
-
-	i = 0;
-	tmp = envs;
-	while (tmp)
-	{
-		i++;
-		tmp = tmp->next;
-	}
-	output = malloc(sizeof(char *) * (i + 1));
-	if (!output)
-		return (NULL);
-	i = 0;
-	tmp = envs;
-	while (tmp)
-	{
-		output[i] = ft_strjoin(tmp->key, "=");
-		output[i] = ft_strjoin(output[i], tmp->value);
-		i++;
-		tmp = tmp->next;
-	}
-	output[i] = NULL;
-	return (output);
 }

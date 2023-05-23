@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 16:31:23 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/21 17:21:52 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/22 15:36:10 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,9 @@ t_env	*get_env(t_env *envs, char *key);
 t_env	*set_env(t_env **envs, char *key, char *value);
 t_env	*remove_env(t_env **envs, char *key);
 void	free_env(t_env *envs);
-char	**format_env(t_env *envs);
 
 // types/token.c
 char	**tokenize(char *line, t_env *envs);
-void	free_tokens(char **tokens);
 
 // types/cmd.c
 typedef struct s_cmd
@@ -49,7 +47,6 @@ typedef struct s_cmd
 
 void	add_cmd(t_cmd **cmds, t_cmd *new);
 t_cmd	*new_cmd(char **tokens, size_t start, size_t end);
-t_cmd	*init_cmds(char **tokens);
 void	free_cmds(t_cmd *cmds);
 
 #endif

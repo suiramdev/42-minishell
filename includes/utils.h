@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 16:46:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/21 17:22:21 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/22 15:36:19 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,20 @@ bool	has_pipes(char *str);
 bool	valid_last_command(char **tokens, size_t i);
 void	cmds_has_pipes(t_cmd *cmds);
 
-// utils/env.c
+// utils/token.c
 char	*trim_token_quote(char **token, char quote, int len, t_env *envs);
+void	free_tokens(char **tokens);
+char	*replace_env_var(t_env *envs, char *token);
+
+// utils/env.c
+char	**format_env(t_env *envs);
 
 // utils/path.c
 char	*join_path(char *s1, char *s2);
 char	*resolve_path(char *file, t_env *envs);
 
 // utils/exec/redirs.c
-# define HEREDOC_FILE "/tmp/heredoc"
+# define HEREDOC_FILE ".heredoc"
 
 bool	init_redirs(char **tokens, size_t i, t_cmd *node);
 void	redirs(t_cmd *cmd);
