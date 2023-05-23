@@ -60,6 +60,8 @@ int	pipeline(t_cmd *cmds, t_env **envs)
 
 	cmd = cmds;
 	i = 0;
+	if (pipe(pipes[1]) == -1)
+		return (EXIT_FAILURE);
 	while (cmd)
 	{
 		if (pipe(pipes[i % 2]) == -1)

@@ -103,10 +103,13 @@ static int	program(t_cmd **cmds, t_env **envs)
 			break ;
 		else if (res == 0)
 			continue ;
-		exit_status = exec_cmds(*cmds, envs);
-		if ((*cmds)->pid == 0)
-			return (free_cmds(*cmds), exit_status);
-		free_cmds(*cmds);
+		if (*cmds)
+		{
+			exit_status = exec_cmds(*cmds, envs);
+			if ((*cmds)->pid == 0)
+				return (free_cmds(*cmds), exit_status);
+			free_cmds(*cmds);
+		}
 		if (g_force_exit != -1)
 			return (g_force_exit);
 	}
