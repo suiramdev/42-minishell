@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdlib.h>
 
 /// @brief Executes a builtin command
 /// @param cmd The command to execute
@@ -67,20 +68,6 @@ int	exec_relative(t_cmd *cmd, t_env **envs)
 	return (EXIT_FAILURE);
 }
 
-static int	exec_in_fork(t_cmd *cmd, t_env **envs, int backups[2])
-{
-	cmd->pid = fork();
-	if (cmd->pid == -1)
-		return (EXIT_FAILURE);
-	if (cmd->pid == 0)
-		return (exec_relative(cmd, envs));
-	close_redirs(cmd);
-	dup2(backups[0], STDIN_FILENO);
-	dup2(backups[1], STDOUT_FILENO);
-	wait_processes(cmd);
-	return (EXIT_SUCCESS);
-}
-
 /// @brief Execute the commands linked list
 /// @param cmds The commands linked list
 /// @param envs The environment variables linked list
@@ -95,10 +82,10 @@ int	exec_cmds(t_cmd *cmds, t_env **envs)
 	backups[1] = dup(STDOUT_FILENO);
 	redirs(cmds);
 	exit_status = exec_builtin(cmds, envs);
-	if (exit_status == BUILTIN_NOT_FOUND)
-		return (exec_in_fork(cmds, envs, backups));
-	close_redirs(cmds);
 	dup2(backups[0], STDIN_FILENO);
 	dup2(backups[1], STDOUT_FILENO);
+	if (exit_status == BUILTIN_NOT_FOUND)
+		return (pipeline(cmds, envs));
+	close_redirs(cmds);
 	return (exit_status);
 }

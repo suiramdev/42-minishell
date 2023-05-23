@@ -83,9 +83,15 @@ bool	init_redirs(char **tokens, size_t i, t_cmd *cmd)
 void	redirs(t_cmd *cmd)
 {
 	if (cmd->infile > 0)
+	{
 		dup2(cmd->infile, STDIN_FILENO);
+		close(cmd->infile);
+	}
 	if (cmd->outfile > 0)
+	{
 		dup2(cmd->outfile, STDOUT_FILENO);
+		close(cmd->outfile);
+	}
 }
 
 void	close_redirs(t_cmd *cmd)
