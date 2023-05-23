@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/22 15:57:43 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/23 16:02:29 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,20 @@ static int	readentry(t_env *envs, t_cmd **cmds)
 	if (!line)
 		return (2);
 	add_history(line);
+	if (line[0] == '\0')
+	{
+		free(line);
+		return (0);
+	}
 	tokens = tokenize(line, envs);
 	free(line);
 	if (!tokens)
 		return (0);
+	///
+	for (int a = 0; tokens[a]; a++)
+		printf("token[%d]: %s\n", a, tokens[a]);
+	///
 	*cmds = init_cmds(tokens);
-	for (size_t j = 0; tokens[j]; j++)
-		printf("tokens[%ld]: %s\n", j, tokens[j]);
 	free_tokens(tokens);
 	return (1);
 }
@@ -95,7 +102,6 @@ static int	program(t_cmd **cmds, t_env **envs)
 {
 	int		exit_status;
 	int		res;
-	t_cmd	*cmd;
 
 	while (1)
 	{
@@ -108,12 +114,15 @@ static int	program(t_cmd **cmds, t_env **envs)
 			continue ;
 		if (*cmds)
 		{
-			// A DELETE
-			int j = 0;
-			for (t_cmd *head = *cmds; head; head = head->next, j++)
-				for (int i = 0; head->args[i]; i++)
-					printf("node[%d]: args[%d]: %s\n", j, i, head->args[i]);
-			// A DELETE
+			/// del
+			int e = 0;
+			for (t_cmd *head = *cmds; head; head = head->next)
+			{
+				for (int a = 0; head->args[a]; a++)
+					printf("node[%d]: args[%d]: %s\n", e, a, head->args[a]);
+				e++;
+			}
+			///
 			exit_status = exec_cmds(*cmds, envs);
 			cmd = *cmds; 
 			// If we're in a child process (create a function for it, or existing one)

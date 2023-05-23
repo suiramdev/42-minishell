@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:31:08 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/22 15:35:28 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/23 16:21:40 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ static bool	loop_get_next_token(char *line, char *quote, size_t *i)
 				(*quote) = line[*i];
 			if (!handle_quotes(line, i))
 				return (error("unclosed quotes ", 0), false);
+			if (line[(*i)] == '|')
+				return (true);
 		}
 		else if ((line[*i] == '<' || line[*i] == '>'))
 		{
@@ -67,7 +69,7 @@ static char	*get_next_token(char **line, t_env *envs)
 	if (quote)
 		token = trim_token_quote(&token, quote, i, envs);
 	else if (ft_strchr(token, '$'))
-		return (replace_env_var(envs, token));
+		token = replace_env_var(envs, token);
 	skip_spaces(*line, &i);
 	*line += i;
 	return (token);
@@ -124,6 +126,30 @@ static size_t	count_tokens(char *line)
 	return (count);
 }
 
+void	unexpected_token_error(char *token)
+{
+	ft_putstr_fd("unexpected token `", STDERR_FILENO);
+	ft_putstr_fd(token, STDERR_FILENO);
+	ft_putstr_fd("`\n", STDERR_FILENO);
+}
+
+int unexpected_token(char **tokens)
+{
+	int i;
+
+	i = 0;
+	while (tokens[i])
+	{
+		if ((!ft_strncmp(tokens[i], ">", 1) || !ft_strncmp(tokens[i], "<", 1)) && tokens[i + 1] 
+			&& (!ft_strncmp(tokens[i + 1], ">", 1) || !ft_strncmp(tokens[i + 1], "<", 1)))
+			return (unexpected_token_error(tokens[i]), 0);
+		if (!ft_strncmp(tokens[i], "|", 1) && tokens[i + 1] && !ft_strncmp(tokens[i + 1], "|", 1))
+			return (unexpected_token_error(tokens[i]), 0);
+		i++;
+	}
+	return (1);
+}
+
 /// @brief Tokenize a line
 /// @param line The line to tokenize
 /// @param envs The environment variables to consider during tokenization
@@ -136,7 +162,6 @@ char	**tokenize(char *line, t_env *envs)
 
 	i = 0;
 	tokens_count = count_tokens(line);
-	printf("count: %ld\n", tokens_count);
 	if (tokens_count <= 0)
 		return (NULL);
 	tokens = (char **)malloc(sizeof(char *) * (tokens_count + 1));
@@ -145,5 +170,7 @@ char	**tokenize(char *line, t_env *envs)
 	while (i < tokens_count)
 		tokens[i++] = get_next_token(&line, envs);
 	tokens[i] = NULL;
+	if (!unexpected_token(tokens))
+		return (NULL);
 	return (tokens);
 }

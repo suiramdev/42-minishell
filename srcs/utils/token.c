@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 16:00:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/22 16:55:09 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/23 12:36:14 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,17 @@ char	*replace_env_var(t_env *envs, char *token)
 	{
 		if (token[i] == '$')
 		{
-			key_len = 1;
-			while (token[i + key_len] && !special_char(token[i + key_len]))
-				key_len++;
-			key = ft_substr(token, i + 1, key_len - 1);
-			token = replace_env_var2(token, key_len, get_env(envs, key), i);
-			free(key);
+			if (token[i] == '$' && token[i + 1] && token[i + 1] == '?')
+				token = replace_env_var2(token, 2, get_env(envs, "?"), i);
+			else
+			{
+				key_len = 1;
+				while (token[i + key_len] && !special_char(token[i + key_len]))
+					key_len++;
+				key = ft_substr(token, i + 1, key_len - 1);
+				token = replace_env_var2(token, key_len, get_env(envs, key), i);
+				free(key);
+			}
 			i = 0;
 		}
 		else
