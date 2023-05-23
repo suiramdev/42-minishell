@@ -51,7 +51,7 @@ static t_cmd	*init_cmds(char **tokens)
 	i = 0;
 	while (tokens[i])
 	{
-		if (has_pipes(tokens[i]) && valid_last_command(tokens, i))
+		if (tokens[i][0] == '|')
 		{
 			add_cmd(&cmds, new_cmd(tokens, start, i));
 			start = i + 1;
@@ -82,6 +82,8 @@ static int	readentry(t_env *envs, t_cmd **cmds)
 	if (!tokens)
 		return (0);
 	*cmds = init_cmds(tokens);
+	for (size_t j = 0; tokens[j]; j++)
+		printf("tokens[%ld]: %s\n", j, tokens[j]);
 	free_tokens(tokens);
 	return (1);
 }
@@ -98,6 +100,7 @@ static int	program(t_cmd **cmds, t_env **envs)
 	while (1)
 	{
 		signal(SIGINT, &signal_handler);
+		signal(SIGQUIT, SIG_IGN);
 		res = readentry(*envs, cmds);
 		if (res == 2)
 			break ;
@@ -105,6 +108,12 @@ static int	program(t_cmd **cmds, t_env **envs)
 			continue ;
 		if (*cmds)
 		{
+			// A DELETE
+			int j = 0;
+			for (t_cmd *head = *cmds; head; head = head->next, j++)
+				for (int i = 0; head->args[i]; i++)
+					printf("node[%d]: args[%d]: %s\n", j, i, head->args[i]);
+			// A DELETE
 			exit_status = exec_cmds(*cmds, envs);
 			if ((*cmds)->pid == 0)
 				return (free_cmds(*cmds), exit_status);

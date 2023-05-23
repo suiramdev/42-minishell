@@ -28,6 +28,9 @@ static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 	cmd->has_heredoc = true;
 	while (1)
 	{
+		signal(SIGINT, &signal_handler);
+		signal(SIGQUIT, SIG_IGN);
+		rl_getc_function = getc;
 		line = readline("> ");
 		if (!line)
 			return (error_heredoc(delimiter), EXIT_FAILURE);
