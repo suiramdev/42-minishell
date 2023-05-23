@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "utils.h"
 
 /// @brief Executes a builtin command
 /// @param cmd The command to execute
@@ -58,6 +59,7 @@ int	exec_relative(t_cmd *cmd, t_env **envs)
 		return (EXIT_FAILURE);
 	}
 	envp = format_env(*envs);
+	signal(SIGQUIT, &signal_handler);
 	execve(path, cmd->args, envp);
 	free(path);
 	i = 0;

@@ -102,6 +102,7 @@ static int	program(t_cmd **cmds, t_env **envs)
 {
 	int		exit_status;
 	int		res;
+	t_cmd	*cmd;
 
 	while (1)
 	{

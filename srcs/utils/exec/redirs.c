@@ -100,6 +100,10 @@ void	close_redirs(t_cmd *cmd)
 		close(cmd->infile);
 	if (cmd->outfile > 2)
 		close(cmd->outfile);
+	printf("cmd->has_heredoc = %d\n", cmd->has_heredoc);
 	if (cmd->has_heredoc)
+	{
+		printf("unlink\n");
 		unlink(HEREDOC_FILE);
+	}
 }
