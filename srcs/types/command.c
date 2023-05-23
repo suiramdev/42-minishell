@@ -17,30 +17,35 @@
 /// @param tokens The tokens array
 /// @param start The start index of the command in the tokens array
 /// @param end The end index of the command in the tokens array
-/// @return true if the arguments are initialized, false otherwise
+/// @return The arguments array
 /// @note Also handle the redirections arguments
-static bool	init_args(t_cmd *cmd, char **tokens, size_t start, size_t end)
+static char	**init_args(t_cmd *cmd, char **tokens, size_t start, size_t end)
 {
+	char	**args;
 	size_t	i;
 
-	cmd->args = (char **)ft_calloc(sizeof(char *), end - start + 1);
-	if (!cmd->args)
-		return (false);
+	args = (char **)ft_calloc(sizeof(char *), end - start + 1);
+	if (!args)
+		return (NULL);
 	i = 0;
 	while (start + i < end)
 	{
 		if (tokens[start + i][0] == '>' || tokens[start + i][0] == '<')
 		{
 			if (!init_redirs(tokens, start + i, cmd))
-				return (false);
+			{
+				while (i > 0)
+					free(args[--i]);
+				free(args);
+				return (NULL);
+			}
 			start += 2;
 			continue ;
 		}
-		cmd->args[i] = ft_strdup(tokens[start + i]);
+		args[i] = ft_strdup(tokens[start + i]);
 		i++;
 	}
-	printf("cmd->args[0] = %s\n", cmd->args[0]);
-	return (true);
+	return (args);
 }
 
 /// @brief Create a new command from the tokens array
@@ -61,7 +66,8 @@ t_cmd	*new_cmd(char **tokens, size_t start, size_t end)
 	cmd->has_pipe = false;
 	cmd->pid = -1;
 	cmd->next = NULL;
-	if (!init_args(cmd, tokens, start, end))
+	cmd->args = init_args(cmd, tokens, start, end);
+	if (!cmd->args || !cmd->args[0])
 		return (free_cmds(cmd), NULL);
 	cmd->name = cmd->args[0];
 	return (cmd);
