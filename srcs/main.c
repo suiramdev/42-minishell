@@ -34,6 +34,7 @@ static t_env	*init_envs(char **envp)
 		free(name);
 		envp++;
 	}
+	set_env(&env, "?", ft_strdup("0"));
 	return (env);
 }
 
@@ -86,10 +87,6 @@ static int	readentry(t_env *envs, t_cmd **cmds)
 	free(line);
 	if (!tokens)
 		return (0);
-	///
-	for (int a = 0; tokens[a]; a++)
-		printf("token[%d]: %s\n", a, tokens[a]);
-	///
 	*cmds = init_cmds(tokens);
 	free_tokens(tokens);
 	return (1);
@@ -103,7 +100,6 @@ static int	program(t_cmd **cmds, t_env **envs)
 {
 	int		exit_status;
 	int		res;
-	t_cmd	*cmd;
 
 	while (1)
 	{
@@ -116,24 +112,9 @@ static int	program(t_cmd **cmds, t_env **envs)
 			continue ;
 		if (*cmds)
 		{
-			/// del
-			int e = 0;
-			for (t_cmd *head = *cmds; head; head = head->next)
-			{
-				for (int a = 0; head->args[a]; a++)
-					printf("node[%d]: args[%d]: %s\n", e, a, head->args[a]);
-				e++;
-			}
-			///
 			exit_status = exec_cmds(*cmds, envs);
-			cmd = *cmds; 
-			// If we're in a child process (create a function for it, or existing one)
-			while (cmd)
-			{
-				if (cmd->pid == 0)
-					return (free_cmds(*cmds), exit_status);
-				cmd = cmd->next;
-			}
+			if (is_child_process(*cmds))
+				return (free_cmds(*cmds), exit_status);
 			free_cmds(*cmds);
 		}
 		if (g_force_exit != -1)

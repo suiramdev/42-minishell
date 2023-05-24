@@ -34,9 +34,17 @@ static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 		rl_getc_function = getc;
 		line = readline("> ");
 		if (!line)
+		{
+			close(cmd->infile);
+			cmd->infile = open(HEREDOC_FILE, O_RDONLY);
 			return (error_heredoc(delimiter), false);
+		}
 		if (ft_strcmp(line, delimiter) == 0)
+		{
+			close(cmd->infile);
+			cmd->infile = open(HEREDOC_FILE, O_RDONLY);
 			return (free(line), true);
+		}
 		ft_putendl_fd(line, cmd->infile);
 		free(line);
 	}
@@ -71,12 +79,7 @@ bool	init_redirs(char **tokens, size_t i, t_cmd *cmd)
 		if (cmd->infile > 2)
 			close(cmd->infile);
 		if (tokens[i][1] == '<')
-		{
-			redir_heredoc(tokens[i + 1], cmd);
-			close(cmd->infile);
-			cmd->infile = open(HEREDOC_FILE, O_RDONLY);
-			return (true);
-		}
+			return (redir_heredoc(tokens[i + 1], cmd));
 		cmd->infile = open(tokens[i + 1], O_RDONLY);
 		if (cmd->infile < 0)
 			return (perror("minishell"), false);

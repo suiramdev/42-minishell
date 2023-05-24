@@ -56,6 +56,7 @@ void	close_redirs(t_cmd *cmds);
 
 // utils/exec/pipeline.c
 void	wait_processes(t_cmd *cmds, t_env **envs);
+bool	is_child_process(t_cmd *cmds);
 int		pipeline(t_cmd *cmds, t_env **envs);
 
 // utils/exec/exec.c

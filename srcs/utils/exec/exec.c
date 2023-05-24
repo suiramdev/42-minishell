@@ -56,7 +56,7 @@ int	exec_relative(t_cmd *cmd, t_env **envs)
 		ft_putstr_fd("Command not found: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->name, STDERR_FILENO);
 		ft_putstr_fd("\n", STDERR_FILENO);
-		return (EXIT_FAILURE);
+		return (127);
 	}
 	envp = format_env(*envs);
 	signal(SIGQUIT, &signal_handler);
@@ -85,6 +85,8 @@ int	exec_cmds(t_cmd *cmds, t_env **envs)
 	exit_status = exec_builtin(cmds, envs);
 	dup2(backups[0], STDIN_FILENO);
 	dup2(backups[1], STDOUT_FILENO);
+	close(backups[0]);
+	close(backups[1]);
 	if (exit_status == BUILTIN_NOT_FOUND)
 		return (pipeline(cmds, envs));
 	set_env(envs, "?", ft_itoa(WEXITSTATUS(exit_status)));

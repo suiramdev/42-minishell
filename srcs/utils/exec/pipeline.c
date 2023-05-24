@@ -53,6 +53,17 @@ void	wait_processes(t_cmd *cmds, t_env **envs)
 	}
 }
 
+bool	is_child_process(t_cmd *cmds)
+{
+	while (cmds)
+	{
+		if (cmds->pid == 0)
+			return (true);
+		cmds = cmds->next;
+	}
+	return (false);
+}
+
 /// @brief Executes the commands in a pipeline
 /// @param cmds The commands to execute
 /// @param envs The environment variables

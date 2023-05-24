@@ -133,17 +133,19 @@ void	unexpected_token_error(char *token)
 	ft_putstr_fd("`\n", STDERR_FILENO);
 }
 
-int unexpected_token(char **tokens)
+int	unexpected_token(char **tokens)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (tokens[i])
 	{
-		if ((!ft_strncmp(tokens[i], ">", 1) || !ft_strncmp(tokens[i], "<", 1)) && tokens[i + 1] 
+		if ((!ft_strncmp(tokens[i], ">", 1)
+				|| !ft_strncmp(tokens[i], "<", 1)) && tokens[i + 1]
 			&& (!ft_strncmp(tokens[i + 1], ">", 1) || !ft_strncmp(tokens[i + 1], "<", 1)))
 			return (unexpected_token_error(tokens[i]), 0);
-		if (!ft_strncmp(tokens[i], "|", 1) && tokens[i + 1] && !ft_strncmp(tokens[i + 1], "|", 1))
+		if (!ft_strncmp(tokens[i], "|", 1) && tokens[i + 1]
+			&& !ft_strncmp(tokens[i + 1], "|", 1))
 			return (unexpected_token_error(tokens[i]), 0);
 		i++;
 	}
@@ -171,6 +173,6 @@ char	**tokenize(char *line, t_env *envs)
 		tokens[i++] = get_next_token(&line, envs);
 	tokens[i] = NULL;
 	if (!unexpected_token(tokens))
-		return (NULL);
+		return (free_tokens(tokens), NULL);
 	return (tokens);
 }
