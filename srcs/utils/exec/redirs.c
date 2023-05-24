@@ -12,6 +12,13 @@
 
 #include "minishell.h"
 
+// I know, it's trash doing like that...
+static void	reopen_heredoc(t_cmd *cmd)
+{
+	close(cmd->infile);
+	cmd->infile = open(HEREDOC_FILE, O_RDONLY);
+}
+
 /// @brief Read entry from stdin until the end of file,
 /// and write it in the file descriptor fd.
 /// @param delimiter The string that will stop the reading.
@@ -34,17 +41,9 @@ static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 		rl_getc_function = getc;
 		line = readline("> ");
 		if (!line)
-		{
-			close(cmd->infile);
-			cmd->infile = open(HEREDOC_FILE, O_RDONLY);
-			return (error_heredoc(delimiter), false);
-		}
+			return (reopen_heredoc(cmd), error_heredoc(delimiter), false);
 		if (ft_strcmp(line, delimiter) == 0)
-		{
-			close(cmd->infile);
-			cmd->infile = open(HEREDOC_FILE, O_RDONLY);
-			return (free(line), true);
-		}
+			return (reopen_heredoc(cmd), free(line), true);
 		ft_putendl_fd(line, cmd->infile);
 		free(line);
 	}
