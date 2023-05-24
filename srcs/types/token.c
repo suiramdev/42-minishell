@@ -23,8 +23,7 @@ static bool	loop_get_next_token(char *line, char *quote, size_t *i)
 	{
 		if (line[*i] == '\'' || line[*i] == '"')
 		{
-			if (!(*quote))
-				(*quote) = line[*i];
+			isquotefill(quote, line[*i]);
 			if (!handle_quotes(line, i))
 				return (error("unclosed quotes ", 0), false);
 			if (line[(*i)] == '|')
@@ -124,32 +123,6 @@ static size_t	count_tokens(char *line)
 		&& line[i - 1] != '>')
 		count++;
 	return (count);
-}
-
-void	unexpected_token_error(char *token)
-{
-	ft_putstr_fd("unexpected token `", STDERR_FILENO);
-	ft_putstr_fd(token, STDERR_FILENO);
-	ft_putstr_fd("`\n", STDERR_FILENO);
-}
-
-int	unexpected_token(char **tokens)
-{
-	int	i;
-
-	i = 0;
-	while (tokens[i])
-	{
-		if ((!ft_strncmp(tokens[i], ">", 1)
-				|| !ft_strncmp(tokens[i], "<", 1)) && tokens[i + 1]
-			&& (!ft_strncmp(tokens[i + 1], ">", 1) || !ft_strncmp(tokens[i + 1], "<", 1)))
-			return (unexpected_token_error(tokens[i]), 0);
-		if (!ft_strncmp(tokens[i], "|", 1) && tokens[i + 1]
-			&& !ft_strncmp(tokens[i + 1], "|", 1))
-			return (unexpected_token_error(tokens[i]), 0);
-		i++;
-	}
-	return (1);
 }
 
 /// @brief Tokenize a line

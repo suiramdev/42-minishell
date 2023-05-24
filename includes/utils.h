@@ -40,6 +40,12 @@ char	*trim_token_quote(char **token, char quote, int len, t_env *envs);
 void	free_tokens(char **tokens);
 char	*replace_env_var(t_env *envs, char *token);
 
+// utils/token2.c
+int		unexpected_token(char **tokens);
+void	unexpected_token_error(char *token);
+void	isquotefill(char *quote, char c);
+bool	special_char(char c);
+
 // utils/env.c
 char	**format_env(t_env *envs);
 

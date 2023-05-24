@@ -12,15 +12,6 @@
 
 #include "minishell.h"
 
-/// @brief Check if a command token string contains any special characters.
-/// @param c The character to check.
-/// @return 1 if the character is special, 0 otherwise.
-static bool	special_char(char c)
-{
-	return (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-			|| (c >= '0' && c <= '9') || (c == '_')));
-}
-
 /// @brief Perform the second part of environment variable
 /// replacement in a token string.
 /// @param token The token string.
@@ -52,6 +43,16 @@ static char	*replace_env_var2(char *token, int key_len, t_env *head, int i)
 	return (token);
 }
 
+static char	*replace_env_var_ext(char *token, int i, int key_len, t_env *envs)
+{
+	char	*key;
+
+	key = ft_substr(token, i + 1, key_len - 1);
+	token = replace_env_var2(token, key_len, get_env(envs, key), i);
+	free(key);
+	return (token);
+}
+
 /// @brief Replace environment variables in a token string.
 /// @param envs The environment variable list.
 /// @param token The token string.
@@ -60,7 +61,6 @@ char	*replace_env_var(t_env *envs, char *token)
 {
 	size_t	i;
 	size_t	key_len;
-	char	*key;
 
 	i = 0;
 	while (token[i])
@@ -74,9 +74,7 @@ char	*replace_env_var(t_env *envs, char *token)
 				key_len = 1;
 				while (token[i + key_len] && !special_char(token[i + key_len]))
 					key_len++;
-				key = ft_substr(token, i + 1, key_len - 1);
-				token = replace_env_var2(token, key_len, get_env(envs, key), i);
-				free(key);
+				token = replace_env_var_ext(token, i, key_len, envs);
 			}
 			i = 0;
 		}

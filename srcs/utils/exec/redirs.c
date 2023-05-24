@@ -38,7 +38,6 @@ static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 	{
 		signal(SIGINT, &signal_handler);
 		signal(SIGQUIT, SIG_IGN);
-		rl_getc_function = getc;
 		line = readline("> ");
 		if (!line)
 			return (reopen_heredoc(cmd), error_heredoc(delimiter), false);
