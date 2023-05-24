@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 16:46:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/22 15:36:19 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/24 16:52:09 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,11 @@ void	redirs(t_cmd *cmd);
 void	close_redirs(t_cmd *cmds);
 
 // utils/exec/pipeline.c
+int		pipeline(t_cmd *cmds, t_env **envs);
+
+// utils/exec/process.c
 void	wait_processes(t_cmd *cmds, t_env **envs);
 bool	is_child_process(t_cmd *cmds);
-int		pipeline(t_cmd *cmds, t_env **envs);
 
 // utils/exec/exec.c
 # define BUILTIN_NOT_FOUND -1

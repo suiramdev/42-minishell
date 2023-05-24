@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:46:36 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/19 16:33:36 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:53:02 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,30 +38,11 @@ static int	child_process(size_t index, int pipes[2][2],
 	return (builtin_exit);
 }
 
-/// @brief Waits for all the processes to finish
-/// @param cmds The commands to execute
-void	wait_processes(t_cmd *cmds, t_env **envs)
+static void	cursor_close(int pipes[2][2], size_t i)
 {
-	int		status;
-
-	status = 0;
-	while (cmds)
-	{
-		waitpid(cmds->pid, &status, 0);
-		set_env(envs, "?", ft_itoa(WEXITSTATUS(status)));
-		cmds = cmds->next;
-	}
-}
-
-bool	is_child_process(t_cmd *cmds)
-{
-	while (cmds)
-	{
-		if (cmds->pid == 0)
-			return (true);
-		cmds = cmds->next;
-	}
-	return (false);
+	if (i > 0)
+		close(pipes[(i - 1) % 2][0]);
+	close(pipes[i % 2][1]);
 }
 
 /// @brief Executes the commands in a pipeline
@@ -87,9 +68,7 @@ int	pipeline(t_cmd *cmds, t_env **envs)
 			return (EXIT_FAILURE);
 		if (cmd->pid == 0)
 			return (child_process(i, pipes, cmd, envs));
-		if (i > 0)
-			close(pipes[(i - 1) % 2][0]);
-		close(pipes[i % 2][1]);
+		cursor_close(pipes, i);
 		i++;
 		cmd = cmd->next;
 	}
