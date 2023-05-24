@@ -25,18 +25,20 @@ void	unexpected_token_error(char *token)
 
 int	unexpected_token(char **tokens)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (tokens[i])
 	{
-		if ((!ft_strncmp(tokens[i], ">", 1)
-				|| !ft_strncmp(tokens[i], "<", 1)) && tokens[i + 1]
-			&& (!ft_strncmp(tokens[i + 1], ">", 1)
-				|| !ft_strncmp(tokens[i + 1], "<", 1)))
+		if (((!ft_strncmp(tokens[i], ">", 1) || !ft_strncmp(tokens[i], "<", 1)) && !tokens[i + 1])
+			|| (!ft_strncmp(tokens[i], "|", 1) && (!tokens[i + 1] || !tokens[i + 1][0]))
+			|| (!ft_strncmp(tokens[0], "|", 1)))
 			return (unexpected_token_error(tokens[i]), 0);
-		if (!ft_strncmp(tokens[i], "|", 1) && tokens[i + 1]
-			&& !ft_strncmp(tokens[i + 1], "|", 1))
+		if ((!ft_strncmp(tokens[i], ">", 1) || !ft_strncmp(tokens[i], "<", 1)) && tokens[i + 1] 
+			&& (!ft_strncmp(tokens[i + 1], ">", 1) || !ft_strncmp(tokens[i + 1], "<", 1) 
+				|| !ft_strncmp(tokens[i + 1], "|", 1)))
+			return (unexpected_token_error(tokens[i]), 0);
+		if (!ft_strncmp(tokens[i], "|", 1) && tokens[i + 1] && !ft_strncmp(tokens[i + 1], "|", 1))
 			return (unexpected_token_error(tokens[i]), 0);
 		i++;
 	}
