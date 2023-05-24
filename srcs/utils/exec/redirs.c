@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:51:58 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/19 17:14:47 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:25:50 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 		signal(SIGQUIT, SIG_IGN);
 		line = readline("> ");
 		if (!line)
-			return (reopen_heredoc(cmd), error_heredoc(delimiter), false);
+			return (reopen_heredoc(cmd), error_heredoc(delimiter), true);
 		if (ft_strcmp(line, delimiter) == 0)
 			return (reopen_heredoc(cmd), free(line), true);
 		ft_putendl_fd(line, cmd->infile);
