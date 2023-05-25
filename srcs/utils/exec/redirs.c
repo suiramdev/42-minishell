@@ -6,13 +6,14 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:51:58 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/24 16:25:50 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/26 00:22:59 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// I know, it's trash doing like that...
+/// @brief Close and open back the file descriptor of the heredoc file.
+/// @param cmd The command node where the infile field will be updated.
 static void	reopen_heredoc(t_cmd *cmd)
 {
 	close(cmd->infile);

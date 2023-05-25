@@ -6,13 +6,14 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 15:27:26 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/23 15:58:48 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/26 00:25:14 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/// @brief Print an error message to the standard error
+/// @brief Print an error message to the standard error with
+/// the program name as prefix.
 /// @param msg The main error message
 /// @param more Additional error information
 void	error(char *msg, char *more)

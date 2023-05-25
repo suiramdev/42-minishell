@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:03:54 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/22 01:23:19 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/25 23:55:08 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,14 +111,14 @@ t_env	*remove_env(t_env **envs, char *key)
 }
 
 /// @brief Free an environment variable
-/// @param envs The environment variable to free
-void	free_env(t_env *envs)
+/// @param env The environment variable to free
+void	free_env(t_env *env)
 {
-	if (!envs)
+	if (!env)
 		return ;
-	if (envs->key)
-		free(envs->key);
-	if (envs->value)
-		free(envs->value);
-	free(envs);
+	if (env->key)
+		free(env->key);
+	if (env->value)
+		free(env->value);
+	free(env);
 }

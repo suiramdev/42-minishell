@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:30:39 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/21 17:23:31 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/25 23:34:27 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,18 +80,17 @@ void	add_cmd(t_cmd **cmds, t_cmd *new)
 {
 	t_cmd	*last;
 
-	if (new)
+	if (!new)
+		return ;
+	if (!*cmds)
 	{
-		if (!*cmds)
-		{
-			*cmds = new;
-			return ;
-		}
-		last = *cmds;
-		while (last->next)
-			last = last->next;
-		last->next = new;
+		*cmds = new;
+		return ;
 	}
+	last = *cmds;
+	while (last->next)
+		last = last->next;
+	last->next = new;
 }
 
 /// @brief Free the commands linked list
