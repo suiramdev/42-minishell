@@ -59,7 +59,6 @@ int	exec_relative(t_cmd *cmd, t_env **envs)
 		return (127);
 	}
 	envp = format_env(*envs);
-	signal(SIGQUIT, &signal_handler);
 	execve(path, cmd->args, envp);
 	free(path);
 	i = 0;
@@ -82,6 +81,7 @@ int	exec_cmds(t_cmd *cmds, t_env **envs)
 	backups[0] = dup(STDIN_FILENO);
 	backups[1] = dup(STDOUT_FILENO);
 	redirs(cmds);
+	signal(SIGQUIT, &signal_handler);
 	exit_status = exec_builtin(cmds, envs);
 	dup2(backups[0], STDIN_FILENO);
 	dup2(backups[1], STDOUT_FILENO);
@@ -89,7 +89,7 @@ int	exec_cmds(t_cmd *cmds, t_env **envs)
 	close(backups[1]);
 	if (exit_status == BUILTIN_NOT_FOUND)
 		return (pipeline(cmds, envs));
-	set_env(envs, "?", ft_itoa(WEXITSTATUS(exit_status)));
+	set_env(envs, "?", ft_itoa(exit_status));
 	close_redirs(cmds);
 	return (exit_status);
 }

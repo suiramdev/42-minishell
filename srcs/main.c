@@ -74,15 +74,12 @@ static int	readentry(t_env *envs, t_cmd **cmds)
 	char	*line;
 	char	**tokens;
 
-	line = readline("minishell$ ");
+	line = readline("minishell# ");
 	if (!line)
 		return (2);
 	add_history(line);
 	if (line[0] == '\0')
-	{
-		free(line);
-		return (0);
-	}
+		return (free(line), 0);
 	tokens = tokenize(line, envs);
 	free(line);
 	if (!tokens)

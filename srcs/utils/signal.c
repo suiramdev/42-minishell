@@ -24,4 +24,6 @@ void	signal_handler(int signal)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
+	if (signal == SIGQUIT)
+		printf("Quit\n");
 }
