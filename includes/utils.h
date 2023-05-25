@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 16:46:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/24 16:52:09 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/26 01:41:12 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 // utils/error.c
 void	error(char *msg, char *more);
 void	error_heredoc(char *delimiter);
+void	error_numerical_arg(char *name, char *arg);
 
 // utils/signal.c
 void	signal_handler(int signal);
