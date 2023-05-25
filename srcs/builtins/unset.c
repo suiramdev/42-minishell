@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:01:56 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/08 16:25:54 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/26 01:54:48 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,14 @@
 // See issue in export.c
 int	builtin_unset(t_cmd *cmd, t_env **envs)
 {
-	if (!cmd->args[1])
-		return (EXIT_FAILURE);
-	if (!remove_env(envs, cmd->args[1]))
-		return (EXIT_FAILURE);
+	size_t	i;
+
+	i = 1;
+	while (cmd->args[i])
+	{
+		if (!remove_env(envs, cmd->args[i]))
+			return (EXIT_FAILURE);
+		i++;
+	}
 	return (EXIT_SUCCESS);
 }
