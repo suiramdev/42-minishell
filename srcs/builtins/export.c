@@ -6,15 +6,12 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 15:57:35 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 14:59:39 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/26 16:27:58 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// Issue there, is that cmd->env is a copy of the env,
-// not the actual env we should make it a pointer to env,
-// and have also its own copy of the env maybe
 int	builtin_export(t_cmd *cmd, t_env **envs)
 {
 	size_t	i;
