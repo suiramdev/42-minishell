@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:01:39 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 01:51:17 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/26 02:03:31 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 
 /// @brief Check if the arguments are numerical
 /// @param args The arguments to check
-/// @param non_numerical_arg The variable to store the first non numerical argument
+/// @param non_numerical_arg The variable to store the first
+/// non numerical argument
 /// @return true if the arguments are numerical, false otherwise
 static bool	numerical_args(char **args, char **non_numerical_arg)
 {
 	int	i;
 	int	j;
-	
+
 	i = 0;
 	while (args[i])
 	{
