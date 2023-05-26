@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 16:46:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 01:41:12 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/26 02:00:50 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ void	error_heredoc(char *delimiter);
 void	error_numerical_arg(char *name, char *arg);
 
 // utils/signal.c
-void	signal_handler(int signal);
+void	main_signal(int signal);
+void	cmd_signal(int signal);
 
 // utils/str.c
 bool	is_space(char c);

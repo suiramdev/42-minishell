@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/23 16:02:29 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/26 02:01:06 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static int	program(t_cmd **cmds, t_env **envs)
 
 	while (1)
 	{
-		signal(SIGINT, &signal_handler);
+		signal(SIGINT, &main_signal);
 		signal(SIGQUIT, SIG_IGN);
 		res = readentry(*envs, cmds);
 		if (res == 2)

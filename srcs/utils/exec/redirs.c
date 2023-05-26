@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:51:58 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 00:22:59 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/26 02:01:43 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 	cmd->has_heredoc = true;
 	while (1)
 	{
-		signal(SIGINT, &signal_handler);
+		signal(SIGINT, &main_signal);
 		signal(SIGQUIT, SIG_IGN);
 		line = readline("> ");
 		if (!line)

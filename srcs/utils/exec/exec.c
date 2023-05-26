@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:46:34 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/24 16:30:38 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/26 02:02:26 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ int	exec_cmds(t_cmd *cmds, t_env **envs)
 	backups[0] = dup(STDIN_FILENO);
 	backups[1] = dup(STDOUT_FILENO);
 	redirs(cmds);
-	signal(SIGQUIT, &signal_handler);
+	signal(SIGINT, &cmd_signal);
+	signal(SIGQUIT, &cmd_signal);
 	exit_status = exec_builtin(cmds, envs);
 	dup2(backups[0], STDIN_FILENO);
 	dup2(backups[1], STDOUT_FILENO);
