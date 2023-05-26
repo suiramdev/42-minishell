@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 15:27:26 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 14:52:13 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/26 14:58:19 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,10 @@ void	error_numerical_arg(char *name, char *arg)
 	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 }
 
+/// @brief Print an error message to the standard error related
+/// a wrong identifier.
+/// @param name The name of the command that was executed
+/// @param arg The argument that was wrong
 void	error_valid_identifier(char *name, char *arg)
 {
 	ft_putstr_fd("minishell: `", STDERR_FILENO);
