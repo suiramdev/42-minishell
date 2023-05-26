@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 15:27:26 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 01:41:05 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/26 14:52:13 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,13 @@ void	error_numerical_arg(char *name, char *arg)
 	ft_putstr_fd(": ", STDERR_FILENO);
 	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+}
+
+void	error_valid_identifier(char *name, char *arg)
+{
+	ft_putstr_fd("minishell: `", STDERR_FILENO);
+	ft_putstr_fd(name, STDERR_FILENO);
+	ft_putstr_fd("': ", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putstr_fd(": not a valid identifier\n", STDERR_FILENO);
 }
