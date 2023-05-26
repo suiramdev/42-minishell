@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 15:57:35 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 14:51:37 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/26 14:59:39 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	builtin_export(t_cmd *cmd, t_env **envs)
 		while (cmd->args[i][j] && cmd->args[i][j] != '=')
 			j++;
 		if (j == 0)
-			return (error_valid_identifier("export", cmd->args[i] + j), EXIT_FAILURE);
+			return (error_invalid_identifier("export", cmd->args[i] + j), EXIT_FAILURE);
 		if (cmd->args[i][j] == '=')
 		{
 			cmd->args[i][j] = '\0';
