@@ -52,6 +52,7 @@ void	increase_token_index(size_t *count, size_t *i);
 
 // utils/parse/trim.c
 void	isquotefill(char *quote, char c);
+bool	special_char(char c);
 char	*replace_env_var(t_env *envs, char *token);
 char	*trim_token_quote(char **token, char quote, int len, t_env *envs);
 

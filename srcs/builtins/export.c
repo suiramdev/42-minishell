@@ -30,23 +30,24 @@ int	builtin_export(t_cmd *cmd, t_env **envs)
 {
 	size_t	i;
 	size_t	j;
-	char	*value;
 
 	i = 1;
 	while (cmd->args && cmd->args[i])
 	{
 		j = 0;
 		while (cmd->args[i][j] && cmd->args[i][j] != '=')
-			j++;
-		if (j == 0)
-			return (error_identifier(&cmd->args[i][j + 1]), EXIT_FAILURE);
-		value = ft_strdup("");
-		if (cmd->args[i][j] == '=')
-			value = ft_strdup(&cmd->args[i][j + 1]);
-		if (!set_env(envs, cmd->args[i], value))
 		{
-			free(value);
-			return (EXIT_FAILURE);
+			if (special_char(cmd->args[i][j]))
+				return (error_identifier(cmd->args[i]), EXIT_FAILURE);
+			j++;
+		}
+		if (j == 0)
+			return (error_identifier(&cmd->args[i][j]), EXIT_FAILURE);
+		if (cmd->args[i][j])
+		{
+			cmd->args[i][j] = '\0';
+			if (!set_env(envs, cmd->args[i], ft_strdup(&cmd->args[i][j + 1])))
+				return (EXIT_FAILURE);
 		}
 		i++;
 	}
