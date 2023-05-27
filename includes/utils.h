@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 16:46:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/22 15:36:19 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/26 02:00:50 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@
 // utils/error.c
 void	error(char *msg, char *more);
 void	error_heredoc(char *delimiter);
+void	error_numerical_arg(char *name, char *arg);
 
 // utils/signal.c
-void	signal_handler(int signal);
+void	main_signal(int signal);
+void	cmd_signal(int signal);
 
 // utils/str.c
 bool	is_space(char c);
@@ -36,9 +38,15 @@ bool	valid_last_command(char **tokens, size_t i);
 void	cmds_has_pipes(t_cmd *cmds);
 
 // utils/token.c
-char	*trim_token_quote(char **token, char quote, int len, t_env *envs);
+char	*trim_token_quote(char **token);
 void	free_tokens(char **tokens);
 char	*replace_env_var(t_env *envs, char *token);
+
+// utils/token2.c
+int		unexpected_token(char **tokens);
+void	unexpected_token_error(char *token);
+void	isquotefill(char *quote, char c);
+bool	special_char(char c);
 
 // utils/env.c
 char	**format_env(t_env *envs);
@@ -55,8 +63,11 @@ void	redirs(t_cmd *cmd);
 void	close_redirs(t_cmd *cmds);
 
 // utils/exec/pipeline.c
-void	wait_processes(t_cmd *cmds);
 int		pipeline(t_cmd *cmds, t_env **envs);
+
+// utils/exec/process.c
+void	wait_processes(t_cmd *cmds, t_env **envs);
+bool	is_child_process(t_cmd *cmds);
 
 // utils/exec/exec.c
 # define BUILTIN_NOT_FOUND -1

@@ -1,28 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/25 16:01:56 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 01:54:48 by mnouchet         ###   ########.fr       */
+/*   Created: 2023/05/24 16:51:22 by mnouchet          #+#    #+#             */
+/*   Updated: 2023/05/24 16:51:49 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// See issue in export.c
-int	builtin_unset(t_cmd *cmd, t_env **envs)
+/// @brief Waits for all the processes to finish
+/// @param cmds The commands to execute
+void	wait_processes(t_cmd *cmds, t_env **envs)
 {
-	size_t	i;
+	int		status;
 
-	i = 1;
-	while (cmd->args[i])
+	status = 0;
+	while (cmds)
 	{
-		if (!remove_env(envs, cmd->args[i]))
-			return (EXIT_FAILURE);
-		i++;
+		waitpid(cmds->pid, &status, 0);
+		set_env(envs, "?", ft_itoa(WEXITSTATUS(status)));
+		cmds = cmds->next;
 	}
-	return (EXIT_SUCCESS);
+}
+
+bool	is_child_process(t_cmd *cmds)
+{
+	while (cmds)
+	{
+		if (cmds->pid == 0)
+			return (true);
+		cmds = cmds->next;
+	}
+	return (false);
 }

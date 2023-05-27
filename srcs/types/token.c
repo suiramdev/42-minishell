@@ -17,14 +17,13 @@
 /// @param quote Keeps track of the type of quotes (' or ") encountered.
 /// @param i Index for iteration.
 /// @return Returns true on successful parsing, false on encountering an error.
-static bool	loop_get_next_token(char *line, char *quote, size_t *i)
+static bool	loop_get_next_token(char *line, int *quote, size_t *i)
 {
 	while (line[*i] && !is_space(line[*i]))
 	{
 		if (line[*i] == '\'' || line[*i] == '"')
 		{
-			if (!(*quote))
-				(*quote) = line[*i];
+			*quote = 1;
 			if (!handle_quotes(line, i))
 				return (error("unclosed quotes ", 0), false);
 			if (line[(*i)] == '|')
@@ -55,7 +54,7 @@ static bool	loop_get_next_token(char *line, char *quote, size_t *i)
 static char	*get_next_token(char **line, t_env *envs)
 {
 	char	*token;
-	char	quote;
+	int	quote;
 	size_t	i;
 
 	i = 0;
@@ -66,10 +65,10 @@ static char	*get_next_token(char **line, t_env *envs)
 	if (!loop_get_next_token((*line), &quote, &i))
 		return (NULL);
 	token = ft_substr(*line, 0, i);
-	if (quote)
-		token = trim_token_quote(&token, quote, i, envs);
-	else if (ft_strchr(token, '$'))
+	if (ft_strchr(token, '$'))
 		token = replace_env_var(envs, token);
+	if (quote)
+		token = trim_token_quote(&token);
 	skip_spaces(*line, &i);
 	*line += i;
 	return (token);
@@ -126,30 +125,6 @@ static size_t	count_tokens(char *line)
 	return (count);
 }
 
-void	unexpected_token_error(char *token)
-{
-	ft_putstr_fd("unexpected token `", STDERR_FILENO);
-	ft_putstr_fd(token, STDERR_FILENO);
-	ft_putstr_fd("`\n", STDERR_FILENO);
-}
-
-int unexpected_token(char **tokens)
-{
-	int i;
-
-	i = 0;
-	while (tokens[i])
-	{
-		if ((!ft_strncmp(tokens[i], ">", 1) || !ft_strncmp(tokens[i], "<", 1)) && tokens[i + 1] 
-			&& (!ft_strncmp(tokens[i + 1], ">", 1) || !ft_strncmp(tokens[i + 1], "<", 1)))
-			return (unexpected_token_error(tokens[i]), 0);
-		if (!ft_strncmp(tokens[i], "|", 1) && tokens[i + 1] && !ft_strncmp(tokens[i + 1], "|", 1))
-			return (unexpected_token_error(tokens[i]), 0);
-		i++;
-	}
-	return (1);
-}
-
 /// @brief Tokenize a line
 /// @param line The line to tokenize
 /// @param envs The environment variables to consider during tokenization
@@ -162,6 +137,7 @@ char	**tokenize(char *line, t_env *envs)
 
 	i = 0;
 	tokens_count = count_tokens(line);
+	printf("count: %ld\n", tokens_count);
 	if (tokens_count <= 0)
 		return (NULL);
 	tokens = (char **)malloc(sizeof(char *) * (tokens_count + 1));
@@ -171,6 +147,6 @@ char	**tokenize(char *line, t_env *envs)
 		tokens[i++] = get_next_token(&line, envs);
 	tokens[i] = NULL;
 	if (!unexpected_token(tokens))
-		return (NULL);
+		return (free_tokens(tokens), NULL);
 	return (tokens);
 }

@@ -29,7 +29,7 @@ int	builtin_export(t_cmd *cmd, t_env **envs)
 		if (cmd->args[i][j] == '=')
 		{
 			cmd->args[i][j] = '\0';
-			if (!set_env(envs, cmd->args[i], &cmd->args[i][j + 1]))
+			if (!set_env(envs, cmd->args[i], ft_strdup(&cmd->args[i][j + 1])))
 				return (EXIT_FAILURE);
 			cmd->args[i][j] = '=';
 		}

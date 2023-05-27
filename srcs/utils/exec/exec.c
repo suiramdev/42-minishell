@@ -6,11 +6,12 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:46:34 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/21 18:07:37 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/26 02:02:26 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "utils.h"
 
 /// @brief Executes a builtin command
 /// @param cmd The command to execute
@@ -52,10 +53,8 @@ int	exec_relative(t_cmd *cmd, t_env **envs)
 	path = resolve_path(cmd->name, *envs);
 	if (!path)
 	{
-		ft_putstr_fd("Command not found: ", STDERR_FILENO);
-		ft_putstr_fd(cmd->name, STDERR_FILENO);
-		ft_putstr_fd("\n", STDERR_FILENO);
-		return (EXIT_FAILURE);
+		error(cmd->name, "command not found");
+		return (127);
 	}
 	envp = format_env(*envs);
 	execve(path, cmd->args, envp);
@@ -67,38 +66,29 @@ int	exec_relative(t_cmd *cmd, t_env **envs)
 	return (EXIT_FAILURE);
 }
 
-static int	exec_in_fork(t_cmd *cmd, t_env **envs, int backups[2])
-{
-	cmd->pid = fork();
-	if (cmd->pid == -1)
-		return (EXIT_FAILURE);
-	if (cmd->pid == 0)
-		return (exec_relative(cmd, envs));
-	close_redirs(cmd);
-	dup2(backups[0], STDIN_FILENO);
-	dup2(backups[1], STDOUT_FILENO);
-	wait_processes(cmd);
-	return (EXIT_SUCCESS);
-}
-
 /// @brief Execute the commands linked list
 /// @param cmds The commands linked list
 /// @param envs The environment variables linked list
 int	exec_cmds(t_cmd *cmds, t_env **envs)
 {
-	int	backups[2];
-	int	exit_status;
+	int		backups[2];
+	int		exit_status;
 
 	if (cmds->next)
 		return (pipeline(cmds, envs));
 	backups[0] = dup(STDIN_FILENO);
 	backups[1] = dup(STDOUT_FILENO);
 	redirs(cmds);
+	signal(SIGINT, &cmd_signal);
+	signal(SIGQUIT, &cmd_signal);
 	exit_status = exec_builtin(cmds, envs);
-	if (exit_status == BUILTIN_NOT_FOUND)
-		return (exec_in_fork(cmds, envs, backups));
-	close_redirs(cmds);
 	dup2(backups[0], STDIN_FILENO);
 	dup2(backups[1], STDOUT_FILENO);
+	close(backups[0]);
+	close(backups[1]);
+	if (exit_status == BUILTIN_NOT_FOUND)
+		return (pipeline(cmds, envs));
+	set_env(envs, "?", ft_itoa(exit_status));
+	close_redirs(cmds);
 	return (exit_status);
 }

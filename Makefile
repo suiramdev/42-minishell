@@ -6,7 +6,7 @@
 #    By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/06 22:19:57 by mnouchet          #+#    #+#              #
-#    Updated: 2023/05/22 17:14:39 by mnouchet         ###   ########.fr        #
+#    Updated: 2023/05/24 16:53:19 by mnouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,9 +47,11 @@ SRCS		:= main.c					\
 			   utils/str.c				\
 			   utils/pipes.c			\
 			   utils/token.c			\
+			   utils/token2.c			\
 			   utils/env.c				\
 			   utils/path.c				\
 			   utils/exec/redirs.c		\
+			   utils/exec/process.c		\
 			   utils/exec/pipeline.c	\
 			   utils/exec/exec.c		\
 			   builtins/cd.c			\

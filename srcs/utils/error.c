@@ -6,13 +6,14 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 15:27:26 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/23 15:58:48 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/26 01:41:05 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/// @brief Print an error message to the standard error
+/// @brief Print an error message to the standard error with
+/// the program name as prefix.
 /// @param msg The main error message
 /// @param more Additional error information
 void	error(char *msg, char *more)
@@ -37,4 +38,17 @@ void	error_heredoc(char *delimiter)
 	ft_putstr_fd("delimited by end-of-file (wanted `", STDERR_FILENO);
 	ft_putstr_fd(delimiter, STDERR_FILENO);
 	ft_putstr_fd("')\n", STDERR_FILENO);
+}
+
+/// @brief Print an error message to the standard error related
+/// a wrong numerical argument.
+/// @param name The name of the command that was executed
+/// @param arg The argument that was wrong
+void	error_numerical_arg(char *name, char *arg)
+{
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(name, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 }

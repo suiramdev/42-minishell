@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:03:54 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/22 01:23:19 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/25 23:55:08 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static t_env	*new_env(char *key, char *value)
 	if (!new)
 		return (NULL);
 	new->key = ft_strdup(key);
-	new->value = ft_strdup(value);
+	new->value = value;
 	new->next = NULL;
 	return (new);
 }
@@ -48,7 +48,7 @@ static t_env	*new_env(char *key, char *value)
 /// @param key The key of the new environment variable
 /// @param value The value of the new environment variable
 /// @return The new environment variable
-/// @note The key and value are duplicated
+/// @note The key is duplicated by the function itself, but the value is not
 t_env	*set_env(t_env **envs, char *key, char *value)
 {
 	t_env	*new;
@@ -111,10 +111,14 @@ t_env	*remove_env(t_env **envs, char *key)
 }
 
 /// @brief Free an environment variable
-/// @param envs The environment variable to free
-void	free_env(t_env *envs)
+/// @param env The environment variable to free
+void	free_env(t_env *env)
 {
-	free(envs->key);
-	free(envs->value);
-	free(envs);
+	if (!env)
+		return ;
+	if (env->key)
+		free(env->key);
+	if (env->value)
+		free(env->value);
+	free(env);
 }
