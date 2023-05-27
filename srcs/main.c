@@ -52,7 +52,6 @@ static t_cmd	*init_cmds(char **tokens)
 	i = 0;
 	while (tokens[i])
 	{
-		printf("token[%zu] = %s\n", i, tokens[i]);
 		if (tokens[i][0] == '|')
 		{
 			add_cmd(&cmds, new_cmd(tokens, start, i));
