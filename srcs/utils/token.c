@@ -43,7 +43,7 @@ static char	*replace_env_var2(char *token, int key_len, t_env *head, int i)
 	return (token);
 }
 
-static char	*replace_env_var_ext(char *token, int i, t_env *envs)
+static char	*replace_env_var_ext(char *token, int i, t_env *envs, bool *split_token)
 {
 	char	*key;
 	size_t	key_len;
@@ -54,6 +54,8 @@ static char	*replace_env_var_ext(char *token, int i, t_env *envs)
 	key = ft_substr(token, i + 1, key_len - 1);
 	token = replace_env_var2(token, key_len, get_env(envs, key), i);
 	free(key);
+	if (ft_strchr(token, ' '))
+		*split_token = true;
 	return (token);
 }
 
@@ -61,7 +63,7 @@ static char	*replace_env_var_ext(char *token, int i, t_env *envs)
 /// @param envs The environment variable list.
 /// @param token The token string.
 /// @return The updated token string after environment variable replacement.
-char	*replace_env_var(t_env *envs, char *token)
+char	*replace_env_var(t_env *envs, char *token, bool *split_token)
 {
 	size_t	i;
 	bool simplequote;
@@ -77,7 +79,7 @@ char	*replace_env_var(t_env *envs, char *token)
 			if (token[i] == '$' && token[i + 1] && (token[i + 1] == '?'))
 				token = replace_env_var2(token, 2, get_env(envs, "?"), i);
 			else if (token[i + 1] && !special_char(token[i + 1]))
-				token = replace_env_var_ext(token, i, envs);
+				token = replace_env_var_ext(token, i, envs, split_token);
 			else
 				return (token);
 			i = 0;

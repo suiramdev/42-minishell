@@ -51,7 +51,7 @@ static bool	loop_get_next_token(char *line, int *quote, size_t *i)
 /// @param envs The environment variables to replace by their values if 
 /// double quotes
 /// @return char* The next token
-static char	*get_next_token(char **line, t_env *envs)
+static char	*get_next_token(char **line, t_env *envs, bool *split_token)
 {
 	char	*token;
 	int	quote;
@@ -66,7 +66,7 @@ static char	*get_next_token(char **line, t_env *envs)
 		return (NULL);
 	token = ft_substr(*line, 0, i);
 	if (ft_strchr(token, '$'))
-		token = replace_env_var(envs, token);
+		token = replace_env_var(envs, token, split_token);
 	if (quote)
 		token = trim_token_quote(&token);
 	skip_spaces(*line, &i);
@@ -132,10 +132,14 @@ static size_t	count_tokens(char *line)
 char	**tokenize(char *line, t_env *envs)
 {
 	size_t	i;
+	size_t	j;
 	size_t	tokens_count;
 	char	**tokens;
+	bool	split_token;
 
+	split_token = false;
 	i = 0;
+	j = 0;
 	tokens_count = count_tokens(line);
 	printf("count: %ld\n", tokens_count);
 	if (tokens_count <= 0)
@@ -143,9 +147,13 @@ char	**tokenize(char *line, t_env *envs)
 	tokens = (char **)malloc(sizeof(char *) * (tokens_count + 1));
 	if (!tokens)
 		return (NULL);
-	while (i < tokens_count)
-		tokens[i++] = get_next_token(&line, envs);
-	tokens[i] = NULL;
+	while (i++ < tokens_count)
+	{
+		tokens[j++] = get_next_token(&line, envs, &split_token);
+		if (split_token)
+			tokens = token_split(tokens, &j, &split_token, tokens_count);
+	}
+	tokens[j] = NULL;
 	if (!unexpected_token(tokens))
 		return (free_tokens(tokens), NULL);
 	return (tokens);

@@ -40,13 +40,14 @@ void	cmds_has_pipes(t_cmd *cmds);
 // utils/token.c
 char	*trim_token_quote(char **token);
 void	free_tokens(char **tokens);
-char	*replace_env_var(t_env *envs, char *token);
+char	*replace_env_var(t_env *envs, char *token, bool *split_token);
 
 // utils/token2.c
 int		unexpected_token(char **tokens);
 void	unexpected_token_error(char *token);
 void	isquotefill(char *quote, char c);
 bool	special_char(char c);
+char	**token_split(char **tokens, size_t *i, bool *split_token, int k);
 
 // utils/env.c
 char	**format_env(t_env *envs);

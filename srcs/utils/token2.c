@@ -58,3 +58,29 @@ int	unexpected_token(char **tokens)
 	}
 	return (1);
 }
+
+char	**token_split(char **tokens, size_t *i, bool *split_token, int k)
+{
+	char **new_tokens;
+	size_t j;
+
+	new_tokens = (char **)malloc(sizeof(char *) * (k + 2));
+	if (!new_tokens)
+		return (0);
+	j = -1;
+	while (j++ < (*i) - 1)	// copy each token dans new tokens
+		new_tokens[j] = tokens[j];
+
+	k = 0;
+	while (tokens[(*i) - 1][k] != ' ')
+		k++;
+
+	new_tokens[j++] = ft_substr(tokens[(*i) - 1], 0, k); // Take the command
+	new_tokens[j] = ft_strdup(tokens[(*i) - 1] + k + 1); // Take the rest
+
+	free(tokens[(*i) - 1]); // free l'ancien token qu'est pas split
+	free(tokens); // free l'ancien tokens
+	(*i)++; // on a ajouter 1 token donc add 1
+	*split_token = false;
+	return (new_tokens);
+}
