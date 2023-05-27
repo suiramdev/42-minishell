@@ -1,16 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token.c                                            :+:      :+:    :+:   */
+/*   trim.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 16:00:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/23 12:36:14 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/27 01:06:14 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	isquotefill(char *quote, char c)
+{
+	if (!(*quote))
+		(*quote) = c;
+}
+
+/// @brief Check if a command token string contains any special characters.
+/// @param c The character to check.
+/// @return 1 if the character is special, 0 otherwise.
+static bool	special_char(char c)
+{
+	return (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+			|| (c >= '0' && c <= '9') || (c == '_')));
+}
 
 /// @brief Perform the second part of environment variable
 /// replacement in a token string.
@@ -118,16 +133,4 @@ char	*trim_token_quote(char **token, char quote, int len, t_env *envs)
 	if (quote == '"' && ft_strchr(dst, '$'))
 		return (replace_env_var(envs, dst));
 	return (dst);
-}
-
-/// @brief Free tokens
-/// @param tokens The tokens to free
-void	free_tokens(char **tokens)
-{
-	size_t	i;
-
-	i = 0;
-	while (tokens[i])
-		free(tokens[i++]);
-	free(tokens);
 }

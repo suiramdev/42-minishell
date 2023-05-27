@@ -6,7 +6,7 @@
 #    By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/06 22:19:57 by mnouchet          #+#    #+#              #
-#    Updated: 2023/05/24 16:53:19 by mnouchet         ###   ########.fr        #
+#    Updated: 2023/05/27 02:36:20 by mnouchet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,37 +30,38 @@ NAME		:= minishell
 # LDFLAGS		linker flags
 # LDLIBS		libraries name
 
-LIBS		:= ft					\
+LIBS		:= ft							\
 			   readline
 LIBS_TARGET	:= libs/libft/libft.a
 
-INCS		:= includes				\
+INCS		:= includes						\
 			   libs/libft
 
 SRCS_DIR	:= srcs
-SRCS		:= main.c					\
-			   types/command.c			\
-			   types/env.c				\
-			   types/token.c			\
-			   utils/error.c			\
-			   utils/signal.c			\
-			   utils/str.c				\
-			   utils/pipes.c			\
-			   utils/token.c			\
-			   utils/token2.c			\
-			   utils/env.c				\
-			   utils/path.c				\
-			   utils/exec/redirs.c		\
-			   utils/exec/process.c		\
-			   utils/exec/pipeline.c	\
-			   utils/exec/exec.c		\
+SRCS		:= main.c						\
 			   builtins/cd.c			\
 			   builtins/echo.c			\
 			   builtins/env.c			\
 			   builtins/exit.c			\
 			   builtins/export.c		\
 			   builtins/pwd.c			\
-			   builtins/unset.c
+			   builtins/unset.c		\
+			   types/command.c			\
+			   types/env.c				\
+			   types/token.c			\
+			   utils/exec/exec.c		\
+			   utils/exec/pipeline.c	\
+			   utils/exec/process.c	\
+			   utils/exec/redirs.c		\
+			   utils/parse/errors.c	\
+			   utils/parse/free.c	    \
+			   utils/parse/str.c	    \
+			   utils/parse/trim.c	    \
+			   utils/env.c			    \
+			   utils/error.c		    \
+			   utils/path.c		    \
+			   utils/pipes.c		    \
+			   utils/signal.c
 
 SRCS		:= $(SRCS:%=$(SRCS_DIR)/%)
 

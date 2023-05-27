@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:01:39 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 02:03:31 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/27 02:36:48 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,17 @@ static bool	numerical_args(char **args, char **non_numerical_arg)
 	return (true);
 }
 
+/// @brief Print an error message to the standard error related
+/// a wrong numerical argument.
+/// @param name The name of the command that was executed
+/// @param arg The argument that was wrong
+static void	error_numerical_arg(char *arg)
+{
+	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+}
+
 /// @brief Execute the exit builtin command
 /// @param cmd The command to execute
 /// @param envs The environment variables
@@ -56,7 +67,7 @@ int	builtin_exit(t_cmd *cmd, t_env **envs)
 	if (!numerical_args(cmd->args + 1, &non_numerical_arg))
 	{
 		g_force_exit = 2;
-		return (error_numerical_arg("exit", non_numerical_arg), 2);
+		return (error_numerical_arg(non_numerical_arg), 2);
 	}
 	if (cmd->args[1])
 	{

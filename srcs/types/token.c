@@ -6,11 +6,21 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:31:08 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/23 16:21:40 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/27 16:30:57 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/// @brief Loop over the line, skipping a specific character.
+/// @param str Input string to parse.
+/// @param c Character to skip.
+/// @param i Index for iteration.
+static void	skip_char(char *str, char c, size_t *i)
+{
+	while (str[*i] && str[*i] == c)
+		(*i)++;
+}
 
 /// @brief Iterates over line to find the next token.
 /// @param line Input string to parse.
@@ -23,25 +33,16 @@ static bool	loop_get_next_token(char *line, char *quote, size_t *i)
 	{
 		if (line[*i] == '\'' || line[*i] == '"')
 		{
-			isquotefill(quote, line[*i]);
+			*quote = line[*i];
 			if (!handle_quotes(line, i))
 				return (error("unclosed quotes ", 0), false);
-			if (line[(*i)] == '|')
-				return (true);
 		}
-		else if ((line[*i] == '<' || line[*i] == '>'))
+		if (line[*i] == '>' || line[*i] == '<' || line[*i] == '|')
 		{
-			if ((*i) > 0 && !is_space(line[(*i) - 1]))
-				break ;
-			(*i)++;
-			if (line[(*i)] == line[*i - 1])
-				(*i)++;
-			break ;
+			skip_char(line, line[*i], i);
+			return (true);
 		}
-		else if (line[*i] == ' ' || line[*i] == '|' || line[(*i) + 1] == '|')
-			return ((*i)++, true);
-		else
-			(*i)++;
+		(*i)++;
 	}
 	return (true);
 }
@@ -145,7 +146,7 @@ char	**tokenize(char *line, t_env *envs)
 	while (i < tokens_count)
 		tokens[i++] = get_next_token(&line, envs);
 	tokens[i] = NULL;
-	if (!unexpected_token(tokens))
+	if (!handle_unexpected(tokens))
 		return (free_tokens(tokens), NULL);
 	return (tokens);
 }

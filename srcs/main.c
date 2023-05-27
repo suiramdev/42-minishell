@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 02:01:06 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/27 15:39:19 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static t_cmd	*init_cmds(char **tokens)
 	i = 0;
 	while (tokens[i])
 	{
+		printf("token[%zu] = %s\n", i, tokens[i]);
 		if (tokens[i][0] == '|')
 		{
 			add_cmd(&cmds, new_cmd(tokens, start, i));
