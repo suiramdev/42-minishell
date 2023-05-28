@@ -51,6 +51,11 @@ static char	*replace_env_var_ext(char *token, int i, t_env *envs, bool *split_to
 	key_len = 1;
 	while (token[i + key_len] && !special_char(token[i + key_len]))
 		key_len++;
+	printf("keylen: %ld\n", key_len);
+	if ((token[i + 1] >= '0' && token[i + 1] <= '9')
+		|| token[i + 1] == '"' || token[i + 1] == '\'')
+		key_len = 2;
+	printf("keylen after: %ld\n", key_len);
 	key = ft_substr(token, i + 1, key_len - 1);
 	token = replace_env_var2(token, key_len, get_env(envs, key), i);
 	free(key);
@@ -66,22 +71,28 @@ static char	*replace_env_var_ext(char *token, int i, t_env *envs, bool *split_to
 char	*replace_env_var(t_env *envs, char *token, bool *split_token)
 {
 	size_t	i;
-	bool simplequote;
+	char quote;
 
 	i = 0;
-	simplequote = false;
+	quote = 0;
 	while (token[i])
 	{
-        if (token[i] == '\'')
-            simplequote = !simplequote;
-		if (token[i] == '$' && !simplequote)
+        if (!quote && (token[i] == '\'' || token[i] == '"'))
+            quote = token[i++];
+		else if (token[i] == quote)
+			quote = 0;
+		if (token[i] == '$' && quote != '\'')
 		{
 			if (token[i] == '$' && token[i + 1] && (token[i + 1] == '?'))
 				token = replace_env_var2(token, 2, get_env(envs, "?"), i);
-			else if (token[i + 1] && !special_char(token[i + 1]))
+			else if (token[i + 1] && (!special_char(token[i + 1])
+					|| token[i + 1] == '"' || token[i + 1] == '\''))
 				token = replace_env_var_ext(token, i, envs, split_token);
 			else
-				return (token);
+			{
+				i++;
+				continue ;
+			}
 			i = 0;
 		}
 		else
