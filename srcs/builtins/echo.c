@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 15:58:58 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 01:12:09 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/28 18:57:49 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,12 @@ int	builtin_echo(t_cmd *cmd, t_env **envs)
 	i = 1 + handle_options(cmd->args, &n_option);
 	while (cmd->args && cmd->args[i])
 	{
-		printf("%s", cmd->args[i]);
-		if (cmd->args[i + 1])
-			printf(" ");
+		if (cmd->args[i][0])
+		{
+			printf("%s", cmd->args[i]);
+			if (cmd->args[i + 1])
+				printf(" ");
+		}
 		i++;
 	}
 	if (!n_option)

@@ -6,11 +6,29 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 15:58:49 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 00:31:23 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/28 19:29:12 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	error_invalid(char *path)
+{
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd("cd: ", STDERR_FILENO);
+	ft_putstr_fd(path, STDERR_FILENO);
+	ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+}
+
+static char	*home_path(t_env **envs)
+{
+	t_env	*env;
+
+	env = get_env(*envs, "HOME");
+	if (!env)
+		return (error("cd", "HOME not set"), NULL);
+	return (env->value);
+}
 
 /// @brief Execute the cd builtin command
 /// @param cmd The command data structure
@@ -18,23 +36,28 @@
 /// @return EXIT_SUCCESS or EXIT_FAILURE if an error occured
 int	builtin_cd(t_cmd *cmd, t_env **envs)
 {
-	t_env	*env;
+	size_t	i;
+	size_t	count;
 	char	*path;
 
-	if (cmd->args[1])
+	i = 1;
+	count = 0;
+	while (cmd->args[i])
 	{
-		if (cmd->args[2])
-			return (error("cd", "too many arguments"), EXIT_FAILURE);
-		path = cmd->args[1];
+		if (cmd->args[i][0])
+		{
+			path = cmd->args[i];
+			count++;
+		}
+		i++;
 	}
-	else
-	{
-		env = get_env(*envs, "HOME");
-		if (!env)
-			return (error("cd", "HOME not set"), EXIT_FAILURE);
-		path = env->value;
-	}
+	if (count > 1)
+		return (error("cd", "too many arguments"), EXIT_FAILURE);
+	else if (count == 0)
+		path = home_path(envs);
+	if (!path)
+		return (EXIT_FAILURE);
 	if (chdir(path) == -1)
-		return (perror("cd"), EXIT_FAILURE);
+		return (error_invalid(path), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
