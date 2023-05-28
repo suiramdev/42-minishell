@@ -6,17 +6,11 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 16:00:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/27 01:06:14 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/28 18:26:12 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	isquotefill(char *quote, char c)
-{
-	if (!(*quote))
-		(*quote) = c;
-}
 
 /// @brief Check if a command token string contains any special characters.
 /// @param c The character to check.
@@ -58,13 +52,23 @@ static char	*replace_env_var2(char *token, int key_len, t_env *head, int i)
 	return (token);
 }
 
-static char	*replace_env_var_ext(char *token, int i, int key_len, t_env *envs)
+static char	*replace_env_var_ext(char *token, int i,
+	t_env *envs, bool *split_token)
 {
 	char	*key;
+	size_t	key_len;
 
+	key_len = 1;
+	while (token[i + key_len] && !special_char(token[i + key_len]))
+		key_len++;
+	if ((token[i + 1] >= '0' && token[i + 1] <= '9')
+		|| token[i + 1] == '"' || token[i + 1] == '\'')
+		key_len = 2;
 	key = ft_substr(token, i + 1, key_len - 1);
 	token = replace_env_var2(token, key_len, get_env(envs, key), i);
 	free(key);
+	if (ft_strchr(token, ' '))
+		*split_token = true;
 	return (token);
 }
 
@@ -72,24 +76,30 @@ static char	*replace_env_var_ext(char *token, int i, int key_len, t_env *envs)
 /// @param envs The environment variable list.
 /// @param token The token string.
 /// @return The updated token string after environment variable replacement.
-char	*replace_env_var(t_env *envs, char *token)
+char	*replace_env_var(t_env *envs, char *token, bool *split_token)
 {
 	size_t	i;
-	size_t	key_len;
+	char	quote;
 
 	i = 0;
+	quote = 0;
 	while (token[i])
 	{
-		if (token[i] == '$')
+		if (!quote && (token[i] == '\'' || token[i] == '"'))
+			quote = token[i++];
+		else if (token[i] == quote)
+			quote = 0;
+		if (token[i] == '$' && quote != '\'')
 		{
-			if (token[i] == '$' && token[i + 1] && token[i + 1] == '?')
+			if (token[i] == '$' && token[i + 1] && (token[i + 1] == '?'))
 				token = replace_env_var2(token, 2, get_env(envs, "?"), i);
+			else if (token[i + 1] && (!special_char(token[i + 1])
+					|| token[i + 1] == '"' || token[i + 1] == '\''))
+				token = replace_env_var_ext(token, i, envs, split_token);
 			else
 			{
-				key_len = 1;
-				while (token[i + key_len] && !special_char(token[i + key_len]))
-					key_len++;
-				token = replace_env_var_ext(token, i, key_len, envs);
+				i++;
+				continue ;
 			}
 			i = 0;
 		}
@@ -99,38 +109,38 @@ char	*replace_env_var(t_env *envs, char *token)
 	return (token);
 }
 
-/// @brief Trim the quote characters from a token string and handle environment
-/// variable replacement if necessary.
+/// @brief Trim the quote characters from a token string
 /// @param token The pointer to the token string.
 /// @param quote The quote character to be trimmed.
 /// @param len The length of the token string.
 /// @param envs The environment variable list.
 /// @return The updated token string after trimming and environment
 /// variable replacement.
-char	*trim_token_quote(char **token, char quote, int len, t_env *envs)
+char	*trim_token_quote(char **token)
 {
-	int		i;
-	int		j;
-	char	*src;
-	char	*dst;
+	char	quote;
+	char	*str;
+	size_t	i;
+	size_t	str_index;
 
-	i = 0;
-	j = 0;
-	src = *token;
-	while (src[i])
-		if (src[i++] == quote)
-			j++;
-	dst = malloc((len - j + 1) * sizeof(char));
-	if (!dst)
+	str = (char *)malloc(sizeof(char) * strlen((*token)) + 1);
+	if (!str)
 		return (NULL);
-	i = -1;
-	j = 0;
-	while (++i < len)
-		if (src[i] != quote)
-			dst[j++] = src[i];
-	dst[j] = '\0';
-	free(*token);
-	if (quote == '"' && ft_strchr(dst, '$'))
-		return (replace_env_var(envs, dst));
-	return (dst);
+	i = 0;
+	str_index = 0;
+	quote = '\0';
+	while (i < ft_strlen((*token)))
+	{
+		if (!quote && ((*token)[i] == '\'' || (*token)[i] == '\"'))
+			quote = (*token)[i++];
+		else if (quote && (*token)[i] == quote)
+		{
+			quote = '\0';
+			i++;
+		}
+		else
+			str[str_index++] = (*token)[i++];
+	}
+	str[str_index] = '\0';
+	return (free(*token), str);
 }

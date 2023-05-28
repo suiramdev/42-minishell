@@ -51,10 +51,9 @@ bool	handle_quotes(char *line, size_t *i);
 void	increase_token_index(size_t *count, size_t *i);
 
 // utils/parse/trim.c
-void	isquotefill(char *quote, char c);
 bool	special_char(char c);
-char	*replace_env_var(t_env *envs, char *token);
-char	*trim_token_quote(char **token, char quote, int len, t_env *envs);
+char	*replace_env_var(t_env *envs, char *token, bool *split_token);
+char	*trim_token_quote(char **token);
 
 // utils/env.c
 char	**format_env(t_env *envs);
@@ -76,5 +75,8 @@ void	cmds_has_pipes(t_cmd *cmds);
 // utils/signal.c
 void	main_signal(int signal);
 void	cmd_signal(int signal);
+
+// utils/token.c
+char	**token_split(char **tokens, size_t *i, bool *split_token, int k);
 
 #endif

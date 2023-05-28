@@ -12,14 +12,16 @@
 
 #include "minishell.h"
 
-/// @brief Print an error message when an invalid identifier is passed to a builtin command.
+/// @brief Print an error message when an invalid identifier
+/// is passed to a builtin command.
 /// @param token The invalid identifier.
 static void	error_unexpected(char *token, size_t len)
 {
 	char	*str;
 
 	str = ft_substr(token, 0, len);
-	ft_putstr_fd("minishell: syntax error near unexpected token `", STDERR_FILENO);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd("syntax error near unexpected token `", STDERR_FILENO);
 	ft_putstr_fd(str, STDERR_FILENO);
 	ft_putstr_fd("'\n", STDERR_FILENO);
 	free(str);
@@ -40,9 +42,9 @@ static bool	check_tokens(char **tokens)
 				j++;
 			if (j > 2)
 				return (error_unexpected(tokens[i], 1
-					+ (tokens[i][0] == '<' || tokens[i][0] == '>')), false);
-			if (tokens[i][0] == '|'
-				&& (i == 0 || !tokens[i - 1]  || tokens[i - 1][0] == '|' ))
+						+ (tokens[i][0] == '<' || tokens[i][0] == '>')), false);
+			if (tokens[i][0] == '|' && (i == 0 || !tokens[i - 1]
+					|| tokens[i - 1][0] == '|' ))
 				return (error_unexpected("|", 1), false);
 			if ((tokens[i][0] == '<' || tokens[i][0] == '>') && !tokens[i + 1])
 				return (error_unexpected(tokens[i], 1), false);
@@ -61,7 +63,8 @@ static bool	check_newline(char **tokens)
 	{
 		if (tokens[i][0] == '|' || tokens[i][0] == '<' || tokens[i][0] == '>')
 		{
-			if (!tokens[i + 1] || (tokens[i][0] == '<' && tokens[i + 1][0] == '>'))
+			if (!tokens[i + 1] || (tokens[i][0] == '<'
+				&& tokens[i + 1][0] == '>'))
 				return (error_unexpected("newline", 7), false);
 		}
 		i++;

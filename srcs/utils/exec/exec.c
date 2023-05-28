@@ -53,9 +53,7 @@ int	exec_relative(t_cmd *cmd, t_env **envs)
 	path = resolve_path(cmd->name, *envs);
 	if (!path)
 	{
-		ft_putstr_fd("Command not found: ", STDERR_FILENO);
-		ft_putstr_fd(cmd->name, STDERR_FILENO);
-		ft_putstr_fd("\n", STDERR_FILENO);
+		error(cmd->name, "command not found");
 		return (127);
 	}
 	envp = format_env(*envs);

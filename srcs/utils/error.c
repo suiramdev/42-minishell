@@ -39,3 +39,16 @@ void	error_heredoc(char *delimiter)
 	ft_putstr_fd(delimiter, STDERR_FILENO);
 	ft_putstr_fd("')\n", STDERR_FILENO);
 }
+
+/// @brief Print an error message to the standard error related
+/// a wrong numerical argument.
+/// @param name The name of the command that was executed
+/// @param arg The argument that was wrong
+void	error_numerical_arg(char *name, char *arg)
+{
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(name, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+}

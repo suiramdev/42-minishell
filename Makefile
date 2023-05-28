@@ -30,38 +30,39 @@ NAME		:= minishell
 # LDFLAGS		linker flags
 # LDLIBS		libraries name
 
-LIBS		:= ft							\
+LIBS		:= ft						\
 			   readline
 LIBS_TARGET	:= libs/libft/libft.a
 
-INCS		:= includes						\
+INCS		:= includes					\
 			   libs/libft
 
 SRCS_DIR	:= srcs
-SRCS		:= main.c						\
+SRCS		:= main.c					\
 			   builtins/cd.c			\
 			   builtins/echo.c			\
 			   builtins/env.c			\
 			   builtins/exit.c			\
 			   builtins/export.c		\
 			   builtins/pwd.c			\
-			   builtins/unset.c		\
+			   builtins/unset.c			\
 			   types/command.c			\
 			   types/env.c				\
 			   types/token.c			\
 			   utils/exec/exec.c		\
 			   utils/exec/pipeline.c	\
-			   utils/exec/process.c	\
+			   utils/exec/process.c		\
 			   utils/exec/redirs.c		\
-			   utils/parse/errors.c	\
+			   utils/parse/errors.c		\
 			   utils/parse/free.c	    \
 			   utils/parse/str.c	    \
 			   utils/parse/trim.c	    \
 			   utils/env.c			    \
 			   utils/error.c		    \
-			   utils/path.c		    \
+			   utils/path.c				\
 			   utils/pipes.c		    \
-			   utils/signal.c
+			   utils/signal.c			\
+			   utils/token.c
 
 SRCS		:= $(SRCS:%=$(SRCS_DIR)/%)
 
