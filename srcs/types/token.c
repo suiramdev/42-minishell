@@ -6,21 +6,11 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:31:08 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/28 18:46:40 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/28 19:43:39 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/// @brief Loop over the line, skipping a specific character.
-/// @param str Input string to parse.
-/// @param c Character to skip.
-/// @param i Index for iteration.
-static void	skip_char(char *str, char c, size_t *i)
-{
-	while (str[*i] && str[*i] == c)
-		(*i)++;
-}
 
 /// @brief Iterates over line to find the next token.
 /// @param line Input string to parse.
@@ -29,6 +19,8 @@ static void	skip_char(char *str, char c, size_t *i)
 /// @return Returns true on successful parsing, false on encountering an error.
 static bool	loop_get_next_token(char *line, int *quote, size_t *i)
 {
+	char	c;
+
 	while (line[*i] && !is_space(line[*i]))
 	{
 		if (line[*i] == '\'' || line[*i] == '"')
@@ -39,7 +31,9 @@ static bool	loop_get_next_token(char *line, int *quote, size_t *i)
 		}
 		if (line[*i] == '>' || line[*i] == '<' || line[*i] == '|')
 		{
-			skip_char(line, line[*i], i);
+			c =	line[*i];
+			while (line[*i] && line[*i] == c)
+				(*i)++;
 			return (true);
 		}
 		(*i)++;
