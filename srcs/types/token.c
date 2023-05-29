@@ -150,5 +150,6 @@ char	**tokenize(char *line, t_env *envs)
 	tokens[j] = NULL;
 	if (!handle_unexpected(tokens))
 		return (free_tokens(tokens), NULL);
+	set_env(&envs, "_", ft_strdup(tokens[j - 1]));
 	return (tokens);
 }
