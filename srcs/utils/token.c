@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 16:50:49 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 13:59:43 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/29 15:38:58 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,23 @@ int	check_end_by_quote(char *line, int i)
 		i--;
 	if (line[i] == '"' || line[i] == '\'')
 		return (1);
+	return (0);
+}
+
+int	isinquote(char *token, size_t *i)
+{
+	size_t	j;
+
+	j = 0;
+	while (j < (*i))
+	{
+		if (token[j] == '"')
+		{
+			handle_quotes(token, &j);
+			if (j > (*i))
+				return (1);
+		}
+		j++;
+	}
 	return (0);
 }
