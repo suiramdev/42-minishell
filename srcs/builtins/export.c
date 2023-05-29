@@ -22,6 +22,16 @@ void	error_identifier(char *identifier)
 	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 }
 
+static char	*trim(char *str)
+{
+	size_t	i;
+
+	i = ft_strlen(str) - 1;
+	while (i > 0 && is_space(str[i]))
+		i--;
+	return (ft_substr(str, 0, i + 1));
+}
+
 /// @brief Execute the export builtin command
 /// @param cmd The command to execute
 /// @param envs The environment variables
@@ -47,7 +57,7 @@ int	builtin_export(t_cmd *cmd, t_env **envs)
 		if (cmd->args[i][j])
 		{
 			cmd->args[i][j] = '\0';
-			if (!set_env(envs, cmd->args[i], ft_strdup(&cmd->args[i][j + 1])))
+			if (!set_env(envs, cmd->args[i], trim(&cmd->args[i][j + 1])))
 				return (EXIT_FAILURE);
 		}
 		i++;
