@@ -45,7 +45,7 @@ char	*join_path(char *s1, char *s2)
 /// @param file The file name to resolve
 /// @param envs The environment variables
 /// @return The resolved path, or NULL if an error occured
-char	*resolve_path(char *file, t_env *envs)
+char	*resolve_path(char *file, t_env *envs, int perms)
 {
 	t_env	*path;
 	char	**paths;
@@ -54,7 +54,7 @@ char	*resolve_path(char *file, t_env *envs)
 
 	if (!file || !file[0])
 		return (NULL);
-	if (access(file, F_OK) >= 0)
+	if (access(file, perms) >= 0)
 		return (ft_strdup(file));
 	path = get_env(envs, "PATH");
 	if (!path)
@@ -64,7 +64,7 @@ char	*resolve_path(char *file, t_env *envs)
 	while (paths[i])
 	{
 		output = join_path(paths[i], file);
-		if (access(output, F_OK) >= 0)
+		if (access(output, perms) >= 0)
 			break ;
 		free(output);
 		output = NULL;

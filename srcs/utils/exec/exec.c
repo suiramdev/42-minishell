@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "utils.h"
 
 /// @brief Executes a builtin command
 /// @param cmd The command to execute
@@ -46,16 +45,17 @@ int	exec_builtin(t_cmd *cmd, t_env **envs)
 /// @return EXIT_SUCCESS, EXIT_FAILURE, or the exit code of the command
 int	exec_relative(t_cmd *cmd, t_env **envs)
 {
+	struct stat sb;
 	char	*path;
 	char	**envp;
 	size_t	i;
 
-	path = resolve_path(cmd->name, *envs);
+	path = resolve_path(cmd->name, *envs, F_OK);
 	if (!path)
-	{
-		error(cmd->name, "command not found");
-		return (127);
-	}
+		return (error(cmd->name, "command not found"), 127);
+	lstat(path, &sb);
+	if (S_ISDIR(sb.st_mode))
+		return (error(path, "Is a directory"), 126);
 	envp = format_env(*envs);
 	execve(path, cmd->args, envp);
 	free(path);

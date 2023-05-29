@@ -64,7 +64,7 @@ void	error_invalid_identifier(char *name, char *arg);
 
 // utils/path.c
 char	*join_path(char *s1, char *s2);
-char	*resolve_path(char *file, t_env *envs);
+char	*resolve_path(char *file, t_env *envs, int perms);
 
 // utils/pipes.c
 bool	has_pipes(char *str);
