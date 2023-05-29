@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 16:00:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 16:02:57 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/29 17:48:08 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,9 @@ static char	*replace_env_var_ext(char *token, int i,
 {
 	char	*key;
 	size_t	key_len;
+	size_t y;
 
+	y = 0;
 	key_len = 1;
 	while (token[i + key_len] && !special_char(token[i + key_len]))
 		key_len++;
@@ -58,8 +60,14 @@ static char	*replace_env_var_ext(char *token, int i,
 	key = ft_substr(token, i + 1, key_len - 1);
 	token = replace_env_var2(token, key_len, get_env(envs, key), i);
 	free(key);
-	if (ft_strchr(token, ' '))
-		*split_token = true;
+	while (token[y] && !isspace(token[y]))
+		y++;
+	if (token[y] && isspace(token[y]))
+	{
+		while (token[++y])
+			if (!isspace(token[y]))
+				*split_token = true;
+	}
 	return (token);
 }
 
@@ -104,7 +112,10 @@ char	*replace_env_var(t_env *envs, char *token, bool *split_token)
 		if (!quote && (token[i] == '\'' || token[i] == '"'))
 			quote = token[i++];
 		else if (token[i] == quote)
+		{
 			quote = 0;
+			i++;
+		}
 		else if (token[i] == '$' && quote != '\'')
 		{
 			if (!replace_env_var_ext2(&token, &i, envs, split_token))
