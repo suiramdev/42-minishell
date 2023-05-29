@@ -6,13 +6,11 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/27 15:39:19 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/29 14:03:53 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	g_force_exit;
 
 /// @brief Initialize the environment variables from the envp array
 /// @param envp The environment variables array
