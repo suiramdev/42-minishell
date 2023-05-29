@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:36:16 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 02:00:35 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/29 13:57:44 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,5 @@ void	cmd_signal(int signal)
 		rl_replace_line("", 0);
 	}
 	if (signal == SIGQUIT)
-		printf("Quit\n");
+		ft_putendl_fd("Quit", STDERR_FILENO);
 }

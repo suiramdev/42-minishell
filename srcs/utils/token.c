@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 16:50:49 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/28 18:23:10 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/29 13:59:43 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/// @brief Check if a command token string contains any special characters.
+/// @param c The character to check.
+/// @return 1 if the character is special, 0 otherwise.
+bool	special_char(char c)
+{
+	return (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+			|| (c >= '0' && c <= '9') || (c == '_')));
+}
 
 char	**token_split(char **tokens, size_t *i, bool *split_token, int k)
 {
@@ -33,4 +42,14 @@ char	**token_split(char **tokens, size_t *i, bool *split_token, int k)
 	(*i)++;
 	*split_token = false;
 	return (new_tokens);
+}
+
+int	check_end_by_quote(char *line, int i)
+{
+	i--;
+	while (i > 0 && is_space(line[i]))
+		i--;
+	if (line[i] == '"' || line[i] == '\'')
+		return (1);
+	return (0);
 }

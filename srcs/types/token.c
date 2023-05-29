@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:31:08 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 13:14:28 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/29 13:50:17 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static bool	loop_get_next_token(char *line, int *quote, size_t *i)
 		}
 		else if (line[*i] == '>' || line[*i] == '<' || line[*i] == '|')
 		{
-			c =	line[*i];
+			c = line[*i];
 			while (line[*i] && line[*i] == c)
 				(*i)++;
 			return (true);
@@ -99,15 +99,6 @@ static int	loop_count_tokens(char *line, size_t *i, size_t *count)
 	return (1);
 }
 
-int	avantilyaunquote(char *line, int i)
-{
-	while (i > 0 && is_space(line[--i]));
-
-	if (line[i] == '"' || line[i] == '\'')
-		return (1);
-	return (0);
-}
-
 /// @brief Count the number of tokens in the input line
 /// @param line The input line to count tokens in
 /// @return The number of tokens in the line
@@ -125,7 +116,8 @@ static size_t	count_tokens(char *line)
 			return (0);
 	}
 	if ((line[i] == '\0' && !is_space(line[i - 1]) && line[i - 1] != '<'
-		&& line[i - 1] != '>') || (avantilyaunquote(line, i) && count == 0))
+			&& line[i - 1] != '>')
+		|| (check_end_by_quote(line, i) && count == 0))
 		count++;
 	return (count);
 }

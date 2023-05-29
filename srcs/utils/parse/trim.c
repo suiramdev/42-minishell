@@ -6,20 +6,11 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 16:00:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 13:14:46 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/29 14:00:31 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/// @brief Check if a command token string contains any special characters.
-/// @param c The character to check.
-/// @return 1 if the character is special, 0 otherwise.
-bool	special_char(char c)
-{
-	return (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-			|| (c >= '0' && c <= '9') || (c == '_')));
-}
 
 /// @brief Perform the second part of environment variable
 /// replacement in a token string.
@@ -72,6 +63,23 @@ static char	*replace_env_var_ext(char *token, int i,
 	return (token);
 }
 
+static int	replace_env_var_ext2(char *token, size_t *i,
+	t_env *envs, bool *split_token)
+{
+	if (token[(*i)] == '$' && token[(*i) + 1] && (token[(*i) + 1] == '?'))
+		token = replace_env_var2(token, 2, get_env(envs, "?"), *i);
+	else if (token[(*i) + 1] && (!special_char(token[(*i) + 1])
+			|| token[(*i) + 1] == '"' || token[(*i) + 1] == '\''))
+		token = replace_env_var_ext(token, (*i), envs, split_token);
+	else
+	{
+		(*i)++;
+		return (0);
+	}
+	(*i) = 0;
+	return (1);
+}
+
 /// @brief Replace environment variables in a token string.
 /// @param envs The environment variable list.
 /// @param token The token string.
@@ -91,17 +99,8 @@ char	*replace_env_var(t_env *envs, char *token, bool *split_token)
 			quote = 0;
 		else if (token[i] == '$' && quote != '\'')
 		{
-			if (token[i] == '$' && token[i + 1] && (token[i + 1] == '?'))
-				token = replace_env_var2(token, 2, get_env(envs, "?"), i);
-			else if (token[i + 1] && (!special_char(token[i + 1])
-					|| token[i + 1] == '"' || token[i + 1] == '\''))
-				token = replace_env_var_ext(token, i, envs, split_token);
-			else
-			{
-				i++;
+			if (!replace_env_var_ext2(token, &i, envs, split_token))
 				continue ;
-			}
-			i = 0;
 		}
 		else
 			i++;
