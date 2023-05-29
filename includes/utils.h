@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 16:46:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 14:00:16 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/29 15:37:34 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,6 @@ void	cmd_signal(int signal);
 char	**token_split(char **tokens, size_t *i, bool *split_token, int k);
 int		check_end_by_quote(char *line, int i);
 bool	special_char(char c);
+int		isinquote(char *token, size_t *i);
 
 #endif

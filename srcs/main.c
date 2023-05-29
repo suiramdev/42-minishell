@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 14:33:11 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/29 15:00:05 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,11 @@ static int	program(t_cmd **cmds, t_env **envs)
 		{
 			int k = 0;
 			for (t_cmd *head = *cmds; head; head = head->next)
+			{
 				for (int i = 0; head->args[i]; i++)
 					printf("node[%d]: args[%d]: %s\n", k, i, head->args[i]);
+				k++;
+			}
 			exit_status = exec_cmds(*cmds, envs);
 			if (is_child_process(*cmds))
 				return (free_cmds(*cmds), exit_status);
