@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 00:36:04 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/27 16:28:46 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/29 16:35:10 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ static bool	check_tokens(char **tokens)
 				return (error_unexpected(tokens[i], 1
 						+ (tokens[i][0] == '<' || tokens[i][0] == '>')), false);
 			if (tokens[i][0] == '|' && (i == 0 || !tokens[i - 1]
-					|| tokens[i - 1][0] == '|' ))
+					|| tokens[i - 1][0] == '|' || tokens[i - 1][0] == '>'
+					|| tokens[i - 1][0] == '<'))
 				return (error_unexpected("|", 1), false);
 			if ((tokens[i][0] == '<' || tokens[i][0] == '>') && !tokens[i + 1])
 				return (error_unexpected("newline", 7), false);
