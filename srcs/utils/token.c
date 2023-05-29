@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 16:50:49 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 15:56:31 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/29 17:56:52 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,12 @@ char	**token_split(char **tokens, size_t *i, bool *split_token, int k)
 	new_tokens = (char **)malloc(sizeof(char *) * (k + 2));
 	if (!new_tokens)
 		return (0);
-	j = -1;
-	while (j++ < (*i) - 1)
+	j = 0;
+	while (j < (*i) - 1)
+	{
 		new_tokens[j] = tokens[j];
+		j++;
+	}
 	k = 0;
 	while (tokens[(*i) - 1][k] != ' ')
 		k++;
