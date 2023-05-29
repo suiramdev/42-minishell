@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 13:11:58 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/27 15:39:19 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static t_cmd	*init_cmds(char **tokens)
 /// @brief Read user input, tokenize it and initialize the commands linked list
 /// @param envs The environment variables linked list
 /// @return The commands linked list, or NULL if any error occured
-static int	readentry(t_env *envs, t_cmd **cmds)
+static int	readentry(t_env **envs, t_cmd **cmds)
 {
 	char	*line;
 	char	**tokens;
@@ -80,13 +80,12 @@ static int	readentry(t_env *envs, t_cmd **cmds)
 	add_history(line);
 	if (line[0] == '\0')
 		return (free(line), 0);
-	tokens = tokenize(line, envs);
+	tokens = tokenize(line, *envs);
 	free(line);
 	if (!tokens)
 		return (0);
-	for (int k = 0; tokens[k]; k++)
-		printf("token[%d]: %s\n", k, tokens[k]);
 	*cmds = init_cmds(tokens);
+	set_env(envs, "_", ft_strdup(last_cmd_arg(*cmds)));
 	free_tokens(tokens);
 	return (1);
 }
@@ -104,7 +103,7 @@ static int	program(t_cmd **cmds, t_env **envs)
 	{
 		signal(SIGINT, &main_signal);
 		signal(SIGQUIT, SIG_IGN);
-		res = readentry(*envs, cmds);
+		res = readentry(envs, cmds);
 		if (res == 2)
 			break ;
 		else if (res == 0)

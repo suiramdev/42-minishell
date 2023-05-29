@@ -101,7 +101,7 @@ static int	loop_count_tokens(char *line, size_t *i, size_t *count)
 
 int	avantilyaunquote(char *line, int i)
 {
-	while (i > 0 && isspace(line[--i]));
+	while (i > 0 && is_space(line[--i]));
 
 	if (line[i] == '"' || line[i] == '\'')
 		return (1);
@@ -160,6 +160,5 @@ char	**tokenize(char *line, t_env *envs)
 	tokens[j] = NULL;
 	if (!handle_unexpected(tokens))
 		return (free_tokens(tokens), NULL);
-	set_env(&envs, "_", ft_strdup(tokens[j - 1]));
 	return (tokens);
 }

@@ -47,6 +47,7 @@ typedef struct s_cmd
 
 void	add_cmd(t_cmd **cmds, t_cmd *new);
 t_cmd	*new_cmd(char **tokens, size_t start, size_t end);
+char	*last_cmd_arg(t_cmd *cmds);
 void	free_cmds(t_cmd *cmds);
 
 #endif

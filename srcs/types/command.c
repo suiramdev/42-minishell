@@ -93,6 +93,20 @@ void	add_cmd(t_cmd **cmds, t_cmd *new)
 	last->next = new;
 }
 
+/// @brief Get the last argument of the last command
+/// @param cmds The commands linked list
+char	*last_cmd_arg(t_cmd *cmds)
+{
+	size_t	i;
+
+	while (cmds->next)
+		cmds = cmds->next;
+	i = 0;
+	while (cmds->args[i])
+		i++;
+	return (cmds->args[i - 1]);
+}
+
 /// @brief Free the commands linked list
 /// @param cmds The commands linked list
 void	free_cmds(t_cmd *cmds)
