@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 16:00:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/28 18:26:12 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/29 13:14:46 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ char	*replace_env_var(t_env *envs, char *token, bool *split_token)
 			quote = token[i++];
 		else if (token[i] == quote)
 			quote = 0;
-		if (token[i] == '$' && quote != '\'')
+		else if (token[i] == '$' && quote != '\'')
 		{
 			if (token[i] == '$' && token[i + 1] && (token[i + 1] == '?'))
 				token = replace_env_var2(token, 2, get_env(envs, "?"), i);
