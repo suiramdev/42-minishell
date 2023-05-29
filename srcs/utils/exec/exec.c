@@ -74,13 +74,13 @@ int	exec_cmds(t_cmd *cmds, t_env **envs)
 	int		backups[2];
 	int		exit_status;
 
+	signal(SIGINT, &cmd_signal);
+	signal(SIGQUIT, &cmd_signal);
 	if (cmds->next)
 		return (pipeline(cmds, envs));
 	backups[0] = dup(STDIN_FILENO);
 	backups[1] = dup(STDOUT_FILENO);
 	redirs(cmds);
-	signal(SIGINT, &cmd_signal);
-	signal(SIGQUIT, &cmd_signal);
 	exit_status = exec_builtin(cmds, envs);
 	dup2(backups[0], STDIN_FILENO);
 	dup2(backups[1], STDOUT_FILENO);
