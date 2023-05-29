@@ -52,7 +52,7 @@ char	*resolve_path(char *file, t_env *envs)
 	size_t	i;
 	char	*output;
 
-	if (!file)
+	if (!file || !file[0])
 		return (NULL);
 	if (access(file, F_OK) >= 0)
 		return (ft_strdup(file));
