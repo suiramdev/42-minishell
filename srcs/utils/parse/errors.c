@@ -47,7 +47,7 @@ static bool	check_tokens(char **tokens)
 					|| tokens[i - 1][0] == '|' ))
 				return (error_unexpected("|", 1), false);
 			if ((tokens[i][0] == '<' || tokens[i][0] == '>') && !tokens[i + 1])
-				return (error_unexpected("newline", 1), false);
+				return (error_unexpected("newline", 7), false);
 		}
 		i++;
 	}
