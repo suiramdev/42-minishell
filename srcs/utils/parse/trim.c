@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 16:00:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 14:00:31 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/29 14:39:57 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,15 @@ static char	*replace_env_var_ext(char *token, int i,
 	return (token);
 }
 
-static int	replace_env_var_ext2(char *token, size_t *i,
+static int	replace_env_var_ext2(char **token, size_t *i,
 	t_env *envs, bool *split_token)
 {
-	if (token[(*i)] == '$' && token[(*i) + 1] && (token[(*i) + 1] == '?'))
-		token = replace_env_var2(token, 2, get_env(envs, "?"), *i);
-	else if (token[(*i) + 1] && (!special_char(token[(*i) + 1])
-			|| token[(*i) + 1] == '"' || token[(*i) + 1] == '\''))
-		token = replace_env_var_ext(token, (*i), envs, split_token);
+	if ((*token)[(*i)] == '$' && (*token)[(*i) + 1]
+		&& ((*token)[(*i) + 1] == '?'))
+		(*token) = replace_env_var2((*token), 2, get_env(envs, "?"), *i);
+	else if ((*token)[(*i) + 1] && (!special_char((*token)[(*i) + 1])
+			|| (*token)[(*i) + 1] == '"' || (*token)[(*i) + 1] == '\''))
+		(*token) = replace_env_var_ext((*token), (*i), envs, split_token);
 	else
 	{
 		(*i)++;
@@ -99,7 +100,7 @@ char	*replace_env_var(t_env *envs, char *token, bool *split_token)
 			quote = 0;
 		else if (token[i] == '$' && quote != '\'')
 		{
-			if (!replace_env_var_ext2(token, &i, envs, split_token))
+			if (!replace_env_var_ext2(&token, &i, envs, split_token))
 				continue ;
 		}
 		else

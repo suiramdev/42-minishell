@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 14:37:48 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 14:03:57 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/29 14:26:57 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,6 @@
 # include <errno.h>
 # include <string.h>
 
-int	g_force_exit;
+extern int	g_force_exit;
 
 #endif

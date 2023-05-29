@@ -6,11 +6,13 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 14:03:53 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/29 14:33:11 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_force_exit;
 
 /// @brief Initialize the environment variables from the envp array
 /// @param envp The environment variables array
@@ -82,6 +84,8 @@ static int	readentry(t_env **envs, t_cmd **cmds)
 	free(line);
 	if (!tokens)
 		return (0);
+	for (int i = 0; tokens[i]; i++)
+		printf("tokens[%d]: %s\n", i, tokens[i]);
 	*cmds = init_cmds(tokens);
 	set_env(envs, "_", ft_strdup(last_cmd_arg(*cmds)));
 	free_tokens(tokens);
@@ -108,6 +112,10 @@ static int	program(t_cmd **cmds, t_env **envs)
 			continue ;
 		if (*cmds)
 		{
+			int k = 0;
+			for (t_cmd *head = *cmds; head; head = head->next)
+				for (int i = 0; head->args[i]; i++)
+					printf("node[%d]: args[%d]: %s\n", k, i, head->args[i]);
 			exit_status = exec_cmds(*cmds, envs);
 			if (is_child_process(*cmds))
 				return (free_cmds(*cmds), exit_status);
