@@ -20,6 +20,7 @@ char	**format_env(t_env *envs)
 {
 	size_t	i;
 	t_env	*tmp;
+	char	*key;
 	char	**output;
 
 	i = 0;
@@ -36,8 +37,9 @@ char	**format_env(t_env *envs)
 	tmp = envs;
 	while (tmp)
 	{
-		output[i] = ft_strjoin(tmp->key, "=");
-		output[i] = ft_strjoin(output[i], tmp->value);
+		key = ft_strjoin(tmp->key, "=");
+		output[i] = ft_strjoin(key, tmp->value);
+		free(key);
 		i++;
 		tmp = tmp->next;
 	}
