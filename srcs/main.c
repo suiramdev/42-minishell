@@ -87,7 +87,6 @@ static int	readentry(t_env **envs, t_cmd **cmds)
 	for (int i = 0; tokens[i]; i++)
 		printf("tokens[%d]: %s\n", i, tokens[i]);
 	*cmds = init_cmds(tokens);
-	set_env(envs, "_", ft_strdup(last_cmd_arg(*cmds)));
 	free_tokens(tokens);
 	return (1);
 }
@@ -112,6 +111,7 @@ static int	program(t_cmd **cmds, t_env **envs)
 			continue ;
 		if (*cmds)
 		{
+			set_env(envs, "_", ft_strdup(last_cmd_arg(*cmds)));
 			int k = 0;
 			for (t_cmd *head = *cmds; head; head = head->next)
 			{
