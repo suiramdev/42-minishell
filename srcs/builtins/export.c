@@ -37,7 +37,8 @@ int	builtin_export(t_cmd *cmd, t_env **envs)
 		j = 0;
 		while (cmd->args[i][j] && cmd->args[i][j] != '=')
 		{
-			if (special_char(cmd->args[i][j]))
+			if ((cmd->args[i][0] >= '0' && cmd->args[i][0] <= '9')
+				|| special_char(cmd->args[i][j]))
 				return (error_identifier(cmd->args[i]), EXIT_FAILURE);
 			j++;
 		}

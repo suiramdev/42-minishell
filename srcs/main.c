@@ -68,7 +68,7 @@ static t_cmd	*init_cmds(char **tokens)
 
 /// @brief Read user input, tokenize it and initialize the commands linked list
 /// @param envs The environment variables linked list
-/// @return The commands linked list, or NULL if any error occured
+/// @param cmds The commands linked list
 static int	readentry(t_env **envs, t_cmd **cmds)
 {
 	char	*line;
@@ -83,7 +83,10 @@ static int	readentry(t_env **envs, t_cmd **cmds)
 	tokens = tokenize(line, *envs);
 	free(line);
 	if (!tokens)
+	{
+		set_env(envs, "?", ft_strdup("2"));
 		return (0);
+	}
 	*cmds = init_cmds(tokens);
 	free_tokens(tokens);
 	return (1);
