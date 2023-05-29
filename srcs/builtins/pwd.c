@@ -21,11 +21,6 @@ int	builtin_pwd(t_cmd *cmd, t_env **envs)
 	char	path[1024];
 
 	(void)envs;
-	if (cmd->args && cmd->args[1])
-	{
-		ft_putstr_fd("pwd: too many arguments\n", STDERR_FILENO);
-		return (EXIT_FAILURE);
-	}
 	if (!getcwd(path, 1024))
 	{
 		perror("pwd");
