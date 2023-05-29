@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 00:36:04 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 16:35:10 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/29 17:09:53 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,21 +27,14 @@ static void	error_unexpected(char *token, size_t len)
 	free(str);
 }
 
-static bool	check_tokens(char **tokens)
+static bool	check_tokens(char **tokens, int i)
 {
-	size_t	i;
-	size_t	j;
-
-	i = 0;
 	while (tokens[i])
 	{
 		if (tokens[i][0] == '|' || tokens[i][0] == '<' || tokens[i][0] == '>')
 		{
-			j = 0;
-			while (tokens[i][j])
-				j++;
-			if (j > 2)
-				return (error_unexpected(tokens[i], 1
+			if (tokens[i + 1] && tokens[i][0] == tokens[i + 1][0])
+				return (error_unexpected(tokens[i + 1], 1
 						+ (tokens[i][0] == '<' || tokens[i][0] == '>')), false);
 			if (tokens[i][0] == '|' && (i == 0 || !tokens[i - 1]
 					|| tokens[i - 1][0] == '|' || tokens[i - 1][0] == '>'
@@ -49,6 +42,9 @@ static bool	check_tokens(char **tokens)
 				return (error_unexpected("|", 1), false);
 			if ((tokens[i][0] == '<' || tokens[i][0] == '>') && !tokens[i + 1])
 				return (error_unexpected("newline", 7), false);
+			if ((tokens[i][0] == '<' || tokens[i][0] == '>') && tokens[i + 1]
+				&& (tokens[i + 1][0] == '<' || tokens[i + 1][0] == '>') )
+				return (error_unexpected(tokens[i + 1], 1), false);
 		}
 		i++;
 	}
@@ -78,7 +74,7 @@ static bool	check_newline(char **tokens)
 /// @return true if the token string is valid, false otherwise.
 bool	handle_unexpected(char **tokens)
 {
-	if (!check_tokens(tokens))
+	if (!check_tokens(tokens, 0))
 		return (false);
 	if (!check_newline(tokens))
 		return (false);

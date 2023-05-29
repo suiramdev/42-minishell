@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:31:08 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 14:40:13 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/29 17:03:30 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@
 /// @return Returns true on successful parsing, false on encountering an error.
 static bool	loop_get_next_token(char *line, int *quote, size_t *i)
 {
-	char	c;
-
 	while (line[*i] && !is_space(line[*i]))
 	{
 		if (line[*i] == '\'' || line[*i] == '"')
@@ -28,14 +26,20 @@ static bool	loop_get_next_token(char *line, int *quote, size_t *i)
 			*quote = 1;
 			if (!handle_quotes(line, i))
 				return (error("unclosed quotes ", 0), false);
+			if (line[(*i)] == '|')
+				return (true);
 		}
-		else if (line[*i] == '>' || line[*i] == '<' || line[*i] == '|')
+		else if ((line[*i] == '<' || line[*i] == '>'))
 		{
-			c = line[*i];
-			while (line[*i] && line[*i] == c)
+			if ((*i) > 0 && !is_space(line[(*i) - 1]))
+				break ;
+			(*i)++;
+			if (line[(*i)] == line[*i - 1])
 				(*i)++;
-			return (true);
+			break ;
 		}
+		else if (line[*i] == ' ' || line[*i] == '|' || line[(*i) + 1] == '|')
+			return ((*i)++, true);
 		else
 			(*i)++;
 	}
@@ -150,6 +154,8 @@ char	**tokenize(char *line, t_env *envs)
 			tokens = token_split(tokens, &j, &split_token, tokens_count);
 	}
 	tokens[j] = NULL;
+	for (int i = 0; tokens[i]; i++)
+		printf("tokens[%d]: %s\n", i, tokens[i]);
 	if (!handle_unexpected(tokens))
 		return (free_tokens(tokens), NULL);
 	return (tokens);

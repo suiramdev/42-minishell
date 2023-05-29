@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 15:00:05 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/29 17:03:35 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,6 @@ static int	readentry(t_env **envs, t_cmd **cmds)
 	free(line);
 	if (!tokens)
 		return (0);
-	for (int i = 0; tokens[i]; i++)
-		printf("tokens[%d]: %s\n", i, tokens[i]);
 	*cmds = init_cmds(tokens);
 	free_tokens(tokens);
 	return (1);
