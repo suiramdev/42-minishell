@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 15:58:49 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/28 19:29:12 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/29 18:57:33 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	builtin_cd(t_cmd *cmd, t_env **envs)
 	size_t	i;
 	size_t	count;
 	char	*path;
+	char	current[1024];
 
 	i = 1;
 	count = 0;
@@ -59,5 +60,7 @@ int	builtin_cd(t_cmd *cmd, t_env **envs)
 		return (EXIT_FAILURE);
 	if (chdir(path) == -1)
 		return (error_invalid(path), EXIT_FAILURE);
+	if (getcwd(current, 1024))
+		set_env(envs, "PWD", ft_strdup(current));
 	return (EXIT_SUCCESS);
 }
