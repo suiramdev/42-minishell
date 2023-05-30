@@ -27,6 +27,29 @@ static void	error_invalid(char *path)
 		ft_putstr_fd(": Unknown error\n", STDERR_FILENO);
 }
 
+static char	*arg_path(t_cmd *cmd)
+{
+	size_t	i;
+	size_t	count;
+	char	*path;
+
+	i = 1;
+	count = 0;
+	path = NULL;
+	while (cmd->args[i])
+	{
+		if (cmd->args[i][0])
+		{
+			path = cmd->args[i];
+			count++;
+		}
+		i++;
+	}
+	if (count > 1)
+		return (error("cd", "too many arguments"), NULL);
+	return (path);
+}
+
 static char	*home_path(t_env **envs)
 {
 	t_env	*env;
@@ -43,31 +66,20 @@ static char	*home_path(t_env **envs)
 /// @return EXIT_SUCCESS or EXIT_FAILURE if an error occured
 int	builtin_cd(t_cmd *cmd, t_env **envs)
 {
-	size_t		i;
-	size_t		count;
 	char		*path;
 	char		current[1024];
 
-	i = 1;
-	count = 0;
-	while (cmd->args[i])
-	{
-		if (cmd->args[i][0])
-		{
-			path = cmd->args[i];
-			count++;
-		}
-		i++;
-	}
-	if (count > 1)
-		return (error("cd", "too many arguments"), EXIT_FAILURE);
-	else if (count == 0)
+	path = arg_path(cmd);
+	if (!path)
 		path = home_path(envs);
 	if (!path)
 		return (EXIT_FAILURE);
-	if (chdir(path) == -1)
-		return (error_invalid(path), EXIT_FAILURE);
-	if (getcwd(current, 1024))
-		set_env(envs, "PWD", ft_strdup(current));
+	if (path[0])
+	{
+		if (chdir(path) == -1)
+			return (error_invalid(path), EXIT_FAILURE);
+		if (getcwd(current, 1024))
+			set_env(envs, "PWD", ft_strdup(current));
+	}
 	return (EXIT_SUCCESS);
 }
