@@ -6,7 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:01:48 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/08 16:26:18 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/30 14:50:31 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,5 @@ int	builtin_pwd(t_cmd *cmd, t_env **envs)
 		perror("pwd");
 		return (EXIT_FAILURE);
 	}
-	printf("%s\n", path);
 	return (EXIT_SUCCESS);
 }

@@ -5,8 +5,9 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/17 00:46:34 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 02:02:26 by mnouchet         ###   ########.fr       */ /*                                                                            */
+/*   Created: 2023/05/30 14:48:57 by mnouchet          #+#    #+#             */
+/*   Updated: 2023/05/30 14:49:06 by mnouchet         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
@@ -46,7 +47,7 @@ static int	handle_errors(char *path)
 	if (S_ISDIR(sb.st_mode))
 		return (error(path, "Is a directory"), 126);
 	else if (access(path, X_OK) != 0)
-			return (error(path, "Permission denied"), 126);
+		return (error(path, "Permission denied"), 126);
 	return (EXIT_SUCCESS);
 }
 

@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:31:08 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 17:03:30 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/30 14:50:18 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,8 +154,6 @@ char	**tokenize(char *line, t_env *envs)
 			tokens = token_split(tokens, &j, &split_token, tokens_count);
 	}
 	tokens[j] = NULL;
-	for (int i = 0; tokens[i]; i++)
-		printf("tokens[%d]: %s\n", i, tokens[i]);
 	if (!handle_unexpected(tokens))
 		return (free_tokens(tokens), NULL);
 	return (tokens);

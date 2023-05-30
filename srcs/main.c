@@ -116,13 +116,6 @@ static int	program(t_cmd **cmds, t_env **envs)
 		if (*cmds)
 		{
 			set_env(envs, "_", ft_strdup(last_cmd_arg(*cmds)));
-			int k = 0;
-			for (t_cmd *head = *cmds; head; head = head->next)
-			{
-				for (int i = 0; head->args[i]; i++)
-					printf("node[%d]: args[%d]: %s\n", k, i, head->args[i]);
-				k++;
-			}
 			exit_status = exec_cmds(*cmds, envs);
 			if (is_child_process(*cmds))
 				return (free_cmds(*cmds), exit_status);

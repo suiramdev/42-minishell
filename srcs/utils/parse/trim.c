@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 16:00:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 17:48:08 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/30 14:49:56 by mnouchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static char	*replace_env_var_ext(char *token, int i,
 {
 	char	*key;
 	size_t	key_len;
-	size_t y;
+	size_t	y;
 
 	y = 0;
 	key_len = 1;
@@ -77,7 +77,7 @@ static int	replace_env_var_ext2(char **token, size_t *i,
 	if ((*token)[(*i)] == '$' && (*token)[(*i) + 1]
 		&& ((*token)[(*i) + 1] == '?'))
 		(*token) = replace_env_var2((*token), 2, get_env(envs, "?"), *i);
-	else if ((*token)[(*i)] == '$' && isinquote(*token, i) 
+	else if ((*token)[(*i)] == '$' && isinquote(*token, i)
 				&& (*token)[(*i) + 1] && ((*token)[(*i) + 1] == '"'
 				|| (*token)[(*i) + 1] == '\''))
 	{

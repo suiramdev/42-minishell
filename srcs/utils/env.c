@@ -12,6 +12,21 @@
 
 #include "minishell.h"
 
+static size_t	count_envs(t_env *envs)
+{
+	size_t	i;
+	t_env	*tmp;
+
+	i = 0;
+	tmp = envs;
+	while (tmp)
+	{
+		i++;
+		tmp = tmp->next;
+	}
+	return (i);
+}
+
 /// @brief Format the list of environment variables to an array of strings
 /// ending with NULL
 /// @param envs The envs of the list of environment variables
@@ -23,13 +38,7 @@ char	**format_env(t_env *envs)
 	char	*key;
 	char	**output;
 
-	i = 0;
-	tmp = envs;
-	while (tmp)
-	{
-		i++;
-		tmp = tmp->next;
-	}
+	i = count_envs(envs);
 	output = malloc(sizeof(char *) * (i + 1));
 	if (!output)
 		return (NULL);
