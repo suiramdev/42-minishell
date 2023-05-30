@@ -14,10 +14,17 @@
 
 static void	error_invalid(char *path)
 {
+	struct stat	sb;
+
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd("cd: ", STDERR_FILENO);
 	ft_putstr_fd(path, STDERR_FILENO);
-	ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+	if (stat(path, &sb) == -1)
+		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+	else if (!S_ISDIR(sb.st_mode))
+		ft_putstr_fd(": Not a directory\n", STDERR_FILENO);
+	else
+		ft_putstr_fd(": Unknown error\n", STDERR_FILENO);
 }
 
 static char	*home_path(t_env **envs)
@@ -36,10 +43,10 @@ static char	*home_path(t_env **envs)
 /// @return EXIT_SUCCESS or EXIT_FAILURE if an error occured
 int	builtin_cd(t_cmd *cmd, t_env **envs)
 {
-	size_t	i;
-	size_t	count;
-	char	*path;
-	char	current[1024];
+	size_t		i;
+	size_t		count;
+	char		*path;
+	char		current[1024];
 
 	i = 1;
 	count = 0;
