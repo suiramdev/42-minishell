@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 16:46:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 15:37:34 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/30 14:28:47 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ bool	handle_quotes(char *line, size_t *i);
 void	increase_token_index(size_t *count, size_t *i);
 
 // utils/parse/trim.c
-char	*replace_env_var(t_env *envs, char *token, bool *split_token);
+char	*replace_env_var(t_env *envs, char *token, bool *split_token, char *tokenpre);
 char	*trim_token_quote(char **token);
 
 // utils/env.c

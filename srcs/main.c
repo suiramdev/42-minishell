@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 17:03:35 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/30 14:31:20 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static int	readentry(t_env **envs, t_cmd **cmds)
 	add_history(line);
 	if (line[0] == '\0')
 		return (free(line), 0);
-	tokens = tokenize(line, *envs);
+	tokens = tokenize(line, *envs, NULL);
 	free(line);
 	if (!tokens)
 	{

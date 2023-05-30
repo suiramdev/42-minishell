@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 16:31:23 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/22 15:36:10 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/30 14:31:38 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_env	*remove_env(t_env **envs, char *key);
 void	free_env(t_env *envs);
 
 // types/token.c
-char	**tokenize(char *line, t_env *envs);
+char	**tokenize(char *line, t_env *envs, char *pretoken);
 
 // types/cmd.c
 typedef struct s_cmd
