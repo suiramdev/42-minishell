@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:01:31 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 01:30:22 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/30 15:36:16 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ int	builtin_env(t_cmd *cmd, t_env **envs)
 	while (env)
 	{
 		if (env->value)
-			printf("%s=%s\n", env->key, env->value);
+		{
+			if (printf("%s=%s\n", env->key, env->value) < 0)
+				return (error_write("env"), EXIT_FAILURE);
+		}
 		env = env->next;
 	}
 	return (EXIT_SUCCESS);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:01:39 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/27 02:36:48 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/30 15:36:59 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,9 @@ int	builtin_exit(t_cmd *cmd, t_env **envs)
 	else
 		g_force_exit = 0;
 	if (!cmd->has_pipe)
-		printf("exit\n");
+	{
+		if (printf("exit\n") < 0)
+			return (error_write("exit"), EXIT_FAILURE);
+	}
 	return (g_force_exit);
 }

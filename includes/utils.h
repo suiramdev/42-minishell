@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 16:46:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/30 14:28:47 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/30 15:35:00 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ char	**format_env(t_env *envs);
 void	error(char *msg, char *more);
 void	error_heredoc(char *delimiter);
 void	error_invalid_identifier(char *name, char *arg);
+void	error_write(char *cmd);
 
 // utils/path.c
 char	*join_path(char *s1, char *s2);

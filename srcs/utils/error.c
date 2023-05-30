@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 15:27:26 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/27 00:55:45 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/30 15:37:41 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,12 @@ void	error_numerical_arg(char *name, char *arg)
 	ft_putstr_fd(": ", STDERR_FILENO);
 	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+}
+
+void	error_write(char *cmd)
+{
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putstr_fd(": write error: ", STDERR_FILENO);
+	ft_putstr_fd("No space left on device\n", STDERR_FILENO);
 }

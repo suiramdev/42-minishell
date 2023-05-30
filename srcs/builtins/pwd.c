@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:01:48 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/30 14:50:31 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/30 15:35:40 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,7 @@ int	builtin_pwd(t_cmd *cmd, t_env **envs)
 		perror("pwd");
 		return (EXIT_FAILURE);
 	}
+	if (printf("%s\n", path) < 0)
+		return (error_write("pwd"), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

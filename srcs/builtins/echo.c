@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 15:58:58 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/28 18:57:49 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/30 15:35:15 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,16 @@ int	builtin_echo(t_cmd *cmd, t_env **envs)
 	{
 		if (cmd->args[i][0])
 		{
-			printf("%s", cmd->args[i]);
+			if (printf("%s", cmd->args[i]) < 0)
+				return (error_write("echo"), EXIT_FAILURE);
 			if (cmd->args[i + 1])
-				printf(" ");
+				if (printf(" ") < 0)
+					return (error_write("echo"), EXIT_FAILURE);
 		}
 		i++;
 	}
 	if (!n_option)
-		printf("\n");
+		if (printf("\n") < 0)
+			return (error_write("echo"), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
