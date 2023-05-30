@@ -72,11 +72,19 @@ static bool	check_newline(char **tokens)
 /// @brief Handle unexpected characters in a token string.
 /// @param tokens The token string to check.
 /// @return true if the token string is valid, false otherwise.
-bool	handle_unexpected(char **tokens)
+bool	handle_unexpected(char ***tokens)
 {
-	if (!check_tokens(tokens, 0))
+	if (!check_tokens(*tokens, 0))
+	{
+		free_tokens(*tokens);
+		*tokens = NULL;
 		return (false);
-	if (!check_newline(tokens))
+	}
+	if (!check_newline(*tokens))
+	{
+		free_tokens(*tokens);
+		*tokens = NULL;
 		return (false);
+	}
 	return (true);
 }

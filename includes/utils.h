@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 16:46:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 15:37:34 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/30 14:28:47 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int		exec_relative(t_cmd *cmd, t_env **envs);
 int		exec_cmds(t_cmd *cmds, t_env **envs);
 
 // utils/parse/errors.c
-bool	handle_unexpected(char **tokens);
+bool	handle_unexpected(char ***tokens);
 
 // utils/parse/free.c
 void	free_tokens(char **tokens);
@@ -51,7 +51,8 @@ bool	handle_quotes(char *line, size_t *i);
 void	increase_token_index(size_t *count, size_t *i);
 
 // utils/parse/trim.c
-char	*replace_env_var(t_env *envs, char *token, bool *split_token);
+char	*replace_env_var(t_env *envs, char *token,
+			bool *split_token, char *tokenpre);
 char	*trim_token_quote(char **token);
 
 // utils/env.c

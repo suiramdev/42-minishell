@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:31:08 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/30 14:50:18 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/05/30 14:35:42 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static bool	loop_get_next_token(char *line, int *quote, size_t *i)
 				(*i)++;
 			break ;
 		}
-		else if (line[*i] == ' ' || line[*i] == '|' || line[(*i) + 1] == '|')
+		else if (is_space(line[*i]) || line[*i] == '|' || line[(*i) + 1] == '|')
 			return ((*i)++, true);
 		else
 			(*i)++;
@@ -51,7 +51,8 @@ static bool	loop_get_next_token(char *line, int *quote, size_t *i)
 /// @param envs The environment variables to replace by their values if 
 /// double quotes
 /// @return char* The next token
-static char	*get_next_token(char **line, t_env *envs, bool *split_token)
+static char	*get_next_token(char **line, t_env *envs,
+	bool *split_token, char *tokenpre)
 {
 	char	*token;
 	int		quote;
@@ -66,7 +67,7 @@ static char	*get_next_token(char **line, t_env *envs, bool *split_token)
 		return (NULL);
 	token = ft_substr(*line, 0, i);
 	if (ft_strchr(token, '$'))
-		token = replace_env_var(envs, token, split_token);
+		token = replace_env_var(envs, token, split_token, tokenpre);
 	if (quote)
 		token = trim_token_quote(&token);
 	skip_spaces(*line, &i);
@@ -83,16 +84,16 @@ static int	loop_count_tokens(char *line, size_t *i, size_t *count)
 	}
 	else if (line[(*i)] == '<' || line[(*i)] == '>')
 	{
-		if ((*i) > 0 && line[(*i) - 1] != ' ' && line != line + (*i))
+		if ((*i) > 0 && !is_space(line[(*i) - 1]) && line != line + (*i))
 			(*count)++;
 		increase_token_index(count, i);
 		if ((*i) > 0 && line[(*i) - 1] == line[(*i)])
 			(*i)++;
 		skip_spaces(line, i);
 	}
-	else if (line[(*i)] == ' ' || line[(*i)] == '|')
+	else if (is_space(line[(*i)]) || line[(*i)] == '|')
 	{
-		if (line[(*i)] == '|' && (*i) > 0 && line[(*i) - 1] != ' '
+		if (line[(*i)] == '|' && (*i) > 0 && !is_space(line[(*i) - 1])
 			&& line[(*i) - 1] != '<' && line[(*i) - 1] != '>' )
 			(*count)++;
 		increase_token_index(count, i);
@@ -130,7 +131,7 @@ static size_t	count_tokens(char *line)
 /// @param line The line to tokenize
 /// @param envs The environment variables to consider during tokenization
 /// @return An array of tokens
-char	**tokenize(char *line, t_env *envs)
+char	**tokenize(char *line, t_env *envs, char *pretoken)
 {
 	size_t	i;
 	size_t	j;
@@ -149,12 +150,11 @@ char	**tokenize(char *line, t_env *envs)
 		return (NULL);
 	while (i++ < tokens_count)
 	{
-		tokens[j++] = get_next_token(&line, envs, &split_token);
+		tokens[j++] = get_next_token(&line, envs, &split_token, pretoken);
 		if (split_token)
 			tokens = token_split(tokens, &j, &split_token, tokens_count);
+		pretoken = tokens[j - 1];
 	}
 	tokens[j] = NULL;
-	if (!handle_unexpected(tokens))
-		return (free_tokens(tokens), NULL);
-	return (tokens);
+	return (handle_unexpected(&tokens), tokens);
 }

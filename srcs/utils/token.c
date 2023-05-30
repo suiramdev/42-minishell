@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 16:50:49 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 17:56:52 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/05/30 14:35:54 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	**token_split(char **tokens, size_t *i, bool *split_token, int k)
 		j++;
 	}
 	k = 0;
-	while (tokens[(*i) - 1][k] != ' ')
+	while (!is_space(tokens[(*i) - 1][k]))
 		k++;
 	new_tokens[j++] = ft_substr(tokens[(*i) - 1], 0, k);
 	new_tokens[j] = ft_strdup(tokens[(*i) - 1] + k + 1);
