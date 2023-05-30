@@ -41,6 +41,7 @@ static char	*get_path(t_cmd *cmd, t_env **envs)
 {
 	size_t	i;
 	char	*path;
+	char	*home;
 
 	i = 1;
 	path = NULL;
@@ -55,7 +56,12 @@ static char	*get_path(t_cmd *cmd, t_env **envs)
 		i++;
 	}
 	if (!path)
-		return (ft_strdup(home_path(envs)));
+	{
+		home = home_path(envs);
+		if (home)
+			return (ft_strdup(home));
+		return (NULL);
+	}
 	return (ft_strdup(path));
 }
 
