@@ -74,8 +74,7 @@ int	builtin_exit(t_cmd *cmd, t_env **envs)
 		g_force_exit = 0;
 	if (!cmd->has_pipe)
 	{
-		if (printf("exit\n") < 0)
-			return (error_write("exit"), EXIT_FAILURE);
+		ft_putstr_fd("exit\n", STDERR_FILENO);
 	}
 	return (g_force_exit);
 }
