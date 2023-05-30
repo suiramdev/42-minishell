@@ -45,12 +45,8 @@ static int	handle_errors(char *path)
 		return (error(path, strerror(errno)), EXIT_FAILURE);
 	if (S_ISDIR(sb.st_mode))
 		return (error(path, "Is a directory"), 126);
-	else if (access(path, X_OK) == -1)
-	{
-		if (errno == EACCES)
+	else if (access(path, X_OK) != 0)
 			return (error(path, "Permission denied"), 126);
-		return (error(path, strerror(errno)), EXIT_FAILURE);
-	}
 	return (EXIT_SUCCESS);
 }
 
@@ -66,6 +62,8 @@ int	exec_relative(t_cmd *cmd, t_env **envs)
 	char	**envp;
 	size_t	i;
 
+	if (!cmd->name[0])
+		return (EXIT_SUCCESS);
 	path = resolve_path(cmd->name, *envs, F_OK);
 	if (!path)
 		return (error(cmd->name, "command not found"), 127);
