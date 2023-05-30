@@ -22,6 +22,7 @@ static t_env	*init_envs(char **envp)
 	t_env	*env;
 	char	*name;
 	size_t	i;
+	char	path[1024];
 
 	env = NULL;
 	while (*envp)
@@ -35,6 +36,8 @@ static t_env	*init_envs(char **envp)
 		envp++;
 	}
 	set_env(&env, "?", ft_strdup("0"));
+	if (getcwd(path, 1024))
+		set_env(&env, "PWD", ft_strdup(path));
 	return (env);
 }
 
