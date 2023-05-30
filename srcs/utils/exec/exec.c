@@ -6,8 +6,7 @@
 /*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:46:34 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 02:02:26 by mnouchet         ###   ########.fr       */
-/*                                                                            */
+/*   Updated: 2023/05/26 02:02:26 by mnouchet         ###   ########.fr       */ /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
@@ -38,6 +37,23 @@ int	exec_builtin(t_cmd *cmd, t_env **envs)
 	return (BUILTIN_NOT_FOUND);
 }
 
+static int	handle_errors(char *path)
+{
+	struct stat	sb;
+
+	if (stat(path, &sb) == -1)
+		return (error(path, strerror(errno)), EXIT_FAILURE);
+	if (S_ISDIR(sb.st_mode))
+		return (error(path, "Is a directory"), 126);
+	else if (access(path, X_OK) == -1)
+	{
+		if (errno == EACCES)
+			return (error(path, "Permission denied"), 126);
+		return (error(path, strerror(errno)), EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
 /// @brief Executes a command relative to the current directory or environment
 /// variables
 /// @param cmd The command to execute
@@ -45,17 +61,17 @@ int	exec_builtin(t_cmd *cmd, t_env **envs)
 /// @return EXIT_SUCCESS, EXIT_FAILURE, or the exit code of the command
 int	exec_relative(t_cmd *cmd, t_env **envs)
 {
-	struct stat sb;
 	char	*path;
+	int		error_code;
 	char	**envp;
 	size_t	i;
 
 	path = resolve_path(cmd->name, *envs, F_OK);
 	if (!path)
 		return (error(cmd->name, "command not found"), 127);
-	lstat(path, &sb);
-	if (S_ISDIR(sb.st_mode))
-		return (error(path, "Is a directory"), 126);
+	error_code = handle_errors(path);
+	if (error_code != EXIT_SUCCESS)
+		return (free(path), error_code);
 	envp = format_env(*envs);
 	execve(path, cmd->args, envp);
 	free(path);
