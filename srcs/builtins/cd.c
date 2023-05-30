@@ -27,29 +27,6 @@ static void	error_invalid(char *path)
 		ft_putstr_fd(": Unknown error\n", STDERR_FILENO);
 }
 
-static char	*arg_path(t_cmd *cmd)
-{
-	size_t	i;
-	size_t	count;
-	char	*path;
-
-	i = 1;
-	count = 0;
-	path = NULL;
-	while (cmd->args[i])
-	{
-		if (cmd->args[i][0])
-		{
-			path = cmd->args[i];
-			count++;
-		}
-		i++;
-	}
-	if (count > 1)
-		return (error("cd", "too many arguments"), NULL);
-	return (path);
-}
-
 static char	*home_path(t_env **envs)
 {
 	t_env	*env;
@@ -58,6 +35,42 @@ static char	*home_path(t_env **envs)
 	if (!env)
 		return (error("cd", "HOME not set"), NULL);
 	return (env->value);
+}
+
+static char	*get_path(t_cmd *cmd, t_env **envs)
+{
+	size_t	i;
+	char	*path;
+
+	i = 1;
+	path = NULL;
+	while (cmd->args[i])
+	{
+		if (cmd->args[i][0])
+		{
+			if (path)
+				return (error("cd", "too many arguments"), NULL);
+			path = cmd->args[i];
+		}
+		i++;
+	}
+	if (!path)
+		return (ft_strdup(home_path(envs)));
+	return (ft_strdup(path));
+}
+
+static void	tilted_path(t_env **envs, char **path)
+{
+	char	*home;
+	char	*tmp;
+
+	home = home_path(envs);
+	if (home)
+	{
+		tmp = ft_strjoin(home, *path + 1);
+		free(*path);
+		*path = tmp;
+	}
 }
 
 /// @brief Execute the cd builtin command
@@ -69,17 +82,21 @@ int	builtin_cd(t_cmd *cmd, t_env **envs)
 	char		*path;
 	char		current[1024];
 
-	path = arg_path(cmd);
-	if (!path)
-		path = home_path(envs);
+	path = get_path(cmd, envs);
+	if (path && path[0] == '~')
+		tilted_path(envs, &path);
 	if (!path)
 		return (EXIT_FAILURE);
 	if (path[0])
 	{
 		if (chdir(path) == -1)
-			return (error_invalid(path), EXIT_FAILURE);
+		{
+			error_invalid(path);
+			return (free(path), EXIT_FAILURE);
+		}
 		if (getcwd(current, 1024))
 			set_env(envs, "PWD", ft_strdup(current));
 	}
+	free(path);
 	return (EXIT_SUCCESS);
 }
