@@ -25,6 +25,12 @@ void	main_signal(int signal)
 	}
 }
 
+void	heredoc_handler(int signal)
+{
+	if (signal == SIGINT)
+		g_force_exit = 128 + SIGINT;
+}
+
 /// @brief Handle the signals for the command execution
 /// @param signal The signal to handle
 void	cmd_signal(int signal)

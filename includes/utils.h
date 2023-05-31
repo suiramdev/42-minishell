@@ -76,6 +76,7 @@ void	cmds_has_pipes(t_cmd *cmds);
 // utils/signal.c
 void	main_signal(int signal);
 void	cmd_signal(int signal);
+void	heredoc_handler(int signal);
 
 // utils/token.c
 char	**token_split(char **tokens, size_t *i, bool *split_token, int k);
