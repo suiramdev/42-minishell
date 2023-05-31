@@ -40,6 +40,7 @@ void	cmd_signal(int signal)
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
+		g_force_exit = 128 + SIGINT;
 	}
 	if (signal == SIGQUIT)
 		ft_putendl_fd("Quit", STDERR_FILENO);
