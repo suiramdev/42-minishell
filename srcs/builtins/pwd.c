@@ -27,7 +27,7 @@ int	builtin_pwd(t_cmd *cmd, t_env **envs)
 		perror("pwd");
 		return (EXIT_FAILURE);
 	}
-	if (printf("%s\n", path) < 0)
+	if (!ft_putendl_fd(path, STDOUT_FILENO))
 		return (error_write("pwd"), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
