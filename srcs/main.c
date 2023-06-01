@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/06/01 17:44:19 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/06/01 19:07:33 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,9 @@ int	main(int argc, char **argv, char **envp)
 	int		exit_status;
 	t_env	*tmp;
 
+
+	if (!isatty(0) || !isatty(1) || !isatty(2))
+		return (2);
 	(void)argc;
 	(void)argv;
 	g_minishell.force_exit = false;

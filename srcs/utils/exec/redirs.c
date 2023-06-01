@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:51:58 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/06/01 18:13:06 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/06/01 18:50:03 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 {
 	char	*line;
 
+
+	// if (unlink(HEREDOC_FILE) == -1)
+	// 	return (false) ;
 	cmd->infile = open(HEREDOC_FILE, O_WRONLY | O_CREAT
 			| O_TRUNC, 0644);
 	if (cmd->infile < 0)

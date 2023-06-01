@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:31:08 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/30 14:35:42 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/06/01 19:21:45 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,5 +156,7 @@ char	**tokenize(char *line, t_env *envs, char *pretoken)
 		pretoken = tokens[j - 1];
 	}
 	tokens[j] = NULL;
+	for (int ad = 0; tokens[ad]; ad++)
+		printf("tokens[%d]: %s\n", ad, tokens[ad]);
 	return (handle_unexpected(&tokens), tokens);
 }

@@ -1,0 +1,14 @@
+minishell# echo > ok | cat | rm ok | ls > here | echotest
+fds
+
+valgrind --track-fds=yes --leak-check=full --track-origins=yes ./minishell
+
+
+int *get_x()
+{
+    static int x;
+
+    return (&x);
+}
+
+int g_len
