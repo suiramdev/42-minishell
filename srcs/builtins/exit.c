@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:01:39 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/06/01 18:20:17 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/06/01 18:30:48 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	builtin_exit(t_cmd *cmd, t_env **envs)
 		return (verify_status);
 	if (!cmd->has_pipe)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
-	if (is_overflowing(cmd->args[1]))
+	if (cmd->args[1] && is_overflowing(cmd->args[1]))
 		return (error_numerical_arg(cmd->args[1]), 2);
 	if (cmd->args[1])
 		exit_arg(cmd);
