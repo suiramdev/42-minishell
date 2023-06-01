@@ -99,11 +99,11 @@ int	builtin_exit(t_cmd *cmd, t_env **envs)
 
 	(void)envs;
 	g_minishell.force_exit = true;
+	if (!cmd->has_pipe)
+		ft_putstr_fd("exit\n", STDERR_FILENO);
 	verify_status = verify_args(cmd->args);
 	if (verify_status != EXIT_SUCCESS)
 		return (verify_status);
-	if (!cmd->has_pipe)
-		ft_putstr_fd("exit\n", STDERR_FILENO);
 	if (cmd->args[1] && is_overflowing(cmd->args[1]))
 		return (error_numerical_arg(cmd->args[1]), 2);
 	if (cmd->args[1])
