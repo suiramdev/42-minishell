@@ -16,32 +16,40 @@
 /// @param signal The signal to handle
 void	main_signal(int signal)
 {
+	g_minishell.signal = signal;
 	if (signal == SIGINT)
 	{
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		set_env(&g_minishell.envs, "?",
+			ft_strdup(ft_itoa(128 + g_minishell.signal)));
 	}
 }
 
-void	heredoc_handler(int signal)
+/// @brief Handle the signals for the herdoc 
+/// @param signal The signal to handle
+void	heredoc_signal(int signal)
 {
-	if (signal == SIGINT)
-		g_force_exit = 128 + SIGINT;
+	g_minishell.signal = signal;
+	set_env(&g_minishell.envs, "?",
+		ft_strdup(ft_itoa(128 + g_minishell.signal)));
 }
 
 /// @brief Handle the signals for the command execution
 /// @param signal The signal to handle
 void	cmd_signal(int signal)
 {
+	g_minishell.signal = signal;
 	if (signal == SIGINT)
 	{
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
-		g_force_exit = 128 + SIGINT;
 	}
 	if (signal == SIGQUIT)
+	{
 		ft_putendl_fd("Quit", STDERR_FILENO);
+	}
 }

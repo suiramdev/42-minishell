@@ -37,17 +37,23 @@ static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 	cmd->has_heredoc = true;
 	while (1)
 	{
-		signal(SIGINT, &heredoc_handler);
+		signal(SIGINT, &heredoc_signal);
 		signal(SIGQUIT, SIG_IGN);
 		rl_getc_function = getc;
 		line = readline("> ");
 		if (!line)
+		{
+			if (g_minishell.signal == SIGINT)
+				break ;
 			return (reopen_heredoc(cmd), error_heredoc(delimiter), true);
+		}
 		if (ft_strcmp(line, delimiter) == 0)
 			return (reopen_heredoc(cmd), free(line), true);
 		ft_putendl_fd(line, cmd->infile);
 		free(line);
 	}
+	close(cmd->infile);
+	unlink(HEREDOC_FILE);
 	return (true);
 }
 

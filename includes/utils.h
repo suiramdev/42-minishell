@@ -28,7 +28,7 @@ void	close_redirs(t_cmd *cmds);
 int		pipeline(t_cmd *cmds, t_env **envs);
 
 // utils/exec/process.c
-void	wait_processes(t_cmd *cmds, t_env **envs);
+int		wait_processes(t_cmd *cmds);
 bool	is_child_process(t_cmd *cmds);
 
 // utils/exec/exec.c
@@ -75,8 +75,8 @@ void	cmds_has_pipes(t_cmd *cmds);
 
 // utils/signal.c
 void	main_signal(int signal);
+void	heredoc_signal(int signal);
 void	cmd_signal(int signal);
-void	heredoc_handler(int signal);
 
 // utils/token.c
 char	**token_split(char **tokens, size_t *i, bool *split_token, int k);

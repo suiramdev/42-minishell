@@ -103,7 +103,6 @@ int	exec_cmds(t_cmd *cmds, t_env **envs)
 	close(backups[1]);
 	if (exit_status == BUILTIN_NOT_FOUND)
 		return (pipeline(cmds, envs));
-	set_env(envs, "?", ft_itoa(exit_status));
 	close_redirs(cmds);
 	return (exit_status);
 }

@@ -72,7 +72,6 @@ int	pipeline(t_cmd *cmds, t_env **envs)
 		i++;
 		cmd = cmd->next;
 	}
-	wait_processes(cmds, envs);
 	close(pipes[i % 2][0]);
-	return (EXIT_SUCCESS);
+	return (wait_processes(cmds));
 }

@@ -30,6 +30,13 @@
 # include <errno.h>
 # include <string.h>
 
-extern int	g_force_exit;
+typedef struct s_minishell
+{
+	bool	force_exit;
+	int		signal;
+	t_env	*envs;
+}	t_minishell;
+
+extern t_minishell	g_minishell;
 
 #endif

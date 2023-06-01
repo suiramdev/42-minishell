@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdlib.h>
 
 /// @brief Print an error message to the standard error related
 /// a wrong numerical argument.
@@ -23,8 +24,7 @@ static void	error_numerical_arg(char *arg)
 	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 }
 
-/// @brief Check if the arguments are numerical
-/// @param args The arguments to check
+/// @brief Check if the arguments are numerical @param args The arguments to check
 /// @param non_numerical_arg The variable to store the first
 /// non numerical argument
 /// @return true if the arguments are numerical, false otherwise
@@ -42,14 +42,14 @@ static int	verify_args(char **args)
 		while (args[i][j])
 		{
 			if (!ft_isdigit(args[i][j]))
-			{
-				g_force_exit = 2;
 				return (error_numerical_arg(args[i]), 2);
-			}
 			j++;
 		}
 		if (args[i + 1])
+		{
+			g_minishell.force_exit = false;
 			return (error("exit", "too many arguments"), EXIT_FAILURE);
+		}
 		i++;
 	}
 	return (EXIT_SUCCESS);
@@ -65,16 +65,13 @@ int	builtin_exit(t_cmd *cmd, t_env **envs)
 	int		verify_status;
 
 	(void)envs;
+	g_minishell.force_exit = true;
 	verify_status = verify_args(cmd->args);
 	if (verify_status != EXIT_SUCCESS)
 		return (verify_status);
-	if (cmd->args[1])
-		g_force_exit = ft_atoi(cmd->args[1]);
-	else
-		g_force_exit = 0;
 	if (!cmd->has_pipe)
-	{
 		ft_putstr_fd("exit\n", STDERR_FILENO);
-	}
-	return (g_force_exit);
+	if (cmd->args[1])
+		return (ft_atoi(cmd->args[1]));
+	return (EXIT_SUCCESS);
 }

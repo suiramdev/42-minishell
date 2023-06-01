@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	g_force_exit;
+t_minishell	g_minishell;
 
 /// @brief Initialize the environment variables from the envp array
 /// @param envp The environment variables array
@@ -72,27 +72,29 @@ static t_cmd	*init_cmds(char **tokens)
 /// @brief Read user input, tokenize it and initialize the commands linked list
 /// @param envs The environment variables linked list
 /// @param cmds The commands linked list
-static int	readentry(t_env **envs, t_cmd **cmds)
+/// @bool Should continue the loop
+static bool	readentry(t_env **envs, t_cmd **cmds)
 {
 	char	*line;
 	char	**tokens;
 
+	*cmds = NULL;
 	line = readline("minishell# ");
 	if (!line)
-		return (2);
+		return (false);
 	add_history(line);
 	if (line[0] == '\0')
-		return (free(line), 0);
+		return (free(line), true);
 	tokens = tokenize(line, *envs, NULL);
 	free(line);
 	if (!tokens)
 	{
 		set_env(envs, "?", ft_strdup("2"));
-		return (0);
+		return (true);
 	}
 	*cmds = init_cmds(tokens);
 	free_tokens(tokens);
-	return (1);
+	return (true);
 }
 
 /// @brief Loop to read user input and execute commands
@@ -102,49 +104,50 @@ static int	readentry(t_env **envs, t_cmd **cmds)
 static int	program(t_cmd **cmds, t_env **envs)
 {
 	int		exit_status;
-	int		res;
 
+	exit_status = 0;
 	while (1)
 	{
 		signal(SIGINT, &main_signal);
 		signal(SIGQUIT, SIG_IGN);
-		res = readentry(envs, cmds);
-		if (res == 2)
+		rl_getc_function = NULL;
+		if (!readentry(envs, cmds))
 			break ;
-		else if (res == 0)
-			continue ;
 		if (*cmds)
 		{
 			set_env(envs, "_", ft_strdup(last_cmd_arg(*cmds)));
 			exit_status = exec_cmds(*cmds, envs);
-			if (is_child_process(*cmds))
-				return (free_cmds(*cmds), exit_status);
-			free_cmds(*cmds);
 		}
-		if (g_force_exit != -1)
-			return (g_force_exit);
+		if (g_minishell.signal > 0)
+			exit_status = 128 + g_minishell.signal;
+		set_env(envs, "?", ft_itoa(exit_status));
+		if (g_minishell.force_exit || is_child_process(*cmds))
+			return (free_cmds(*cmds), exit_status);
+		free_cmds(*cmds);
+		g_minishell.signal = 0;
 	}
-	return (EXIT_SUCCESS);
+	return (exit_status);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_env	*envs;
 	t_cmd	*cmds;
 	int		exit_status;
 	t_env	*tmp;
 
 	(void)argc;
 	(void)argv;
-	cmds = NULL;
-	g_force_exit = -1;
-	envs = init_envs(envp);
-	exit_status = program(&cmds, &envs);
+	g_minishell.force_exit = false;
+	g_minishell.signal = 0;
+	g_minishell.envs = init_envs(envp);
+	exit_status = program(&cmds, &g_minishell.envs);
+	if (g_minishell.signal > 0)
+		exit_status = 128 + g_minishell.signal;
 	rl_clear_history();
-	while (envs)
+	while (g_minishell.envs)
 	{
-		tmp = envs;
-		envs = envs->next;
+		tmp = g_minishell.envs;
+		g_minishell.envs = g_minishell.envs->next;
 		free_env(tmp);
 	}
 	return (exit_status);
