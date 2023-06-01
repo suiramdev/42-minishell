@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/06/01 15:30:52 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/06/01 17:44:19 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	g_minishell.force_exit = false;
 	g_minishell.signal = 0;
+	g_minishell.heredoc = false;
 	g_minishell.envs = init_envs(envp);
 	exit_status = program(&cmds, &g_minishell.envs);
 	if (g_minishell.signal > 0)

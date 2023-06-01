@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 14:37:48 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/29 14:26:57 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/06/01 17:43:07 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 typedef struct s_minishell
 {
 	bool	force_exit;
+	bool	heredoc;
 	int		signal;
 	t_env	*envs;
 }	t_minishell;

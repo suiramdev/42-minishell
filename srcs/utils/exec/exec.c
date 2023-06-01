@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 14:48:57 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/30 14:49:06 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/06/01 17:46:31 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int	exec_cmds(t_cmd *cmds, t_env **envs)
 
 	signal(SIGINT, &cmd_signal);
 	signal(SIGQUIT, &cmd_signal);
+	g_minishell.heredoc = false;
 	if (cmds->next)
 		return (pipeline(cmds, envs));
 	backups[0] = dup(STDIN_FILENO);

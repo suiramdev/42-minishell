@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:36:16 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/30 15:37:24 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/06/01 17:43:52 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	main_signal(int signal)
 	g_minishell.signal = signal;
 	if (signal == SIGINT)
 	{
-		printf("\n");
+		if (!g_minishell.heredoc)
+			write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
@@ -33,6 +34,7 @@ void	main_signal(int signal)
 void	heredoc_signal(int signal)
 {
 	g_minishell.signal = signal;
+	g_minishell.heredoc = true;
 	set_env(&g_minishell.envs, "?",
 		ft_strdup(ft_itoa(128 + g_minishell.signal)));
 }
@@ -44,7 +46,7 @@ void	cmd_signal(int signal)
 	g_minishell.signal = signal;
 	if (signal == SIGINT)
 	{
-		printf("\n");
+		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 	}

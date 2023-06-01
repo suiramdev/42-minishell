@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirs.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnouchet <mnouchet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:51:58 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/26 02:01:43 by mnouchet         ###   ########.fr       */
+/*   Updated: 2023/06/01 17:37:40 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 		ft_putendl_fd(line, cmd->infile);
 		free(line);
 	}
+	rl_getc_function = rl_getc;
 	close(cmd->infile);
 	unlink(HEREDOC_FILE);
 	return (true);
