@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:01:39 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/06/01 17:10:19 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/06/01 17:22:56 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,31 +55,19 @@ static int	verify_args(char **args)
 	return (EXIT_SUCCESS);
 }
 
-static bool is_overflowing(const char *s, int len_s, int len_max, int i)
+static bool is_overflowing(const char *s)
 {
-    const char *max[2];
     bool is_negative;
 
-    max[0] = "9223372036854775807";
-    max[1] = "9223372036854775808";
     is_negative = false;
     if (s && *s == '-')
 		is_negative = true;
-	i = is_negative;
-    len_s = ft_strlen(s) - i;
-    len_max = ft_strlen(max[is_negative]);
-    if (len_s > len_max)
-        return true;
-    if (len_s < len_max)
-        return false;
-    while (s[i])
-    {
-        if (s[i] > max[is_negative][i - is_negative])
-            return true;
-        if (s[i] < max[is_negative][i - is_negative])
-            return false;
-        i++;
-    }
+	if (ft_strlen(s) - is_negative > 19)
+		return true;
+	if (is_negative && ft_strcmp(s + 1, "9223372036854775808") > 0)
+		return true;
+    else if (!is_negative && ft_strcmp(s, "9223372036854775807") > 0)
+		return true;
     return false;
 }
 
@@ -105,9 +93,9 @@ int	builtin_exit(t_cmd *cmd, t_env **envs)
 	verify_status = verify_args(cmd->args);
 	if (verify_status != EXIT_SUCCESS)
 		return (verify_status);
-	// if (!cmd->has_pipe)
-		// ft_putstr_fd("exit\n", STDERR_FILENO);
-	if (is_overflowing(cmd->args[1], 0, 0, 0))
+	if (!cmd->has_pipe)
+		ft_putstr_fd("exit\n", STDERR_FILENO);
+	if (is_overflowing(cmd->args[1]))
 		return (exit_error(cmd->args[1]), 0);
 	if (cmd->args[1])
 		return (ft_atoi(cmd->args[1]));
