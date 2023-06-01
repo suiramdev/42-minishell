@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 00:51:58 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/06/01 17:37:40 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/06/01 18:13:06 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,16 @@ static bool	redir_heredoc(char *delimiter, t_cmd *cmd)
 		signal(SIGQUIT, SIG_IGN);
 		rl_getc_function = getc;
 		line = readline("> ");
-		if (!line)
-		{
-			if (g_minishell.signal == SIGINT)
-				break ;
+		if (!line && g_minishell.signal == SIGINT)
+			break ;
+		else if (!line)
 			return (reopen_heredoc(cmd), error_heredoc(delimiter), true);
-		}
 		if (ft_strcmp(line, delimiter) == 0)
 			return (reopen_heredoc(cmd), free(line), true);
 		ft_putendl_fd(line, cmd->infile);
 		free(line);
 	}
-	rl_getc_function = rl_getc;
-	close(cmd->infile);
-	unlink(HEREDOC_FILE);
+	redir_heredoc2(cmd);
 	return (true);
 }
 

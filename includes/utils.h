@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 16:46:24 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/30 15:35:00 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/06/01 18:19:20 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 bool	init_redirs(char **tokens, size_t i, t_cmd *node);
 void	redirs(t_cmd *cmd);
 void	close_redirs(t_cmd *cmds);
+void	redir_heredoc2(t_cmd *cmd);
 
 // utils/exec/pipeline.c
 int		pipeline(t_cmd *cmds, t_env **envs);
