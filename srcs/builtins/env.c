@@ -42,7 +42,9 @@ int	builtin_env(t_cmd *cmd, t_env **envs)
 	{
 		if (!is_special_env(env->key) && env->value)
 		{
-			if (printf("%s=%s\n", env->key, env->value) < 0)
+			if (!ft_putstr_fd(env->key, STDOUT_FILENO)
+				|| !ft_putstr_fd("=", STDOUT_FILENO)
+				|| !ft_putendl_fd(env->value, STDOUT_FILENO))
 				return (error_write("env"), EXIT_FAILURE);
 		}
 		env = env->next;

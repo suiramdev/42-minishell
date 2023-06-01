@@ -110,7 +110,7 @@ static int	program(t_cmd **cmds, t_env **envs)
 	{
 		signal(SIGINT, &main_signal);
 		signal(SIGQUIT, SIG_IGN);
-		rl_getc_function = NULL;
+		rl_getc_function = rl_getc;
 		if (!readentry(envs, cmds))
 			break ;
 		if (*cmds)

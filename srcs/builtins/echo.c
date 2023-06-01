@@ -48,9 +48,6 @@ static int	handle_options(char **args, bool *n_option)
 /// @param cmd The command data structure
 /// @param envs The environment variables
 /// @return EXIT_SUCCESS or EXIT_FAILURE if an error occured
-/// @todo Handle the -n option
-/// we should have a custom printf function in order to skip quotes
-/// and replace environment variables
 int	builtin_echo(t_cmd *cmd, t_env **envs)
 {
 	bool	n_option;
@@ -62,16 +59,16 @@ int	builtin_echo(t_cmd *cmd, t_env **envs)
 	{
 		if (cmd->args[i][0])
 		{
-			if (printf("%s", cmd->args[i]) < 0)
+			if (!ft_putstr_fd(cmd->args[i], STDOUT_FILENO))
 				return (error_write("echo"), EXIT_FAILURE);
 			if (cmd->args[i + 1])
-				if (printf(" ") < 0)
+				if (!ft_putstr_fd(" ", STDOUT_FILENO))
 					return (error_write("echo"), EXIT_FAILURE);
 		}
 		i++;
 	}
 	if (!n_option)
-		if (printf("\n") < 0)
+		if (!ft_putstr_fd("\n", STDOUT_FILENO))
 			return (error_write("echo"), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
