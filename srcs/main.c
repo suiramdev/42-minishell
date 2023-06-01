@@ -6,7 +6,7 @@
 /*   By: zdevove <zdevove@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 14:30:09 by mnouchet          #+#    #+#             */
-/*   Updated: 2023/05/30 14:31:20 by zdevove          ###   ########.fr       */
+/*   Updated: 2023/06/01 15:30:52 by zdevove          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ static int	program(t_cmd **cmds, t_env **envs)
 	{
 		signal(SIGINT, &main_signal);
 		signal(SIGQUIT, SIG_IGN);
-		rl_getc_function = NULL;
+		rl_getc_function = rl_getc;
 		if (!readentry(envs, cmds))
 			break ;
 		if (*cmds)
