@@ -103,13 +103,17 @@ void	redirs(t_cmd *cmd)
 
 /// @brief Close the input and output redirections of the command
 /// and delete the temporary file containing the heredoc input.
-/// @param cmd The command
-void	close_redirs(t_cmd *cmd)
+/// @param cmds The command list
+void	close_redirs(t_cmd *cmds)
 {
-	if (cmd->infile > 2)
-		close(cmd->infile);
-	if (cmd->outfile > 2)
-		close(cmd->outfile);
-	if (cmd->has_heredoc)
-		unlink(HEREDOC_FILE);
+	while (cmds)
+	{
+		if (cmds->infile > 2)
+			close(cmds->infile);
+		if (cmds->outfile > 2)
+			close(cmds->outfile);
+		if (cmds->has_heredoc)
+			unlink(HEREDOC_FILE);
+		cmds = cmds->next;
+	}
 }

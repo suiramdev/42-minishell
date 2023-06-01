@@ -114,6 +114,7 @@ void	free_cmds(t_cmd *cmds)
 	t_cmd	*tmp;
 	size_t	i;
 
+	close_redirs(cmds);
 	while (cmds)
 	{
 		tmp = cmds;
@@ -123,7 +124,6 @@ void	free_cmds(t_cmd *cmds)
 			free(tmp->args[i++]);
 		if (tmp->args)
 			free(tmp->args);
-		close_redirs(tmp);
 		free(tmp);
 	}
 }
