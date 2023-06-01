@@ -53,6 +53,7 @@ SRCS		:= main.c					\
 			   utils/exec/pipeline.c	\
 			   utils/exec/process.c		\
 			   utils/exec/redirs.c		\
+			   utils/exec/redirs2.c		\
 			   utils/parse/errors.c		\
 			   utils/parse/free.c	    \
 			   utils/parse/str.c	    \
