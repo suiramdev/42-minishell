@@ -20,6 +20,8 @@ t_env	*get_env(t_env *envs, char *key)
 {
 	t_env	*tmp;
 
+	if (!key)
+		return (NULL);
 	tmp = envs;
 	while (tmp)
 	{
@@ -34,6 +36,8 @@ static t_env	*new_env(char *key, char *value)
 {
 	t_env	*new;
 
+	if (!key || !value)
+		return (NULL);
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return (NULL);
