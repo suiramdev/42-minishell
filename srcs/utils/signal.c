@@ -36,7 +36,7 @@ void	heredoc_signal(int signal)
 	g_minishell.signal = signal;
 	g_minishell.heredoc = true;
 	set_env(&g_minishell.envs, "?",
-		ft_strdup(ft_itoa(128 + g_minishell.signal)));
+		ft_itoa(128 + g_minishell.signal));
 }
 
 /// @brief Handle the signals for the command execution
