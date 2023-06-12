@@ -25,7 +25,7 @@ void	main_signal(int signal)
 		rl_replace_line("", 0);
 		rl_redisplay();
 		set_env(&g_minishell.envs, "?",
-			ft_strdup(ft_itoa(128 + g_minishell.signal)));
+			ft_itoa(128 + g_minishell.signal));
 	}
 }
 
