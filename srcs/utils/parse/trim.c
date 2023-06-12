@@ -108,7 +108,7 @@ char	*replace_env_var(t_env *envs, char *token,
 
 	i = 0;
 	quote = 0;
-	while (token[i])
+	while (token && token[i])
 	{
 		if (!quote && (token[i] == '\'' || token[i] == '"'))
 			quote = token[i++];
