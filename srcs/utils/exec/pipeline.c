@@ -12,23 +12,40 @@
 
 #include "minishell.h"
 
+static void	reset_pipes(int pipes[2][2])
+{
+	pipes[0][0] = 0;
+	pipes[0][1] = 0;
+	pipes[1][0] = 0;
+	pipes[1][1] = 0;
+}
+
 static void	close_pipes(int pipes[2][2])
 {
-	if (pipes[0][0] > 2)
+	if (pipes[0][0] > 0)
 		close(pipes[0][0]);
-	if (pipes[0][1] > 2) 
+	if (pipes[0][1] > 0)
 		close(pipes[0][1]);
-	if (pipes[1][0] > 2)
+	if (pipes[1][0] > 0)
 		close(pipes[1][0]);
-	if (pipes[1][1] > 2)
+	if (pipes[1][1] > 0)
 		close(pipes[1][1]);
 }
 
 static int	child_process(size_t index, int pipes[2][2],
-	t_cmd *cmd, t_cmd *cmds, t_env **envs)
+	t_cmd *cmds, t_env **envs)
 {
-	int	builtin_exit;
+	int		builtin_exit;
+	t_cmd	*cmd;
+	size_t	i;
 
+	i = 0;
+	cmd = cmds;
+	while (i < index)
+	{
+		cmd = cmd->next;
+		i++;
+	}
 	if (index > 0)
 		dup2(pipes[(index - 1) % 2][0], STDIN_FILENO);
 	if (cmd->next)
@@ -62,10 +79,7 @@ int	pipeline(t_cmd *cmds, t_env **envs)
 
 	cmd = cmds;
 	i = 0;
-	pipes[0][0] = 0;
-	pipes[0][1] = 0;
-	pipes[1][0] = 0;
-	pipes[1][1] = 0;
+	reset_pipes(pipes);
 	while (cmd)
 	{
 		if (cmd->next)
@@ -77,7 +91,7 @@ int	pipeline(t_cmd *cmds, t_env **envs)
 		if (cmd->pid == -1)
 			return (EXIT_FAILURE);
 		if (cmd->pid == 0)
-			return (child_process(i, pipes, cmd, cmds, envs));
+			return (child_process(i, pipes, cmds, envs));
 		cursor_close(pipes, i, cmd);
 		i++;
 		cmd = cmd->next;
